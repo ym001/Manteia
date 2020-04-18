@@ -1,5 +1,5 @@
 Manteia - Proclame la bonne parole 
-================================
+================================================================
 
 Ce module proclame la bonne parole. Puissent-t-ils
 retrouver une totale liberté de pensée cosmique vers un nouvel age

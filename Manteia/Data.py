@@ -30,7 +30,7 @@ from nltk.corpus import stopwords
 from sklearn.model_selection import train_test_split
 
 
-DATA_COLUMN = 'documents'
+TEXT_COLUMN = 'texts'
 LABEL_COLUMN = 'labels'
 ID_COLUMN = 'id'
 
@@ -38,18 +38,22 @@ class Data:
 	
 	
 	
-	def __init__(self,documents=None,labels=None,percentage=1.0,size_by_nb_sample=False,nb_sample=None,path='./Document/'):
+	def __init__(self,documents=None,labels=None,percentage=1.0,size_by_nb_sample=False,nb_sample=None,path='./Document/',lang='english'):
 
 		self.documents=documents
 		self.labels=labels
 		self.percentage=percentage
 		self.size_by_nb_sample=size_by_nb_sample
 		self.path=path
-
+		self.lang=lang
+		
 		self.load()
 		self.reduction()
 		self.df_documents=self.clean_df(self.df_documents)
 		self.list_labels=self.list_labels(self.df_labels[LABEL_COLUMN].values.tolist())
+		
+		self.documents=self.df_documents[TEXT_COLUMN].values.tolist()
+		self.labels=self.df_labels[LABEL_COLUMN].values.tolist()
 		#self.construct_id()
 
 		
@@ -62,8 +66,9 @@ class Data:
 		f.close()
 		
 	def load(self): # load data -> dataframe df
-		self.df_documents=pd.DataFrame({DATA_COLUMN:self.documents})
+		self.df_documents=pd.DataFrame({TEXT_COLUMN:self.documents})
 		self.df_labels  =pd.DataFrame({LABEL_COLUMN:self.labels})
+		#multiclass
 		self.df_labels[LABEL_COLUMN] = self.df_labels[LABEL_COLUMN].apply(lambda x: x[0])
 
 	def reduction(self):
@@ -75,31 +80,53 @@ class Data:
 
 			
 	def clean_df(self,df):
-		stop_unicode = stopwords.words('english')
-		#conversion du dictionnaire en str
+		df=self.clean_stop_word(df,self.lang)
+		df=self.clean_html(df)
+		df=self.clean_contraction(df,self.lang)
+		df=self.clean_special_char(df)
+		df=self.clean_lower(df)
+		df=self.clean_number(df)
+		df=self.clean_spaces(df)
+		df=self.lemmatizer(df)
+		return df
+		
+	def clean_stop_word(self,df,lang='english'):
+		stop_unicode = stopwords.words(lang)
+		#dictionary to string conversion
 		stop=[str(w) for w in stop_unicode]
-		df[DATA_COLUMN] = df[DATA_COLUMN].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop)]))#stop word
+		df[TEXT_COLUMN] = df[TEXT_COLUMN].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop)]))#stop word
+		return df
+
+	def clean_html(self,df):
+		df[TEXT_COLUMN] = df[TEXT_COLUMN].apply(lambda x: re.sub(re.compile('<.*?>'), '', x))#supprime balise html
+		return df
 		
-		df[DATA_COLUMN] = df[DATA_COLUMN].apply(lambda x: re.sub(re.compile('<.*?>'), '', x))#supprime balise html
-		
+	def clean_contraction(self,df,lang='english'):
 		#remove contraction
 		def _get_contractions(contraction_dict):
 			contraction_re = re.compile('(%s)' % '|'.join(contraction_dict.keys()))
 			return contraction_dict, contraction_re
+		if lang=='english':
+			contraction_dict = {"ain't": "is not", "aren't": "are not","can't": "cannot", "'cause": "because", "could've": "could have", "couldn't": "could not", "didn't": "did not",  "doesn't": "does not", "don't": "do not", "hadn't": "had not", "hasn't": "has not", "haven't": "have not", "he'd": "he would","he'll": "he will", "he's": "he is", "how'd": "how did", "how'd'y": "how do you", "how'll": "how will", "how's": "how is",  "I'd": "I would", "I'd've": "I would have", "I'll": "I will", "I'll've": "I will have","I'm": "I am", "I've": "I have", "i'd": "i would", "i'd've": "i would have", "i'll": "i will",  "i'll've": "i will have","i'm": "i am", "i've": "i have", "isn't": "is not", "it'd": "it would", "it'd've": "it would have", "it'll": "it will", "it'll've": "it will have","it's": "it is", "let's": "let us", "ma'am": "madam", "mayn't": "may not", "might've": "might have","mightn't": "might not","mightn't've": "might not have", "must've": "must have", "mustn't": "must not", "mustn't've": "must not have", "needn't": "need not", "needn't've": "need not have","o'clock": "of the clock", "oughtn't": "ought not", "oughtn't've": "ought not have", "shan't": "shall not", "sha'n't": "shall not", "shan't've": "shall not have", "she'd": "she would", "she'd've": "she would have", "she'll": "she will", "she'll've": "she will have", "she's": "she is", "should've": "should have", "shouldn't": "should not", "shouldn't've": "should not have", "so've": "so have","so's": "so as", "this's": "this is","that'd": "that would", "that'd've": "that would have", "that's": "that is", "there'd": "there would", "there'd've": "there would have", "there's": "there is", "here's": "here is","they'd": "they would", "they'd've": "they would have", "they'll": "they will", "they'll've": "they will have", "they're": "they are", "they've": "they have", "to've": "to have", "wasn't": "was not", "we'd": "we would", "we'd've": "we would have", "we'll": "we will", "we'll've": "we will have", "we're": "we are", "we've": "we have", "weren't": "were not", "what'll": "what will", "what'll've": "what will have", "what're": "what are",  "what's": "what is", "what've": "what have", "when's": "when is", "when've": "when have", "where'd": "where did", "where's": "where is", "where've": "where have", "who'll": "who will", "who'll've": "who will have", "who's": "who is", "who've": "who have", "why's": "why is", "why've": "why have", "will've": "will have", "won't": "will not", "won't've": "will not have", "would've": "would have", "wouldn't": "would not", "wouldn't've": "would not have", "y'all": "you all", "y'all'd": "you all would","y'all'd've": "you all would have","y'all're": "you all are","y'all've": "you all have","you'd": "you would", "you'd've": "you would have", "you'll": "you will", "you'll've": "you will have", "you're": "you are", "you've": "you have"}
 
-		contraction_dict = {"ain't": "is not", "aren't": "are not","can't": "cannot", "'cause": "because", "could've": "could have", "couldn't": "could not", "didn't": "did not",  "doesn't": "does not", "don't": "do not", "hadn't": "had not", "hasn't": "has not", "haven't": "have not", "he'd": "he would","he'll": "he will", "he's": "he is", "how'd": "how did", "how'd'y": "how do you", "how'll": "how will", "how's": "how is",  "I'd": "I would", "I'd've": "I would have", "I'll": "I will", "I'll've": "I will have","I'm": "I am", "I've": "I have", "i'd": "i would", "i'd've": "i would have", "i'll": "i will",  "i'll've": "i will have","i'm": "i am", "i've": "i have", "isn't": "is not", "it'd": "it would", "it'd've": "it would have", "it'll": "it will", "it'll've": "it will have","it's": "it is", "let's": "let us", "ma'am": "madam", "mayn't": "may not", "might've": "might have","mightn't": "might not","mightn't've": "might not have", "must've": "must have", "mustn't": "must not", "mustn't've": "must not have", "needn't": "need not", "needn't've": "need not have","o'clock": "of the clock", "oughtn't": "ought not", "oughtn't've": "ought not have", "shan't": "shall not", "sha'n't": "shall not", "shan't've": "shall not have", "she'd": "she would", "she'd've": "she would have", "she'll": "she will", "she'll've": "she will have", "she's": "she is", "should've": "should have", "shouldn't": "should not", "shouldn't've": "should not have", "so've": "so have","so's": "so as", "this's": "this is","that'd": "that would", "that'd've": "that would have", "that's": "that is", "there'd": "there would", "there'd've": "there would have", "there's": "there is", "here's": "here is","they'd": "they would", "they'd've": "they would have", "they'll": "they will", "they'll've": "they will have", "they're": "they are", "they've": "they have", "to've": "to have", "wasn't": "was not", "we'd": "we would", "we'd've": "we would have", "we'll": "we will", "we'll've": "we will have", "we're": "we are", "we've": "we have", "weren't": "were not", "what'll": "what will", "what'll've": "what will have", "what're": "what are",  "what's": "what is", "what've": "what have", "when's": "when is", "when've": "when have", "where'd": "where did", "where's": "where is", "where've": "where have", "who'll": "who will", "who'll've": "who will have", "who's": "who is", "who've": "who have", "why's": "why is", "why've": "why have", "will've": "will have", "won't": "will not", "won't've": "will not have", "would've": "would have", "wouldn't": "would not", "wouldn't've": "would not have", "y'all": "you all", "y'all'd": "you all would","y'all'd've": "you all would have","y'all're": "you all are","y'all've": "you all have","you'd": "you would", "you'd've": "you would have", "you'll": "you will", "you'll've": "you will have", "you're": "you are", "you've": "you have"}
 		contractions, contractions_re = _get_contractions(contraction_dict)
 		def replace_contractions(text):
 			def replace(match):
 				return contractions[match.group(0)]
 			return contractions_re.sub(replace, text)
 			
-		df[DATA_COLUMN] = df[DATA_COLUMN].apply(lambda x: replace_contractions(x))
+		df[TEXT_COLUMN] = df[TEXT_COLUMN].apply(lambda x: replace_contractions(x))
+		return df
 		
-		df[DATA_COLUMN] = df[DATA_COLUMN].apply(lambda x: re.sub(re.compile('[^a-zA-z0-9\s]'), ' ', x))#supprime les caracteres speciaux
+	def clean_special_char(self,df):
+		df[TEXT_COLUMN] = df[TEXT_COLUMN].apply(lambda x: re.sub(re.compile('[^a-zA-z0-9\s]'), ' ', x))#del special char
+		return df
 		
-		df[DATA_COLUMN] = df[DATA_COLUMN].apply(lambda x: x.lower())#passe en minuscule
-		
+	def clean_lower(self,df):
+		df[TEXT_COLUMN] = df[TEXT_COLUMN].apply(lambda x: x.lower())#passe en minuscule
+		return df
+
+	def clean_number(self,df):
 		def clean_numbers(x):
 			if bool(re.search(r'\d', x)):
 				x = re.sub('[0-9]{5,}', '#####', x)
@@ -108,41 +135,20 @@ class Data:
 				x = re.sub('[0-9]{2}', '##', x)
 			return x
 			
-		df[DATA_COLUMN] = df[DATA_COLUMN].apply(lambda x: clean_numbers(x))
-
-		df[DATA_COLUMN] = df[DATA_COLUMN].apply(lambda x: re.sub("[ ]{2,}", " ", x))#enleve les espaces successsifs
-		df[DATA_COLUMN] = df[DATA_COLUMN].apply(lambda x: x.strip())#enleve les espaces debut et fin
-
-		lemmatizer = WordNetLemmatizer()
-		df[DATA_COLUMN] = df[DATA_COLUMN].apply(lambda x: ' '.join([lemmatizer.lemmatize(word) for word in x.split()]))
+		df[TEXT_COLUMN] = df[TEXT_COLUMN].apply(lambda x: clean_numbers(x))
 		return df
 		
-	def calcul_longueur_sequence(self):
-		count_sequence={}
-		max_longueur=0
-		c=0
-		somme=0
-		for item in self.df_train_documents.iteritems():
+	def clean_spaces(self,df):
+		df[TEXT_COLUMN] = df[TEXT_COLUMN].apply(lambda x: re.sub("[ ]{2,}", " ", x))#del spaces
+		df[TEXT_COLUMN] = df[TEXT_COLUMN].apply(lambda x: x.strip())#del space at begin and end
+		return df
+		
+	def lemmatizer(self,df):
+		lemmatizer = WordNetLemmatizer()
+		df[TEXT_COLUMN] = df[TEXT_COLUMN].apply(lambda x: ' '.join([lemmatizer.lemmatize(word) for word in x.split()]))
+		return df
+		
 
-			sequence=item[1].split(' ')
-			longueur=len(sequence)
-			somme+=longueur
-			if longueur in count_sequence:
-				count_sequence[longueur]+=1
-				if max_longueur<longueur:max_longueur=longueur
-			else:count_sequence[longueur]=1
-
-		print("sequence la plus longue: {}".format(max_longueur))
-		print("nb mot moyen par séquence: {}".format(somme/len(self.df_train_doc)))
-		somme_sequence=0
-		for key in sorted(count_sequence.keys()):
-			#valeur debase!!!!!
-			#if somme_sequence<len(document)*0.5:
-			if somme_sequence<len(self.df_train_doc)*0.8:
-				somme_sequence+=count_sequence[key]
-				self.longueur_sequence=key
-				
-		print("longueur sequence choisie: {}".format(self.longueur_sequence))
 		
 	def labels_to_int(self):
 		def label_int(label):
@@ -164,7 +170,7 @@ class Data:
 		return self.df_labels
 
 	def get_df(self):
-		return pd.DataFrame({DATA_COLUMN:self.df_documents[DATA_COLUMN] , LABEL_COLUMN:self.df_labels[LABEL_COLUMN]})
+		return pd.DataFrame({TEXT_COLUMN:self.df_documents[TEXT_COLUMN] , LABEL_COLUMN:self.df_labels[LABEL_COLUMN]})
 		
 	def list_labels(self,labels):
 		return np.sort(np.unique(np.array(labels)), axis=0)

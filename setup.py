@@ -21,7 +21,7 @@ setup(
  
     author="Yves Mercadier",
  
-    author_email="yves.mercadier@gmail.com",
+    author_email="manteia.ym001@gmail.com",
  
     # Une description courte
     description="Deep NLP",
@@ -56,7 +56,7 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Development Status :: 1 - Planning",
-        "License :: OSI Approved",
+        "License :: MIT",
         "Natural Language :: French",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.6",
@@ -78,7 +78,7 @@ setup(
  
     # A fournir uniquement si votre licence n'est pas listée dans "classifiers"
     # ce qui est notre cas
-    license="WTFPL",
+    license="MIT",
  
     # Il y a encore une chiée de paramètres possibles, mais avec ça vous
     # couvrez 90% des besoins

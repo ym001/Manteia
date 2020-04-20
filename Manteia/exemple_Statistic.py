@@ -21,12 +21,10 @@
 #  MA 02110-1301, USA.
 #  
 #
-import pandas as pd 
-from Data import Data
-
+from Statistic import Statistic 
 			
 def main(args):
-	documents = ["!??    :::new york is important geese a hell of a town ;; //",
+	documents = ["The !??    :::13New york ain't important feet geese a hell of a town ;;    //   ",
 			"london is in the uk",
 			"new york was originally dutch",
 			"the big apple is great",
@@ -55,9 +53,8 @@ def main(args):
 			["london"],["london"],["london"],["london"],["new york"],["new york"]
 			]
 			
-	data=Data(documents,labels)
-	print(data.list_labels)
-	print(data.get_df().head())
+	Statistic(documents,labels)
+	
 	return 0
 
 if __name__ == '__main__':

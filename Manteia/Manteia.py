@@ -27,15 +27,17 @@
  
     Usage:
  
-    >>> from sm_lib import proclamer
+    >>> from Manteia import proclamer
     >>> testManteia()
 """
+__all__ = ['testManteia']
 
-from datetime import datetime
-
-__all__ = ['testHermes00']
+from Data import Data
+class Manteia:
+	def __init__(self,documents=None,labels=None):
+		self.data=Data(documents,labels)
 
 def testManteia():
-    print ("[%s] Hello, i am alive." % datetime.now())
+    print ("Hello, Mantéïa is alive.")
  
 

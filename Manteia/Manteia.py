@@ -32,7 +32,8 @@
 """
 __all__ = ['testManteia']
 
-from Data import Data
+from Manteia.Data import Data
+
 class Manteia:
 	def __init__(self,documents=None,labels=None):
 		self.data=Data(documents,labels)

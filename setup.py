@@ -56,7 +56,7 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Development Status :: 1 - Planning",
-        "License :: MIT",
+        "License :: OSI Approved :: MIT License",
         "Natural Language :: French",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.6",
@@ -72,13 +72,13 @@ setup(
     # La syntaxe est "nom-de-commande-a-creer = package.module:fonction".
     entry_points = {
         'console_scripts': [
-            'Manteia-test = Manteia.Manteia:testManteia',
+            'Manteia-test = Manteia.Manteia:testLogos00',
         ],
     },
  
     # A fournir uniquement si votre licence n'est pas listée dans "classifiers"
     # ce qui est notre cas
-    license="MIT",
+    license="WTFPL",
  
     # Il y a encore une chiée de paramètres possibles, mais avec ça vous
     # couvrez 90% des besoins

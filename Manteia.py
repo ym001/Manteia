@@ -63,4 +63,4 @@ def makeClassification():
 	documents=['test voiture','test maison']
 	labels=['1','0']
 	mant=Manteia(documents,labels)
-	
+

@@ -23,12 +23,17 @@
 #  
 
 """
-    Ce module proclame la bonne parole de sieurs Sam et Max. Puissent-t-ils
-    retrouver une totale liberté de pensée cosmique vers un nouvel age
-    reminiscent.
+	This module proclaims the good word. May they
+	regain total freedom of artificial thought towards a new age
+	reminiscent.
 """
  
 __version__ = "0.0.4"
 
-from Manteia import testManteia
+from Manteia import *
+from Classification import *
+from Data import *
+from Model import *
+from Statistic import *
+
 

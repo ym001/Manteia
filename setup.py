@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
  
 # notez qu'on import la lib
 # donc assurez-vous que l'import n'a pas d'effet de bord
-import Manteia.Manteia
+import Manteia
  
 # Ceci n'est qu'un appel de fonction. Mais il est trèèèèèèèèèèès long
 # et il comporte beaucoup de paramètres
@@ -14,7 +14,7 @@ setup(
     # le nom de votre bibliothèque, tel qu'il apparaitre sur pypi
     name='Manteia',
  
-    version=Manteia.__version__,
+    version="0.0.4",
  
     # Liste les packages à insérer dans la distribution
     packages=find_packages(),
@@ -80,7 +80,7 @@ setup(
  
     # A fournir uniquement si votre licence n'est pas listée dans "classifiers"
     # ce qui est notre cas
-    license="WTFPL",
+    #license="WTFPL",
  
     # Il y a encore une chiée de paramètres possibles, mais avec ça vous
     # couvrez 90% des besoins

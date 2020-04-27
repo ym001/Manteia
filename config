@@ -1,0 +1,12 @@
+find . -name "*.pyc" -exec rm -rf {} \;
+
+git add --all *
+git commit -a
+git push origin master
+
+scp -p -r /home/yves/MEGA/Application/Manteia mercadier@gpu2.lirmm.fr:/home/mercadier/Application/
+
+rm -R dist
+python setup.py sdist
+twine upload dist/*
+

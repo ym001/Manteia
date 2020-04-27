@@ -27,18 +27,32 @@
  
     Usage:
  
-    >>> from Manteia import proclamer
+    >>> from Manteia import testManteia
     >>> testManteia()
 """
 __all__ = ['testManteia']
 
-from Manteia.Data import Data
+from Data import Data
+from Classification import Classification
 
 class Manteia:
-	def __init__(self,documents=None,labels=None):
+	def __init__(self,documents=None,labels=None,task='classification'):
 		self.data=Data(documents,labels)
+		if task=='classification':
+			self.classification=Classification(data=self.data)
 
 def testManteia():
     print ("Hello, Mantéïa is alive.")
- 
 
+def readData():
+	documents=['test voiture','test maison']
+	labels=['1','0']
+	mant=Manteia(documents,labels)
+	print(mant.data.list_labels)
+	print(mant.data.get_df())
+
+def makeClassification():
+	documents=['test voiture','test maison']
+	labels=['1','0']
+	mant=Manteia(documents,labels)
+	

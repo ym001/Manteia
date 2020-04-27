@@ -34,6 +34,8 @@ TEXT_COLUMN = 'texts'
 LABEL_COLUMN = 'labels'
 ID_COLUMN = 'id'
 
+LANG=['arabic', 'azerbaijani', 'danish', 'dutch', 'english', 'finnish', 'french', 'german', 'greek','hungarian', 'indonesian', 'italian', 'kazakh', 'nepali', 'norwegian', 'portuguese', 'romanian', 'russian', 'slovene', 'spanish', 'swedish', 'tajik', 'turkish']
+ 
 class Data:
 	
 	
@@ -155,10 +157,10 @@ class Data:
 			if label in self.list_labels:
 				idx_label=self.list_labels.index(label)
 			return idx_label
-		self.df_train_labels = self.df_train_labels.apply(lambda x: label_int(x))
+		self.df_labels[LABEL_COLUMN] = self.df_labels[LABEL_COLUMN].apply(lambda x: label_int(x))
 		
 	def get_labels_int(self):
-		return self.df_train_labels.values.tolist()
+		return self.df_labels.values.tolist()
 		
 	def construct_id(self):
 		return [id_idx for id_idx in range(len(self.df_labels))]
@@ -173,4 +175,4 @@ class Data:
 		return pd.DataFrame({TEXT_COLUMN:self.df_documents[TEXT_COLUMN] , LABEL_COLUMN:self.df_labels[LABEL_COLUMN]})
 		
 	def list_labels(self,labels):
-		return np.sort(np.unique(np.array(labels)), axis=0)
+		return list(np.sort(np.unique(np.array(labels)), axis=0))

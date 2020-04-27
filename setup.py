@@ -72,7 +72,9 @@ setup(
     # La syntaxe est "nom-de-commande-a-creer = package.module:fonction".
     entry_points = {
         'console_scripts': [
-            'Manteia-test = Manteia.Manteia:testLogos00',
+            'Manteia-test = Manteia.Manteia:testManteia',
+            'Manteia-data = Manteia.Manteia:readData',
+            'Manteia-classification = Manteia.Manteia:makeClassification',
         ],
     },
  

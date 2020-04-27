@@ -1,17 +1,17 @@
-Manteia - Proclame la bonne parole 
+Manteia - proclaim the good word
 ================================================================
 
-Ce module proclame la bonne parole. Puissent-t-ils
-retrouver une totale liberté de pensée cosmique vers un nouvel age
+This module proclaims the good word. May they
+regain total freedom of artificial thought towards a new age
 reminiscent.
 
-Vous pouvez l'installer avec pip:
+You can install it with pip:
 
-    pip install Manteia
+     pip install Manteia
 
-Exemple d'usage:
+Example of use:
 
-    >>> from Manteia import testManteia
-    >>> testManteia()
+     >>> from Manteia import testManteia
+     >>> testManteia ()
 
-Ce code est sous licence WTFPL.
+This code is licensed under MIT.

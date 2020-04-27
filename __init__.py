@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  core.py
+#  __init__.py
 #  
 #  Copyright 2020 Yves <yves@mercadier>
 #  
@@ -20,39 +20,15 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #  
-#
- 
+#  
+
 """
-    Implémentation de la proclamation de la bonne parole.
- 
-    Usage:
- 
-    >>> from Manteia import testManteia
-    >>> testManteia()
+    Ce module proclame la bonne parole de sieurs Sam et Max. Puissent-t-ils
+    retrouver une totale liberté de pensée cosmique vers un nouvel age
+    reminiscent.
 """
-__all__ = ['testManteia']
+ 
+__version__ = "0.0.4"
 
-from Data import Data
-from Classification import Classification
+from Manteia import testManteia
 
-class Manteia:
-	def __init__(self,documents=None,labels=None,task='classification'):
-		self.data=Data(documents,labels)
-		if task=='classification':
-			self.classification=Classification(data=self.data)
-
-def testManteia():
-    print ("Hello, Mantéïa is alive.")
-
-def readData():
-	documents=['test voiture','test maison']
-	labels=['1','0']
-	mant=Manteia(documents,labels)
-	print(mant.data.list_labels)
-	print(mant.data.get_df())
-
-def makeClassification():
-	documents=['test voiture','test maison']
-	labels=['1','0']
-	mant=Manteia(documents,labels)
-	

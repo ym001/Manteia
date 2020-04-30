@@ -28,12 +28,12 @@
 	reminiscent.
 """
  
-__version__ = "0.0.4"
+__version__ = "0.0.7"
 
-from Manteia import *
-from Classification import *
-from Data import *
-from Model import *
-from Statistic import *
+from Manteia import Manteia
+from Manteia import Classification
+from Manteia import Preprocess
+from Manteia import Model
+from Manteia import Statistic
 
 

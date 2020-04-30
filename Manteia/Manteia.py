@@ -38,29 +38,35 @@
 
 	This code is licensed under MIT.
 """
-__all__ = ['testManteia','readData','makeClassification']
+__all__ = ['testManteia','testData','testClassification']
 
-from Data import Data
-from Classification import Classification
+from .Preprocess import Preprocess
+from .Classification import Classification
+from .Statistic import Statistic
+from .Visualisation import Visualisation
+from .Model import Model
 
 class Manteia:
 	def __init__(self,documents=None,labels=None,task='classification'):
-		self.data=Data(documents,labels)
+		if documents!=None:
+			self.data=Data(documents,labels)
 		if task=='classification':
 			self.classification=Classification(data=self.data)
-
+	def testManteia():
+		return "Hello, Mantéïa is alive."
+		
 def testManteia():
     print ("Hello, Mantéïa is alive.")
 
-def readData():
-	documents=['test voiture','test maison']
+def testData():
+	documents=['    ,;:123test   car','test houses']
 	labels=['1','0']
-	mant=Manteia(documents,labels)
+	mant=Data(documents,labels)
 	print(mant.data.list_labels)
 	print(mant.data.get_df())
 
-def makeClassification():
-	documents=['test voiture','test maison']
+def testClassification():
+	documents=['test car','test house']
 	labels=['1','0']
-	mant=Manteia(documents,labels)
+	mant=Classification(documents,labels)
 

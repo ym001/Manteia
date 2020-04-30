@@ -36,11 +36,9 @@ ID_COLUMN = 'id'
 
 LANG=['arabic', 'azerbaijani', 'danish', 'dutch', 'english', 'finnish', 'french', 'german', 'greek','hungarian', 'indonesian', 'italian', 'kazakh', 'nepali', 'norwegian', 'portuguese', 'romanian', 'russian', 'slovene', 'spanish', 'swedish', 'tajik', 'turkish']
  
-class Data:
+class Preprocess:
 	
-	
-	
-	def __init__(self,documents=None,labels=None,percentage=1.0,size_by_nb_sample=False,nb_sample=None,path='./Document/',lang='english'):
+	def __init__(self,documents=None,labels=None,percentage=1.0,size_by_nb_sample=False,nb_sample=None,path='./Document/',lang='english',preprocess=True):
 
 		self.documents=documents
 		self.labels=labels
@@ -48,16 +46,18 @@ class Data:
 		self.size_by_nb_sample=size_by_nb_sample
 		self.path=path
 		self.lang=lang
+		if preprocess and documents!=None:
+			self.load()
+			self.reduction()
+			self.df_documents=self.clean_df(self.df_documents)
+			self.list_labels=self.list_labels(self.df_labels[LABEL_COLUMN].values.tolist())
 		
-		self.load()
-		self.reduction()
-		self.df_documents=self.clean_df(self.df_documents)
-		self.list_labels=self.list_labels(self.df_labels[LABEL_COLUMN].values.tolist())
-		
-		self.documents=self.df_documents[TEXT_COLUMN].values.tolist()
-		self.labels=self.df_labels[LABEL_COLUMN].values.tolist()
-		#self.construct_id()
-
+			self.documents=self.df_documents[TEXT_COLUMN].values.tolist()
+			self.labels=self.df_labels[LABEL_COLUMN].values.tolist()
+			#self.construct_id()
+			
+	def test(self):
+		return "Preprocess Mantéïa."
 		
 	def save_json(self):
 		dataset=[]

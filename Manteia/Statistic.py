@@ -21,20 +21,23 @@
 #  MA 02110-1301, USA.
 #  
 #  '
-from Data import Data
+from .Preprocess import Preprocess
 import numpy as np
 
 class Statistic:
 	
 	
-	def __init__(self,documents=None,labels=None,name=None,path=''):
+	def __init__(self,documents=None,labels=None,name=None,path='',statistic=True):
 		self.documents=documents
 		self.labels=labels
 		self.path=path
 		self.name=name
-		self.list_labels=self.list_labels(labels)
+		if statistic==True and documents!=None and labels!=None:
+			self.list_labels=self.list_labels(labels)
+			self.print_report()
 		
-		self.print_report()
+	def test(self):
+		return "Mantéïa Statistic."
 		
 	def type(self,labels=None):
 		c_lab=0
@@ -66,11 +69,11 @@ class Statistic:
 	def number_word(self):
 		return len(self.dictionary(self.documents))
 		
-	def word_classe(self):
+	def dictionnary_stat_labels(self):
 		dic_word={}
-		for lab in self.list_label:
+		for lab in self.list_labels:
 			dic_word[lab]= 0
-		for doc,lab in zip(self.document,self.label):
+		for doc,lab in zip(self.documents,self.labels):
 			tab=doc.split(" ")
 			for l in lab:
 				dic_word[l]=dic_word[l]+len(tab)
@@ -80,14 +83,14 @@ class Statistic:
 		dic_length={}
 		length_of_doc=[]
 		classe=[]
-		for lab in self.list_label:
+		for lab in self.list_labels:
 			dic_length[lab]= []
 		for doc,cl in zip(self.document,self.labels):
 			sentence=doc.split(" ")
 			length_of_doc.append(len(sentence))
 			classe.append(cl[0])
 			dic_length[cl[0]].append(len(sentence))
-		for lab in self.list_label:
+		for lab in self.list_labels:
 			tab=np.array(dic_length[lab])
 			dic_length[lab]=np.mean(tab)
 
@@ -109,9 +112,9 @@ class Statistic:
 			
 		return c/len(self.documents)
 		
-	def doc_classe(self,list_label=None,documents=None,labels=None):
+	def doc_classe(self,list_labels=None,documents=None,labels=None):
 		dic_doc={}
-		for lab in list_label:
+		for lab in list_labels:
 			dic_doc[lab]= 0
 		for doc,lab in zip(documents,labels):
 			for l in lab:
@@ -132,19 +135,6 @@ class Statistic:
 		for key, value in self.dic_doc.items():
 			classe.append(key)
 			height.append(value)
-		
-		#Plot the data:
-		palette = plt.cm.get_cmap('tab10')
-
-		plt.title(self.name)
-		#Set tick colors:
-		ax = plt.gca()
-		ax.tick_params(axis='x', colors='gray')
-		ax.tick_params(axis='y', colors='blue')
-		
-		plt.barh(classe, height,color=palette.colors)
-
-		plt.savefig('/home/mercadier/these/resultat/image/desequilibre-classe.png')
 	'''
 		
 	def report(self):

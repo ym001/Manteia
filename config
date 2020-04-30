@@ -5,6 +5,9 @@ git commit -a
 git push origin master
 
 scp -p -r /home/yves/MEGA/Application/Manteia mercadier@gpu2.lirmm.fr:/home/mercadier/Application/
+pip uninstall Manteia
+python setup.py install
+python ./Tests/test_Manteia.py
 
 rm -R dist
 python setup.py sdist

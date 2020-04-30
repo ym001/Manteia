@@ -3,9 +3,6 @@
  
 from setuptools import setup, find_packages
  
-# notez qu'on import la lib
-# donc assurez-vous que l'import n'a pas d'effet de bord
-import Manteia
  
 # Ceci n'est qu'un appel de fonction. Mais il est trèèèèèèèèèèès long
 # et il comporte beaucoup de paramètres
@@ -14,7 +11,7 @@ setup(
     # le nom de votre bibliothèque, tel qu'il apparaitre sur pypi
     name='Manteia',
  
-    version="0.0.4",
+    version='0.0.7',
  
     # Liste les packages à insérer dans la distribution
     packages=find_packages(),

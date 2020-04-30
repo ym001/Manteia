@@ -32,16 +32,16 @@ from transformers import (
     XLMTokenizer,
     RobertaTokenizer,
     DistilBertTokenizer,
-    AlbertTokenizer,
-    CamembertTokenizer
+    #AlbertTokenizer,
+    #CamembertTokenizer
 )
 from transformers import BertForSequenceClassification
 from transformers import RobertaForSequenceClassification
 from transformers import XLMForSequenceClassification
 from transformers import XLNetForSequenceClassification
 from transformers import DistilBertForSequenceClassification
-from transformers import AlbertForSequenceClassification
-from transformers import CamembertForSequenceClassification
+#from transformers import AlbertForSequenceClassification
+#from transformers import CamembertForSequenceClassification
 
 import numpy as np
 import random
@@ -59,7 +59,8 @@ class Model:
 		self.epochs = 4
 		self.MAX_SEQ_LEN = 64
 		self.num_labels=num_labels
-
+	def test(self):
+		return "Model Mantéïa."
 	def load(self):
 		# Load the tokenizer.
 		print('Loading {} tokenizer...'.format(self.model_name))
@@ -157,6 +158,7 @@ class Model:
 
 		input_ids=[tokenizer.encode(text=sent,add_special_tokens=True,max_length=self.MAX_SEQ_LEN,pad_to_max_length=True) for sent in sentences]
 
+		print(input_ids)
 		print('\nPadding/truncating all sentences to %d values...' % self.MAX_SEQ_LEN)
 
 		attention_masks = []
@@ -167,10 +169,6 @@ class Model:
 			attention_masks.append(att_mask)
 
 		return input_ids,attention_masks
-		
-
-	def totensor(self,inputs):
-		return torch.tensor(inputs)
 
 	def totensors(self,inputs_ids):
 		return torch.tensor(inputs_ids)

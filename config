@@ -9,6 +9,9 @@ pip uninstall Manteia
 python setup.py install
 python ./Tests/test_Manteia.py
 
+pipreqs ./
+scp -p -r mercadier@gpu2.lirmm.fr:/home/mercadier/Application/Manteia/requirements.txt  /home/yves/Téléchargements/
+
 rm -R dist
 python setup.py sdist
 twine upload dist/*

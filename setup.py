@@ -3,7 +3,9 @@
  
 from setuptools import setup, find_packages
  
- 
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()
+    
 # Ceci n'est qu'un appel de fonction. Mais il est trèèèèèèèèèèès long
 # et il comporte beaucoup de paramètres
 setup(
@@ -21,7 +23,7 @@ setup(
     author_email="manteia.ym001@gmail.com",
  
     # Une description courte
-    description="Deep NLP",
+    description="deep learning,NLP,classification,text,bert,distilbert,albert,xlnet,roberta,gpt2",
  
     # Une description longue, sera affichée pour présenter la lib
     # Généralement on dump le README ici
@@ -35,7 +37,7 @@ setup(
     #
     # Dans notre cas on en a pas besoin, donc je le commente, mais je le
     # laisse pour que vous sachiez que ça existe car c'est très utile.
-    # install_requires= ,
+    install_requires=requirements ,
  
     # Active la prise en compte du fichier MANIFEST.in
     include_package_data=True,

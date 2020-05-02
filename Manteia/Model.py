@@ -32,16 +32,16 @@ from transformers import (
     XLMTokenizer,
     RobertaTokenizer,
     DistilBertTokenizer,
-    #AlbertTokenizer,
-    #CamembertTokenizer
+    AlbertTokenizer,
+    CamembertTokenizer
 )
 from transformers import BertForSequenceClassification
 from transformers import RobertaForSequenceClassification
 from transformers import XLMForSequenceClassification
 from transformers import XLNetForSequenceClassification
 from transformers import DistilBertForSequenceClassification
-#from transformers import AlbertForSequenceClassification
-#from transformers import CamembertForSequenceClassification
+from transformers import AlbertForSequenceClassification
+from transformers import CamembertForSequenceClassification
 
 import numpy as np
 import random
@@ -52,6 +52,7 @@ import time
 import datetime
 import gc
 
+#model'distilbert','albert','xlnet','roberta','camenbert','scibert'
 class Model:
 	def __init__(self,model_name ='bert',num_labels=None): # constructeur
 		self.model_name = model_name
@@ -115,80 +116,6 @@ class Model:
 		self.total_steps = len(train_dataloader) * self.epochs
 		self.scheduler = get_linear_schedule_with_warmup(self.optimizer,num_warmup_steps = 0,num_training_steps = self.total_steps)
 
-
-
-	def encode_text(self,sentences=None,tokenizer=None):
-		# Get the lists of sentences and their labels.
-
-		print(' Original: ', sentences[0])
-
-		# Print the sentence split into tokens.
-		print('Tokenized: ', tokenizer.tokenize(sentences[0]))
-
-		# Print the sentence mapped to token ids.
-		print('Token IDs: ', tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize(sentences[0])))
-
-		# Tokenize all of the sentences and map the tokens to thier word IDs.
-		input_ids = []
-
-		for sent in sentences:
-			encoded_sent = tokenizer.encode(sent,add_special_tokens = True)
-			input_ids.append(encoded_sent)
-
-		print('Max sentence length: ', max([len(sen) for sen in input_ids]))
-		def pad_sequence(sequence=None,MAX_SEQ_LEN=None,pad='post'):
-			pad_seq=[0]*MAX_SEQ_LEN
-			if pad=='post':
-				if len(sequence)<MAX_SEQ_LEN:
-					pad_seq=pad_seq[len(sequence):]
-					pad_seq=sequence+pad_seq
-				else:
-					pad_seq=pad_seq+sequence[:MAX_SEQ_LEN]
-			if pad=='pre':
-				if len(sequence)<MAX_SEQ_LEN:
-					pad_seq=pad_seq[:MAX_SEQ_LEN-len(sequence)]
-					pad_seq=pad_seq+sequence
-				else:
-					pad_seq=pad_seq+sequence[:MAX_SEQ_LEN]
-			return pad_seq
-		pad='post'
-		if self.model_name=='xlnet':
-			pad='pre'
-		#input_ids=[pad_sequence(sequence,self.MAX_SEQ_LEN,pad) for sequence in input_ids]
-
-		input_ids=[tokenizer.encode(text=sent,add_special_tokens=True,max_length=self.MAX_SEQ_LEN,pad_to_max_length=True) for sent in sentences]
-
-		print(input_ids)
-		print('\nPadding/truncating all sentences to %d values...' % self.MAX_SEQ_LEN)
-
-		attention_masks = []
-
-		# For each sentence...
-		for sent in input_ids:  
-			att_mask = [int(token_id > 0) for token_id in sent]
-			attention_masks.append(att_mask)
-
-		return input_ids,attention_masks
-
-	def totensors(self,inputs_ids):
-		return torch.tensor(inputs_ids)
-	'''
-	def Create_DataLoader(self):
-		train_data = TensorDataset(self.train_inputs, self.train_masks, self.train_labels)
-		train_sampler = RandomSampler(train_data)
-		self.train_dataloader = DataLoader(train_data, sampler=train_sampler, batch_size=self.batch_size)
-
-		validation_data = TensorDataset(self.validation_inputs, self.validation_masks, self.validation_labels)
-		validation_sampler = SequentialSampler(validation_data)
-		self.validation_dataloader = DataLoader(validation_data, sampler=validation_sampler, batch_size=self.batch_size)
-	'''
-	#pb
-	def Create_DataLoader(self,inputs,masks,labels):
-		
-		td = TensorDataset(inputs, masks, labels)
-		rs = RandomSampler(td)
-		
-		return DataLoader(td, sampler=rs, batch_size=self.batch_size)
 		
 	def fit(self,train_dataloader,validation_dataloader):
 		seed_val = 42
@@ -285,7 +212,116 @@ class Model:
 
 		print("")
 		print("Training complete!")
+		
+	def predict(self,predict_dataloader):
+		self.model.eval()
+		prediction=[]
+		for batch in predict_dataloader:
+        
+					batch = tuple(t.to(self.device) for t in batch)
+        
+					b_input_ids, b_input_mask = batch
+        
+					with torch.no_grad():        
 
+						if self.model_name != 'distilbert':
+							outputs = self.model(b_input_ids, token_type_ids=None,attention_mask=b_input_mask)
+						else:
+							outputs = self.model(b_input_ids,attention_mask=b_input_mask)
+						tmp_logits = outputs[0]
+
+						tmp_logits = tmp_logits.detach().cpu().numpy()
+					prediction.extend(flat_prediction(tmp_logits))
+		return prediction
+
+
+def Create_DataLoader_train(inputs,masks,labels,batch_size=16):
+		td = TensorDataset(totensors(inputs), totensors(masks), totensors(labels))
+		rs = RandomSampler(td)
+		return DataLoader(td, sampler=rs, batch_size=batch_size)
+
+def Create_DataLoader_predict(predict_inputs,predict_masks,batch_size=16):
+		predict_data = TensorDataset(totensors(predict_inputs), totensors(predict_masks))
+		predict_sampler = RandomSampler(predict_data)
+		return DataLoader(predict_data, sampler=predict_sampler, batch_size=batch_size)
+
+def encode_text(sentences=None,tokenizer=None,MAX_SEQ_LEN=128):
+		# Get the lists of sentences and their labels.
+
+		print(' Original: ', sentences[0])
+
+		# Print the sentence split into tokens.
+		print('Tokenized: ', tokenizer.tokenize(sentences[0]))
+
+		# Print the sentence mapped to token ids.
+		print('Token IDs: ', tokenizer.convert_tokens_to_ids(tokenizer.tokenize(sentences[0])))
+
+		# Tokenize all of the sentences and map the tokens to thier word IDs.
+		input_ids = []
+
+		for sent in sentences:
+			encoded_sent = tokenizer.encode(sent,add_special_tokens = True)
+			input_ids.append(encoded_sent)
+
+		#print('Max sentence length: ', max([len(sen) for sen in input_ids]))
+		def pad_sequence(sequence=None,MAX_SEQ_LEN=None,pad='post'):
+			pad_seq=[0]*MAX_SEQ_LEN
+			if pad=='post':
+				if len(sequence)<MAX_SEQ_LEN:
+					pad_seq=pad_seq[len(sequence):]
+					pad_seq=sequence+pad_seq
+				else:
+					pad_seq=pad_seq+sequence[:MAX_SEQ_LEN]
+			if pad=='pre':
+				if len(sequence)<MAX_SEQ_LEN:
+					pad_seq=pad_seq[:MAX_SEQ_LEN-len(sequence)]
+					pad_seq=pad_seq+sequence
+				else:
+					pad_seq=pad_seq+sequence[:MAX_SEQ_LEN]
+			return pad_seq
+		pad='post'
+		#if self.model_name=='xlnet':
+		#	pad='pre'
+		#input_ids=[pad_sequence(sequence,self.MAX_SEQ_LEN,pad) for sequence in input_ids]
+
+		#input_ids=[tokenizer.encode(text=sent,add_special_tokens=True,max_length=MAX_SEQ_LEN,pad_to_max_length=True) for sent in sentences]
+		dico_input_and_mask = [tokenizer.encode_plus(text=sent,add_special_tokens=True,max_length=MAX_SEQ_LEN,pad_to_max_length=True,return_attention_mask=True) for sent in sentences]
+		attention_masks = []
+		input_ids       = []
+		for dico in dico_input_and_mask:
+			input_ids.append(dico['input_ids'])
+			attention_masks.append(dico['attention_mask'])
+		print('\nPadding/truncating all sentences to %d values...' % MAX_SEQ_LEN)
+
+		#attention_masks = []
+
+		# For each sentence...
+		#for sent in input_ids:  
+		#	att_mask = [int(token_id > 0) for token_id in sent]
+		#	attention_masks.append(att_mask)
+
+		return input_ids,attention_masks
+		
+def encode_label(labels,list_labels):
+	def label_int(label):
+			if label in list_labels:
+				idx_label=list_labels.index(label)
+			return idx_label
+	labels_int=[]
+	for lab in labels:
+		labels_int.append(label_int(lab))
+	return labels_int
+	
+def decode_label(labels_int,list_labels):
+		labels_string = []
+		for label in labels_int:
+			str_label = list_labels[label]
+			labels_string.append(str_label)
+		return labels_string
+
+def totensors(inputs):
+		return torch.tensor(inputs)
+		
 def format_time(elapsed):
     '''
     Takes a time in seconds and returns a string hh:mm:ss
@@ -301,3 +337,6 @@ def flat_accuracy(preds, labels):
     pred_flat = np.argmax(preds, axis=1).flatten()
     labels_flat = labels.flatten()
     return np.sum(pred_flat == labels_flat) / len(labels_flat)
+
+def flat_prediction(preds):
+    return np.argmax(preds, axis=1).flatten()

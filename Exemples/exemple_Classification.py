@@ -41,8 +41,8 @@ def main(args):
 			['funny'],['not funny'],['funny'],['not funny'],['funny'],['not funny'],['not funny'],['not funny'],['funny'],['not funny'],
 			]
 			
-	Classification(documents=documents,labels=labels)
-	
+	cl=Classification(documents=documents,labels=labels)
+	print(cl.predict(documents[:2]))
 	return 0
 
 if __name__ == '__main__':

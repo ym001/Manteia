@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
- 
+import Manteia
+
 from setuptools import setup, find_packages
  
 with open('requirements.txt') as f:
@@ -10,7 +11,8 @@ setup(
  
     name='Manteia',
  
-    version='0.0.9',
+    #version='0.0.10',
+    version=Manteia.__version__,
  
     packages=find_packages(),
  
@@ -33,7 +35,7 @@ setup(
         "Programming Language :: Python",
         "Development Status :: 1 - Planning",
         "License :: OSI Approved :: MIT License",
-        "Natural Language :: French",
+        "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.6",
         "Topic :: Communications",

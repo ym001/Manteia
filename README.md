@@ -11,7 +11,10 @@ You can install it with pip:
 
 Example of use:
 
-     >>> from Manteia import testManteia
-     >>> testManteia ()
+     >>> from Manteia.Classification import Classification
+     >>> # Initializing a list of texts,labels
+     >>> documents=['a text','text b']
+     >>> labels=['a','b']
+     >>> Classification(documents,labels)
 
 This code is licensed under MIT.

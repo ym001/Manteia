@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  __init__.py
+#  exemple_Data.py
 #  
 #  Copyright 2020 Yves <yves@mercadier>
 #  
@@ -20,22 +20,14 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #  
-#  
+#
+from Manteia.Generation import Generation 
+			
+def main(args):
+			
+	Generation(documents=['text a','text b'])
+	return 0
 
-"""
-	This module proclaims the good word. May they
-	regain total freedom of artificial thought towards a new age
-	reminiscent.
-"""
- 
-__version__ = "0.0.10"
-
-from Manteia import Classification
-from Manteia import Generation
-from Manteia import Preprocess
-from Manteia import Model
-from Manteia import Statistic
-from Manteia import Visualisation
-from Manteia import Task
-
-
+if __name__ == '__main__':
+    import sys
+    sys.exit(main(sys.argv))

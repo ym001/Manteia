@@ -42,6 +42,7 @@ from transformers import XLNetForSequenceClassification
 from transformers import DistilBertForSequenceClassification
 from transformers import AlbertForSequenceClassification
 from transformers import CamembertForSequenceClassification
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 import numpy as np
 import random
@@ -71,7 +72,7 @@ class Model:
 
 			# Load BertForSequenceClassification, the pretrained BERT model with a single 
 			# linear classification layer on top. 
-			self.model = BertForSequenceClassification.from_pretrained("bert-base-uncased", # Use the 12-layer BERT model, with an uncased vocab.
+			self.model     = BertForSequenceClassification.from_pretrained("bert-base-uncased", # Use the 12-layer BERT model, with an uncased vocab.
 			num_labels = self.num_labels, # The number of output labels--2 for binary classification.
 			# You can increase this for multi-class tasks.   
 			output_attentions = False, # Whether the model returns attentions weights.
@@ -79,23 +80,27 @@ class Model:
 		)
 		if self.model_name=='distilbert':
 			self.tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', do_lower_case=True)
-			self.model = DistilBertForSequenceClassification.from_pretrained("distilbert-base-uncased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = DistilBertForSequenceClassification.from_pretrained("distilbert-base-uncased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
 
 		if self.model_name=='albert':
 			self.tokenizer = AlbertTokenizer.from_pretrained('albert-base-v1', do_lower_case=True)
-			self.model = AlbertForSequenceClassification.from_pretrained("albert-base-v1",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = AlbertForSequenceClassification.from_pretrained("albert-base-v1",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
 	
 		if self.model_name=='xlnet':
 			self.tokenizer = XLNetTokenizer.from_pretrained('xlnet-base-cased', do_lower_case=True)
-			self.model = XLNetForSequenceClassification.from_pretrained("xlnet-base-cased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = XLNetForSequenceClassification.from_pretrained("xlnet-base-cased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
 
 		if self.model_name=='roberta':
 			self.tokenizer = RobertaTokenizer.from_pretrained('roberta-base', do_lower_case=True)
-			self.model = RobertaForSequenceClassification.from_pretrained("roberta-base",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = RobertaForSequenceClassification.from_pretrained("roberta-base",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
 
 		if self.model_name=='camenbert':
 			self.tokenizer = CamembertTokenizer.from_pretrained('camembert-base', do_lower_case=True)
-			self.model = CamembertForSequenceClassification.from_pretrained("camembert-base",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = CamembertForSequenceClassification.from_pretrained("camembert-base",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+		if self.model_name=='gpt2-medium':
+			self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2-medium')
+			self.model     = GPT2LMHeadModel.from_pretrained('gpt2-medium')
+
 		self.device()
 		
 	def device(self):
@@ -233,7 +238,100 @@ class Model:
 						tmp_logits = tmp_logits.detach().cpu().numpy()
 					prediction.extend(flat_prediction(tmp_logits))
 		return prediction
+	def fit_generation(self,text_loader):
 
+		self.model.train()
+		optimizer = AdamW(self.model.parameters(), lr=self.LEARNING_RATE)
+		t_total = len(text_loader) // self.EPOCHS
+
+		scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=self.WARMUP_STEPS,num_training_steps=t_total)
+		proc_seq_count = 0
+		sum_loss = 0.0
+		batch_count = 0
+		tmp_jokes_tens = None
+
+		for epoch in range(self.EPOCHS):
+    
+			print('EPOCH :'+str(epoch ))
+    
+			for idx,text in enumerate(text_loader):
+        
+				#################### "Fit as many joke sequences into MAX_SEQ_LEN sequence as possible" logic start ####
+				joke_tens = torch.tensor(self.tokenizer.encode(text[0])).unsqueeze(0).to(self.device)
+				#Skip sample from dataset if it is longer than MAX_SEQ_LEN
+				if joke_tens.size()[1] > self.MAX_SEQ_LEN:
+					continue
+        
+				#The first joke sequence in the sequence
+				if not torch.is_tensor(tmp_jokes_tens):
+					tmp_jokes_tens = joke_tens
+					continue
+				else:
+					#The next joke does not fit in so we process the sequence and leave the last joke 
+					#as the start for next sequence 
+					if tmp_jokes_tens.size()[1] + joke_tens.size()[1] > self.MAX_SEQ_LEN:
+						work_jokes_tens = tmp_jokes_tens
+						tmp_jokes_tens = joke_tens
+					else:
+						#Add the joke to sequence, continue and try to add more
+						tmp_jokes_tens = torch.cat([tmp_jokes_tens, joke_tens[:,1:]], dim=1)
+						continue
+				################## Sequence ready, process it trough the model ##################
+            
+				outputs = model(work_jokes_tens, labels=work_jokes_tens)
+				loss, logits = outputs[:2]                        
+				loss.backward()
+				sum_loss = sum_loss + loss.detach().data
+                       
+				proc_seq_count = proc_seq_count + 1
+				if proc_seq_count == BATCH_SIZE:
+					proc_seq_count = 0    
+					batch_count += 1
+					optimizer.step()
+					scheduler.step() 
+					optimizer.zero_grad()
+					model.zero_grad()
+
+				if batch_count == 100:
+					print("sum loss :"+str(sum_loss))
+					batch_count = 0
+					sum_loss = 0.0
+
+
+	def predict_generation(self,seed):
+		self.model.to(self.device)
+		self.model.eval()
+		with torch.no_grad():
+			joke_finished = False
+
+			cur_ids   = torch.tensor(self.tokenizer.encode(seed)).unsqueeze(0).to(self.device)
+
+			for i in range(200):
+				outputs = self.model(cur_ids, labels=cur_ids)
+				loss, logits = outputs[:2]
+				softmax_logits = torch.softmax(logits[0,-1], dim=0) #Take the first(from only one in this case) batch and the last predicted embedding
+				if i < 3:
+					n = 20
+				else:
+					n = 3
+				next_token_id = choose_from_top(softmax_logits.to('cpu').numpy(), n=n) #Randomly(from the topN probability distribution) select the next word
+				cur_ids = torch.cat([cur_ids, torch.ones((1,1)).long().to(self.device) * next_token_id], dim = 1) # Add the last word to the running sequence
+
+				if next_token_id in self.tokenizer.encode('<|endoftext|>'):
+					joke_finished = True
+					break
+                                
+			output_list = list(cur_ids.squeeze().to('cpu').numpy())
+		return output_list
+
+def choose_from_top(probs, n=5):
+    ind = np.argpartition(probs, -n)[-n:]
+    top_prob = probs[ind]
+    top_prob = top_prob / np.sum(top_prob) # Normalize
+    choice = np.random.choice(n, 1, p = top_prob)
+    token_id = ind[choice][0]
+    return int(token_id)
+		
 
 def Create_DataLoader_train(inputs,masks,labels,batch_size=16):
 		td = TensorDataset(totensors(inputs), totensors(masks), totensors(labels))
@@ -245,6 +343,24 @@ def Create_DataLoader_predict(predict_inputs,predict_masks,batch_size=16):
 		predict_sampler = RandomSampler(predict_data)
 		return DataLoader(predict_data, sampler=predict_sampler, batch_size=batch_size)
 
+def Create_DataLoader_generation(text):
+		return DataLoader(TextDataset(text), batch_size=1, shuffle=True)
+
+class TextDataset():
+	def __init__(self,list_texts):
+		super().__init__()
+
+		self.joke_list = []
+		end_of_text_token = "<|endoftext|>"
+		for text in list_texts:
+			self.joke_list.append(text+end_of_text_token)
+        
+	def __len__(self):
+		return len(self.joke_list)
+
+	def __getitem__(self, item):
+		return self.joke_list[item]
+		
 def encode_text(sentences=None,tokenizer=None,MAX_SEQ_LEN=128):
 		# Get the lists of sentences and their labels.
 
@@ -318,6 +434,9 @@ def decode_label(labels_int,list_labels):
 			str_label = list_labels[label]
 			labels_string.append(str_label)
 		return labels_string
+		
+def decode_text(output_list,tokenizer):
+	return tokenizer.decode(output_list)
 
 def totensors(inputs):
 		return torch.tensor(inputs)

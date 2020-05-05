@@ -30,6 +30,7 @@
  
 __version__ = "0.0.10"
 
+
 from Manteia import Classification
 from Manteia import Generation
 from Manteia import Preprocess

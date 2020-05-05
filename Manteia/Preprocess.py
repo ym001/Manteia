@@ -41,6 +41,7 @@ class Preprocess:
 		This is the class to preprocess text before task NLP.
    
 		Args:
+		
 			lang='english',preprocess=True):
 
 			documents (:obj:`list`, optional, defaults to None):
@@ -61,6 +62,7 @@ class Preprocess:
 				make preprocess in init.
             
 		Example::
+		
 			from Manteia.Preprocess import *
 			import pandas as pd
 			# Initializing a list of texts,labels
@@ -70,6 +72,7 @@ class Preprocess:
 			pp.load()
 			pp.df_documents=clean(pp.df_documents)
 			print(pp.df_documents.head())
+			
 		Attributes:
 	"""
 	def __init__(self,documents=None,labels=None,percentage=1.0,size_by_nb_sample=False,nb_sample=None,path='./Document/',lang='english',preprocess=True):

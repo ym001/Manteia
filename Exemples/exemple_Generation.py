@@ -25,7 +25,7 @@ from Manteia.Generation import Generation
 			
 def main(args):
 			
-	Generation(documents=['text a','text b'])
+	Generation(seed='What do you do if a bird shits on your car?')
 	return 0
 
 if __name__ == '__main__':

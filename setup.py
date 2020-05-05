@@ -23,7 +23,9 @@ setup(
     description="deep learning,NLP,classification,text,bert,distilbert,albert,xlnet,roberta,gpt2",
  
     long_description=open('README.md').read(),
- 
+
+    long_description_content_type='text/markdown',
+
     install_requires=requirements ,
  
     # Active la prise en compte du fichier MANIFEST.in

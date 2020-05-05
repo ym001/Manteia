@@ -1,13 +1,6 @@
 
 Simple Documentation Tutorial : Mantéïa
 =======================================
-
-Another Head
-------------
-
-some texte.
-    print('Hello')
-    >>Hello
    
 Guide
 -----
@@ -15,6 +8,24 @@ Guide
 .. automodule:: Manteia.Classification
     :members:
     
+.. automodule:: Manteia.Generation
+    :members:
+
+.. automodule:: Manteia.Model
+    :members:
+
+.. automodule:: Manteia.Preprocess
+    :members:
+
+.. automodule:: Manteia.Visualisation
+    :members:
+
+.. automodule:: Manteia.Statistic
+    :members:
+
+.. automodule:: Manteia.Task
+    :members:
+
 .. toctree::
    :maxdepth: 2
 

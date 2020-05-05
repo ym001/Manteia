@@ -1,0 +1,5 @@
+[console_scripts]
+Manteia-classification = Manteia.Manteia:makeClassification
+Manteia-data = Manteia.Manteia:readData
+Manteia-test = Manteia.Manteia:testManteia
+

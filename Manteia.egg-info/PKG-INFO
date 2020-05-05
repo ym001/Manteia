@@ -1,0 +1,37 @@
+Metadata-Version: 1.1
+Name: Manteia
+Version: 0.0.10
+Summary: deep learning,NLP,classification,text,bert,distilbert,albert,xlnet,roberta,gpt2
+Home-page: https://github.com/ym001/Manteia
+Author: Yves Mercadier
+Author-email: manteia.ym001@gmail.com
+License: UNKNOWN
+Description: Manteia - proclaim the good word
+        ================================================================
+        
+        This module proclaims the good word. May they
+        regain total freedom of artificial thought towards a new age
+        reminiscent.
+        
+        You can install it with pip:
+        
+             pip install Manteia
+        
+        Example of use:
+        
+             >>> from Manteia.Classification import Classification
+             >>> # Initializing a list of texts,labels
+             >>> documents=['a text','text b']
+             >>> labels=['a','b']
+             >>> Classification(documents,labels)
+        
+        This code is licensed under MIT.
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
+Classifier: Development Status :: 1 - Planning
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Communications

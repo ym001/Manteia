@@ -43,13 +43,14 @@ class Classification:
 			
 		Attributes:
 	"""
-	def __init__(self,model_name ='bert',documents = None,labels = None): 
+	def __init__(self,model_name ='bert',documents = [],labels = []): 
 		self.MAX_SEQ_LEN = 64
 		self.model_name  = model_name
 		
-		if documents!=None and labels!=None:
-			pp               = Preprocess(documents,labels)
+		if documents!=[] and labels!=[]:
+			pp               = Preprocess(documents=documents,labels=labels)
 			self.list_labels = pp.list_labels
+			print(self.list_labels)
 			self.model       = Model(num_labels=len(pp.list_labels))
 			self.model.load()
 
@@ -65,6 +66,7 @@ class Classification:
 		
 			self.model.configuration(dt_train)
 			self.model.fit(dt_train,dt_validation)
+			
 	def test(self):
 		return "Classification Mantéïa."
 		

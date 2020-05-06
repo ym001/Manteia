@@ -75,7 +75,7 @@ class Preprocess:
 			
 		Attributes:
 	"""
-	def __init__(self,documents=None,labels=None,percentage=1.0,size_by_nb_sample=False,nb_sample=None,path='./Document/',lang='english',preprocess=True):
+	def __init__(self,documents=[],labels=[],percentage=1.0,size_by_nb_sample=False,nb_sample=None,path='./Document/',lang='english',preprocess=True):
 
 		self.documents=documents
 		self.labels=labels
@@ -83,28 +83,32 @@ class Preprocess:
 		self.size_by_nb_sample=size_by_nb_sample
 		self.path=path
 		self.lang=lang
-		if preprocess and documents!=None and labels!=None:
+		if preprocess and documents!=[] and labels!=[]:
 			print('Preprocess...')
+			################
+			for i in range(len(documents)):
+				documents[i]=str(documents[i])
+			for i in range(len(labels)):
+				labels[i]=str(labels[i])
+			################
 			self.load()
 			self.reduction()
 			self.df_documents=clean(self.df_documents)
 			self.list_labels=self.list_labels(self.df_labels[LABEL_COLUMN].values.tolist())
 		
 			self.documents=self.df_documents[TEXT_COLUMN].values.tolist()
-			print(self.documents)
 			self.labels=self.df_labels[LABEL_COLUMN].values.tolist()
-			#self.construct_id()
 			
 	def test(self):
 		return "Preprocess Mantéïa."
 		
 	def load(self): # load data -> dataframe df
-		if self.documents!=None:
+		if self.documents!=[]:
 			self.df_documents=pd.DataFrame({TEXT_COLUMN:self.documents})
-		if self.labels!=None:
+		if self.labels!=[]:
 			self.df_labels  =pd.DataFrame({LABEL_COLUMN:self.labels})
 			#multiclass
-			self.df_labels[LABEL_COLUMN] = self.df_labels[LABEL_COLUMN].apply(lambda x: x[0])
+			#self.df_labels[LABEL_COLUMN] = self.df_labels[LABEL_COLUMN].apply(lambda x: x[0])
 
 	def reduction(self):
 		if self.size_by_nb_sample==True:
@@ -127,11 +131,19 @@ class Preprocess:
 
 	def get_df(self):
 		return pd.DataFrame({TEXT_COLUMN:self.df_documents[TEXT_COLUMN] , LABEL_COLUMN:self.df_labels[LABEL_COLUMN]})
-		
+
+	
 	def list_labels(self,labels):
 		return list(np.sort(np.unique(np.array(labels)), axis=0))
-
-
+	'''
+	def list_labels(self,labels):
+		label=[]
+		for l in labels:
+				if l not in label:
+					label.append(l)
+		label.sort(reverse=False)
+		return label
+	'''
 		
 def clean_stop_word(df,lang='english'):
 		stop_unicode = stopwords.words(lang)

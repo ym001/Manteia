@@ -26,13 +26,39 @@ import numpy as np
 
 class Statistic:
 	
-	
-	def __init__(self,documents=None,labels=None,name=None,path='',statistic=True):
+	r"""
+		This is the class to make statistic of text.
+		
+		Args:
+		
+				
+			documents (:obj:`list`, optional, defaults to None):
+				A list of documents.
+				
+			labels (:obj:`float`, optional, defaults to None):
+				A list of labels.
+
+			dataset_name (:obj:`string`, optional, defaults to ''):
+				Name of the dataset.
+
+			path (:obj:`string`, optional, defaults to ''):
+				Path to save the report.
+				 
+		Example::
+		
+			from Manteia.Statistic import Statistic
+			documents=['a text','text b']
+			labels=['a','b']
+			Statistic(documents,labels)
+			
+		Attributes:
+	"""
+	def __init__(self,documents=[],labels=[],dataset_name='',path='',statistic=True):
 		self.documents=documents
 		self.labels=labels
 		self.path=path
-		self.name=name
-		if statistic==True and documents!=None and labels!=None:
+		self.dataset_name=dataset_name
+		if statistic==True and documents!=[] and labels!=[]:
 			self.list_labels=self.list_labels(labels)
 			self.print_report()
 		
@@ -139,7 +165,7 @@ class Statistic:
 		
 	def report(self):
 		report=''
-		report+="Dataset : {}\n".format(self.name)
+		report+="Dataset : {}\n".format(self.dataset_name)
 		report+="Number of documents : {}\n".format(self.number_text())
 		report+="Type : {}\n".format(self.type(self.labels))
 		report+="List of labels : {}\n".format(self.list_labels)
@@ -155,9 +181,9 @@ class Statistic:
 		print(self.report())
 		
 	def save_report(self):
-		fichier=self.path+"statistical_report_"+self.name+".txt"
+		fichier=self.path+"statistical_report_"+self.dataset_name+".txt"
 		mon_fichier = open(fichier, "w") 
-		mon_fichier.write(self.rapport)
+		mon_fichier.write(self.report)
 		mon_fichier.close()
 		
 	def list_labels(self,labels):

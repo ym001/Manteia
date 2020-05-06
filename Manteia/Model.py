@@ -33,7 +33,8 @@ from transformers import (
     RobertaTokenizer,
     DistilBertTokenizer,
     AlbertTokenizer,
-    CamembertTokenizer
+    CamembertTokenizer,
+    FlaubertTokenizer
 )
 from transformers import BertForSequenceClassification
 from transformers import RobertaForSequenceClassification
@@ -42,6 +43,7 @@ from transformers import XLNetForSequenceClassification
 from transformers import DistilBertForSequenceClassification
 from transformers import AlbertForSequenceClassification
 from transformers import CamembertForSequenceClassification
+from transformers import FlaubertForSequenceClassification
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 import numpy as np
@@ -55,25 +57,66 @@ import gc
 
 #model'distilbert','albert','xlnet','roberta','camenbert','scibert'
 class Model:
-	def __init__(self,model_name ='bert',num_labels=None): # constructeur
+	r"""
+		This is the class to construct model.
+		
+		Args:
+		
+			model_name (:obj:`string`, optional, defaults to  'bert'):
+				give the name of a model.
+			num_labels (:obj:`int`, optional, defaults to  '0'):
+				give the number of categorie for classification.
+				
+
+				 
+		Example::
+		
+			from Manteia.Preprocess import Preprocess
+			from Manteia.Model import Model,encode_text,encode_label,Create_DataLoader_train
+			from sklearn.model_selection import train_test_split
+
+			documents=['a text','text b']
+			labels=['a','b']
+			pp               = Preprocess(documents=documents,labels=labels)
+			model       = Model(model_name=model_name,num_labels=len(pp.list_labels))
+			model.load()
+
+			train_text, validation_text, train_labels, validation_labels = train_test_split(pp.documents, pp.labels, random_state=2018, test_size=0.1)
+
+			train_ids,train_masks           = encode_text(train_text,model.tokenizer,MAX_SEQ_LEN)
+			validation_ids,validation_masks = encode_text(validation_text,model.tokenizer,MAX_SEQ_LEN)
+			train_labels                    = encode_label(train_labels,pp.list_labels)
+			validation_labels               = encode_label(validation_labels,pp.list_labels)
+
+			dt_train          = Create_DataLoader_train(train_ids,train_masks,train_labels)
+			dt_validation     = Create_DataLoader_train(validation_ids,validation_masks,validation_labels)
+		
+			model.configuration(dt_train)
+			model.fit(dt_train,dt_validation)
+			
+		Attributes:
+	"""
+	def __init__(self,model_name ='bert',num_labels=0): # constructeur
 		self.model_name = model_name
 		self.batch_size = 32
 		self.epochs = 4
-		self.MAX_SEQ_LEN = 64
+		self.MAX_SEQ_LEN = 12
+
 		self.num_labels=num_labels
 	def test(self):
 		return "Model Mantéïa."
 	def load(self):
 		# Load the tokenizer.
 		print('Loading {} tokenizer...'.format(self.model_name))
-
+		num_labels = self.num_labels # The number of output labels
 		if self.model_name=='bert':
-			self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
+			#model_type='bert-base-uncased'
+			model_type='bert-base-multilingual-cased'
+			self.tokenizer = BertTokenizer.from_pretrained(model_type, do_lower_case=True)
 
 			# Load BertForSequenceClassification, the pretrained BERT model with a single 
 			# linear classification layer on top. 
-			self.model     = BertForSequenceClassification.from_pretrained("bert-base-uncased", # Use the 12-layer BERT model, with an uncased vocab.
-			num_labels = self.num_labels, # The number of output labels--2 for binary classification.
+			self.model     = BertForSequenceClassification.from_pretrained(model_type, # Use the 12-layer BERT model, with an uncased vocab.
 			# You can increase this for multi-class tasks.   
 			output_attentions = False, # Whether the model returns attentions weights.
 			output_hidden_states = False, # Whether the model returns all hidden-states.
@@ -97,6 +140,10 @@ class Model:
 		if self.model_name=='camenbert':
 			self.tokenizer = CamembertTokenizer.from_pretrained('camembert-base', do_lower_case=True)
 			self.model     = CamembertForSequenceClassification.from_pretrained("camembert-base",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+
+		if self.model_name=='flaubert':
+			self.tokenizer = FlaubertTokenizer.from_pretrained('flaubert-base-uncased', do_lower_case=True)
+			self.model     = FlaubertForSequenceClassification.from_pretrained("flaubert-base-uncased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='gpt2-medium':
 			self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2-medium')
 			self.model     = GPT2LMHeadModel.from_pretrained('gpt2-medium')
@@ -174,22 +221,22 @@ class Model:
     
 				loss_values.append(avg_train_loss)
 
-				print("")
-				print("  Average training loss: {0:.2f}".format(avg_train_loss))
-				print("  Training epcoh took: {:}".format(format_time(time.time() - t0)))
+			print("")
+			print("  Average training loss: {0:.2f}".format(avg_train_loss))
+			print("  Training epoch took: {:}".format(format_time(time.time() - t0)))
         
 
-				print("")
-				print("Running Validation...")
+			print("")
+			print("Running Validation...")
 
-				t0 = time.time()
+			t0 = time.time()
 
-				self.model.eval()
+			self.model.eval()
 
-				eval_loss, eval_accuracy = 0, 0
-				nb_eval_steps, nb_eval_examples = 0, 0
+			eval_loss, eval_accuracy = 0, 0
+			nb_eval_steps, nb_eval_examples = 0, 0
 
-				for batch in validation_dataloader:
+			for batch in validation_dataloader:
         
 					batch = tuple(t.to(self.device) for t in batch)
         
@@ -212,8 +259,8 @@ class Model:
 
 					nb_eval_steps += 1
 
-				print("  Accuracy: {0:.2f}".format(eval_accuracy/nb_eval_steps))
-				print("  Validation took: {:}".format(format_time(time.time() - t0)))
+			print("  Accuracy: {0:.2f}".format(eval_accuracy/nb_eval_steps))
+			print("  Validation took: {:}".format(format_time(time.time() - t0)))
 
 		print("")
 		print("Training complete!")

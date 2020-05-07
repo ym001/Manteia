@@ -10,13 +10,13 @@ You can install it with pip :
      __pip install Manteia__
 
 Example of use Classification :
-''
-     >>> from Manteia.Classification import Classification
-     >>> # Initializing a list of texts,labels
-     >>> documents=['a text','text b']
-     >>> labels=['a','b']
-     >>> Classification(documents,labels)
-''
+
+    '>>> from Manteia.Classification import Classification'  
+    '>>> # Initializing a list of texts,labels'  
+    '>>> documents=['a text','text b']'  
+    '>>> labels=['a','b']'  
+    '>>> Classification(documents,labels)'
+
 Example of use Generation :
 
      >>> from Manteia.Generation import Generation

@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>License &#8212; Mantéïa 0.0.10 documentation</title>
+    <title>Generation &#8212; Mantéïa 0.0.10 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -16,7 +16,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Task" href="Task.html" /> 
+    <link rel="next" title="Model" href="Model.html" />
+    <link rel="prev" title="Classification" href="Classification.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -28,7 +29,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Task.html" title="Task"
+          <a href="Model.html" title="Model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Classification.html" title="Classification"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mantéïa 0.0.10 documentation</a> &#187;</li> 
       </ul>
@@ -39,16 +43,32 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="license">
-<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
-<p>Copyright © &lt;copyright holders&gt;
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-<p>The Software is provided “as is”, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the Software.</p>
+  <div class="section" id="module-Manteia.Generation">
+<span id="generation"></span><h1>Generation<a class="headerlink" href="#module-Manteia.Generation" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="Manteia.Generation.Generation">
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Generation.</code><code class="sig-name descname">Generation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">'gpt2-medium'</span></em>, <em class="sig-param"><span class="n">documents</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Generation.Generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the class to gnerate text in categorie a NLP task.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>model_name (<code class="xref py py-obj docutils literal notranslate"><span class="pre">string</span></code>, optional, defaults to  ‘bert’):</dt><dd><p>give the name of a model.</p>
+</dd>
+<dt>documents (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>, optional, defaults to None):</dt><dd><p>A list of documents.</p>
+</dd>
+<dt>labels (<code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code>, optional, defaults to None):</dt><dd><p>A list of labels.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Generation</span> <span class="kn">import</span> <span class="n">Generation</span> 
+
+<span class="n">Generation</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="s1">&#39;What do you do if a bird shits on your car?&#39;</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="contact">
-<h1>Contact<a class="headerlink" href="#contact" title="Permalink to this headline">¶</a></h1>
-<p>Question? Please contact <a class="reference external" href="mailto:manteia&#46;ym001&#37;&#52;&#48;gmail&#46;com">manteia<span>&#46;</span>ym001<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+<p>Attributes:</p>
+</dd></dl>
+
 </div>
 
 
@@ -57,19 +77,16 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">License</a></li>
-<li><a class="reference internal" href="#contact">Contact</a></li>
-</ul>
-
   <h4>Previous topic</h4>
-  <p class="topless"><a href="Task.html"
-                        title="previous chapter">Task</a></p>
+  <p class="topless"><a href="Classification.html"
+                        title="previous chapter">Classification</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Model.html"
+                        title="next chapter">Model</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/license.rst.txt"
+      <li><a href="_sources/Generation.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -97,7 +114,10 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Task.html" title="Task"
+          <a href="Model.html" title="Model"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Classification.html" title="Classification"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Mantéïa 0.0.10 documentation</a> &#187;</li> 
       </ul>

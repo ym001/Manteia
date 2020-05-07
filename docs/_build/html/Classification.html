@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Classification &#8212; Mantéïa 0.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Generation" href="Generation.html" />
+    <link rel="prev" title="Simple Documentation Tutorial : Mantéïa" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Generation.html" title="Generation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Simple Documentation Tutorial : Mantéïa"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mantéïa 0.0.10 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-Manteia.Classification">
+<span id="classification"></span><h1>Classification<a class="headerlink" href="#module-Manteia.Classification" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-useful_1"></span><dl class="py class">
+<dt id="Manteia.Classification.Classification">
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Classification.</code><code class="sig-name descname">Classification</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labels</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">process</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Classification.Classification" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the class to classify text in categorie a NLP task.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>model_name (<code class="xref py py-obj docutils literal notranslate"><span class="pre">string</span></code>, optional, defaults to  ‘bert’):</dt><dd><p>give the name of a model.</p>
+</dd>
+<dt>documents (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>, optional, defaults to None):</dt><dd><p>A list of documents.</p>
+</dd>
+<dt>labels (<code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code>, optional, defaults to None):</dt><dd><p>A list of labels.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Classification</span> <span class="kn">import</span> <span class="n">Classification</span>
+<span class="c1"># Initializing a list of texts,labels</span>
+<span class="n">documents</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a text&#39;</span><span class="p">,</span><span class="s1">&#39;text b&#39;</span><span class="p">]</span>
+<span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+<span class="n">Classification</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Attributes:</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Simple Documentation Tutorial : Mantéïa</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Generation.html"
+                        title="next chapter">Generation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Classification.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Generation.html" title="Generation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Simple Documentation Tutorial : Mantéïa"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mantéïa 0.0.10 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mercadier.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

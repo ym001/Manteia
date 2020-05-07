@@ -5,11 +5,11 @@ This module proclaims the good word. May they
 regain total freedom of artificial thought towards a new age
 reminiscent.
 
-You can install it with pip:
+You can install it with pip :
 
      pip install Manteia
 
-Example of use Classification:
+Example of use Classification :
 
      >>> from Manteia.Classification import Classification
      >>> # Initializing a list of texts,labels
@@ -17,11 +17,15 @@ Example of use Classification:
      >>> labels=['a','b']
      >>> Classification(documents,labels)
 
-Example of use Generation:
+Example of use Generation :
 
      >>> from Manteia.Generation import Generation
      >>> Generation(seed='What do you do if a bird shits on your car?')
      If you're a car owner, you're supposed to be able to call the police
      and have them take the bird off the car.
-     
+
+documentation :
+
+     https://manteia.readthedocs.io/en/latest/#
+
 This code is licensed under MIT.

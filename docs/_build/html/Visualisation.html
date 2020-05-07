@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Visualisation &#8212; Mantéïa 0.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Statistic" href="Statistic.html" />
+    <link rel="prev" title="Preprocess" href="Preprocess.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Statistic.html" title="Statistic"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Preprocess.html" title="Preprocess"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mantéïa 0.0.10 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-Manteia.Visualisation">
+<span id="visualisation"></span><h1>Visualisation<a class="headerlink" href="#module-Manteia.Visualisation" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="Manteia.Visualisation.Visualisation">
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Visualisation.</code><code class="sig-name descname">Visualisation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">save</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Visualisation.Visualisation" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the class to make visualisation of NLP task.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>documents (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>, optional, defaults to None):</dt><dd><p>A list of documents.</p>
+</dd>
+<dt>labels (<code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code>, optional, defaults to None):</dt><dd><p>A list of labels.</p>
+</dd>
+<dt>dataset_name (<code class="xref py py-obj docutils literal notranslate"><span class="pre">string</span></code>, optional, defaults to ‘’):</dt><dd><p>Name of the dataset.</p>
+</dd>
+<dt>path (<code class="xref py py-obj docutils literal notranslate"><span class="pre">string</span></code>, optional, defaults to ‘’):</dt><dd><p>Path to save the report.</p>
+</dd>
+<dt>save (<code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code>, optional, defaults to False):</dt><dd><p>save the graph to the path.</p>
+</dd>
+<dt>show (<code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code>, optional, defaults to False):</dt><dd><p>show the graph.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Statistic</span> <span class="kn">import</span> <span class="n">Statistic</span> 
+<span class="kn">from</span> <span class="nn">Manteia.Visualisation</span> <span class="kn">import</span> <span class="n">Visualisation</span>
+
+<span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
+<span class="s1">&#39;  !?? What do you call a potato in space? Spudnik:::13 ;;    //   &#39;</span><span class="p">,</span>
+<span class="s1">&#39;What should you do before criticizing Pac-Man? WAKA WAKA WAKA mile in his shoe.&#39;</span><span class="p">,</span>
+<span class="s1">&#39;What did Arnold Schwarzenegger say at the abortion clinic? Hasta last vista, baby.&#39;</span><span class="p">,</span>
+<span class="s1">&#39;Why do you never see elephants hiding in trees? </span><span class="se">\&#39;</span><span class="s1">Cause they are freaking good at it&#39;</span><span class="p">,</span>
+<span class="s1">&#39;My son just got a tattoo of a heart, a spade, a club, and a diamond, all without my permission. I guess I</span><span class="se">\&#39;</span><span class="s1">ll deal with him later.&#39;</span><span class="p">,</span>
+<span class="s1">&#39;Mom: &quot;Do you want this?&quot; Me: &quot;No.&quot; Mom: &quot;Ok I</span><span class="se">\&#39;</span><span class="s1">ll give it to your brother.&quot; Me: &quot;No I want it.&quot;&#39;</span><span class="p">,</span>
+<span class="s1">&#39;Ibuprofen is my favorite headache medicine that also sounds like a reggae professor.&#39;</span><span class="p">,</span>
+<span class="s1">&#39;INTERVIEWER: Why do you want to work here? ME: *crumbs tumbling from my mouth* Oh, I don</span><span class="se">\&#39;</span><span class="s1">t. I was just walking by and saw you had donuts.&#39;</span><span class="p">,</span>
+<span class="s1">&#39;I</span><span class="se">\&#39;</span><span class="s1">ve struggled for years to be above the influence... But I</span><span class="se">\&#39;</span><span class="s1">ve never been able to get that high&#39;</span><span class="p">,</span>
+<span class="s1">&#39;With Facebook, you can stay in touch with people you would otherwise never talk to, but that</span><span class="se">\&#39;</span><span class="s1">s only one of the many awful things about it&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span>
+<span class="p">[</span><span class="s1">&#39;funny&#39;</span><span class="p">],[</span><span class="s1">&#39;not funny&#39;</span><span class="p">],[</span><span class="s1">&#39;funny&#39;</span><span class="p">],[</span><span class="s1">&#39;not funny&#39;</span><span class="p">],[</span><span class="s1">&#39;funny&#39;</span><span class="p">],[</span><span class="s1">&#39;not funny&#39;</span><span class="p">],[</span><span class="s1">&#39;not funny&#39;</span><span class="p">],[</span><span class="s1">&#39;not funny&#39;</span><span class="p">],[</span><span class="s1">&#39;funny&#39;</span><span class="p">],[</span><span class="s1">&#39;not funny&#39;</span><span class="p">],</span>
+<span class="p">]</span>
+
+<span class="n">stat</span><span class="o">=</span><span class="n">Statistic</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="p">)</span>
+<span class="n">dictionary</span><span class="o">=</span><span class="n">stat</span><span class="o">.</span><span class="n">dictionnary_stat_labels</span><span class="p">()</span>
+<span class="n">path</span><span class="o">=</span><span class="s1">&#39;./visu.png&#39;</span>
+<span class="n">visu</span> <span class="o">=</span> <span class="n">Visualisation</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">visu</span><span class="o">.</span><span class="n">format_data</span><span class="p">(</span><span class="n">dictionary</span><span class="p">)</span>
+<span class="n">visu</span><span class="o">.</span><span class="n">plot_bar</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Attributes:</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Preprocess.html"
+                        title="previous chapter">Preprocess</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Statistic.html"
+                        title="next chapter">Statistic</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Visualisation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Statistic.html" title="Statistic"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Preprocess.html" title="Preprocess"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mantéïa 0.0.10 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mercadier.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Model &#8212; Mantéïa 0.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Preprocess" href="Preprocess.html" />
+    <link rel="prev" title="Generation" href="Generation.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Preprocess.html" title="Preprocess"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Generation.html" title="Generation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mantéïa 0.0.10 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-Manteia.Model">
+<span id="model"></span><h1>Model<a class="headerlink" href="#module-Manteia.Model" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="Manteia.Model.EarlyStopping">
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Model.</code><code class="sig-name descname">EarlyStopping</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">patience</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">delta</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Model.EarlyStopping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Early stops the training if validation loss doesn’t improve after a given patience.</p>
+<dl class="py method">
+<dt id="Manteia.Model.EarlyStopping.save_checkpoint">
+<code class="sig-name descname">save_checkpoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">acc_validation</span></em>, <em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Model.EarlyStopping.save_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves model when validation loss decrease.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="Manteia.Model.Model">
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Model.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">'bert'</span></em>, <em class="sig-param"><span class="n">num_labels</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">early_stopping</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">'./model'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Model.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the class to construct model.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>model_name (<code class="xref py py-obj docutils literal notranslate"><span class="pre">string</span></code>, optional, defaults to  ‘bert’):</dt><dd><p>give the name of a model.</p>
+</dd>
+<dt>num_labels (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, optional, defaults to  ‘0’):</dt><dd><p>give the number of categorie for classification.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Preprocess</span> <span class="kn">import</span> <span class="n">Preprocess</span>
+<span class="kn">from</span> <span class="nn">Manteia.Model</span> <span class="kn">import</span> <span class="n">Model</span><span class="p">,</span><span class="n">encode_text</span><span class="p">,</span><span class="n">encode_label</span><span class="p">,</span><span class="n">Create_DataLoader_train</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">documents</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a text&#39;</span><span class="p">,</span><span class="s1">&#39;text b&#39;</span><span class="p">]</span>
+<span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+<span class="n">pp</span>               <span class="o">=</span> <span class="n">Preprocess</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+<span class="n">model</span>       <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span><span class="n">num_labels</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">list_labels</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+<span class="n">train_text</span><span class="p">,</span> <span class="n">validation_text</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">,</span> <span class="n">validation_labels</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">documents</span><span class="p">,</span> <span class="n">pp</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2018</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="n">train_ids</span><span class="p">,</span><span class="n">train_masks</span>           <span class="o">=</span> <span class="n">encode_text</span><span class="p">(</span><span class="n">train_text</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">,</span><span class="n">MAX_SEQ_LEN</span><span class="p">)</span>
+<span class="n">validation_ids</span><span class="p">,</span><span class="n">validation_masks</span> <span class="o">=</span> <span class="n">encode_text</span><span class="p">(</span><span class="n">validation_text</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">,</span><span class="n">MAX_SEQ_LEN</span><span class="p">)</span>
+<span class="n">train_labels</span>                    <span class="o">=</span> <span class="n">encode_label</span><span class="p">(</span><span class="n">train_labels</span><span class="p">,</span><span class="n">pp</span><span class="o">.</span><span class="n">list_labels</span><span class="p">)</span>
+<span class="n">validation_labels</span>               <span class="o">=</span> <span class="n">encode_label</span><span class="p">(</span><span class="n">validation_labels</span><span class="p">,</span><span class="n">pp</span><span class="o">.</span><span class="n">list_labels</span><span class="p">)</span>
+
+<span class="n">dt_train</span>          <span class="o">=</span> <span class="n">Create_DataLoader_train</span><span class="p">(</span><span class="n">train_ids</span><span class="p">,</span><span class="n">train_masks</span><span class="p">,</span><span class="n">train_labels</span><span class="p">)</span>
+<span class="n">dt_validation</span>     <span class="o">=</span> <span class="n">Create_DataLoader_train</span><span class="p">(</span><span class="n">validation_ids</span><span class="p">,</span><span class="n">validation_masks</span><span class="p">,</span><span class="n">validation_labels</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">configuration</span><span class="p">(</span><span class="n">dt_train</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dt_train</span><span class="p">,</span><span class="n">dt_validation</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Attributes:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Manteia.Model.format_time">
+<code class="sig-prename descclassname">Manteia.Model.</code><code class="sig-name descname">format_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">elapsed</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Model.format_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a time in seconds and returns a string hh:mm:ss</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Generation.html"
+                        title="previous chapter">Generation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Preprocess.html"
+                        title="next chapter">Preprocess</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Model.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Preprocess.html" title="Preprocess"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Generation.html" title="Generation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Mantéïa 0.0.10 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mercadier.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

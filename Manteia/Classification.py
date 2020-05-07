@@ -43,21 +43,25 @@ class Classification:
 			
 		Attributes:
 	"""
-	def __init__(self,model_name ='bert',documents = [],labels = []): 
-		self.MAX_SEQ_LEN = 64
-		self.model_name  = model_name
+	def __init__(self,documents = [],labels = [],model=None,process=False,verbose=True):
 		
 		if documents!=[] and labels!=[]:
 			pp               = Preprocess(documents=documents,labels=labels)
 			self.list_labels = pp.list_labels
-			print(self.list_labels)
-			self.model       = Model(num_labels=len(pp.list_labels))
+			
+		if model!=None:
+			self.model = model
+		else:
+			self.model = Model(num_labels=len(pp.list_labels),early_stopping=True)
+
+		if process:
+			print('Process...')
 			self.model.load()
 
 			train_text, validation_text, train_labels, validation_labels = train_test_split(pp.documents, pp.labels, random_state=2018, test_size=0.1)
 
-			train_ids,train_masks           = encode_text(train_text,self.model.tokenizer,self.MAX_SEQ_LEN)
-			validation_ids,validation_masks = encode_text(validation_text,self.model.tokenizer,self.MAX_SEQ_LEN)
+			train_ids,train_masks           = encode_text(train_text,self.model.tokenizer,self.model.MAX_SEQ_LEN)
+			validation_ids,validation_masks = encode_text(validation_text,self.model.tokenizer,self.model.MAX_SEQ_LEN)
 			train_labels                    = encode_label(train_labels,pp.list_labels)
 			validation_labels               = encode_label(validation_labels,pp.list_labels)
 

@@ -96,13 +96,13 @@ class Model:
 			
 		Attributes:
 	"""
-	def __init__(self,model_name ='bert',num_labels=0): # constructeur
+	def __init__(self,model_name ='bert',num_labels=0,early_stopping=False,path='./model'): # constructeur
 		self.model_name = model_name
-		self.batch_size = 32
-		self.epochs = 4
-		self.MAX_SEQ_LEN = 12
-
+		self.early_stopping=early_stopping
 		self.num_labels=num_labels
+		self.path=path
+		if self.early_stopping:
+			self.es=EarlyStopping(path=path)
 	def test(self):
 		return "Model Mantéïa."
 	def load(self):
@@ -162,7 +162,11 @@ class Model:
 			print('No GPU available, using the CPU instead.')
 			self.device = torch.device("cpu")
 
-	def configuration(self,train_dataloader):
+	def configuration(self,train_dataloader,batch_size = 16,epochs = 20,MAX_SEQ_LEN = 128):
+		self.batch_size = batch_size
+		self.epochs = epochs
+		self.MAX_SEQ_LEN = MAX_SEQ_LEN
+		
 		self.model.cuda()
 		self.optimizer = AdamW(self.model.parameters(),lr = 2e-5,eps = 1e-8)
 		self.total_steps = len(train_dataloader) * self.epochs
@@ -224,9 +228,7 @@ class Model:
 			print("")
 			print("  Average training loss: {0:.2f}".format(avg_train_loss))
 			print("  Training epoch took: {:}".format(format_time(time.time() - t0)))
-        
-
-			print("")
+			
 			print("Running Validation...")
 
 			t0 = time.time()
@@ -258,14 +260,22 @@ class Model:
 					eval_accuracy += tmp_eval_accuracy
 
 					nb_eval_steps += 1
-
-			print("  Accuracy: {0:.2f}".format(eval_accuracy/nb_eval_steps))
+			acc_validation=eval_accuracy/nb_eval_steps
+			print("  Accuracy: {0:.2f}".format(acc_validation))
 			print("  Validation took: {:}".format(format_time(time.time() - t0)))
 
+			if self.early_stopping:
+				self.es(acc_validation, self.model)
+                 
+				if self.es.early_stop:
+					print("Early stopping")
+					break
 		print("")
 		print("Training complete!")
 		
 	def predict(self,predict_dataloader):
+		if self.early_stopping:
+			self.model.from_pretrained(self.path)
 		self.model.eval()
 		prediction=[]
 		for batch in predict_dataloader:
@@ -285,6 +295,7 @@ class Model:
 						tmp_logits = tmp_logits.detach().cpu().numpy()
 					prediction.extend(flat_prediction(tmp_logits))
 		return prediction
+		
 	def fit_generation(self,text_loader):
 
 		self.model.train()
@@ -500,9 +511,69 @@ def format_time(elapsed):
 
 # Function to calculate the accuracy of our predictions vs labels
 def flat_accuracy(preds, labels):
-    pred_flat = np.argmax(preds, axis=1).flatten()
-    labels_flat = labels.flatten()
-    return np.sum(pred_flat == labels_flat) / len(labels_flat)
+	pred_flat = np.argmax(preds, axis=1).flatten()
+	labels_flat = labels.flatten()
+	return np.sum(pred_flat == labels_flat) / len(labels_flat)
+
+def accuracy(preds, labels):
+	return np.sum(preds == labels) / len(labels)
 
 def flat_prediction(preds):
-    return np.argmax(preds, axis=1).flatten()
+	return np.argmax(preds, axis=1).flatten()
+
+
+class EarlyStopping:
+	"""Early stops the training if validation loss doesn't improve after a given patience."""
+	def __init__(self, patience=2, delta=0,path=None, verbose=True):
+		"""
+        Args:
+            patience (int): How long to wait after last time validation loss improved.
+                            Default: 2
+            verbose (bool): If True, prints a message for each validation loss improvement. 
+                            Default: False
+            delta (float): Minimum change in the monitored quantity to qualify as an improvement.
+                            Default: 0
+		"""
+		self.patience = patience
+		self.verbose = verbose
+		self.counter = 0
+		self.best_score = None
+		self.early_stop = False
+		self.acc_validation_min = 0
+		self.delta = delta
+		self.path=path
+
+	def __call__(self, acc_validation , model):
+        
+		score = acc_validation
+
+		if self.best_score is None:
+			self.best_score = score
+			self.save_checkpoint(acc_validation, model)
+		elif score < self.best_score:
+			self.counter += 1
+			print(f'EarlyStopping counter: {self.counter} out of {self.patience}')
+			if self.counter >= self.patience:
+				self.early_stop = True
+		else:
+			print(f'Save model : {self.counter} out of {self.patience}')
+			self.best_score = score
+			self.save_checkpoint(acc_validation, model)
+			self.counter = 0
+
+	def save_checkpoint(self, acc_validation, model):
+		'''Saves model when validation loss decrease.'''
+		print(self.path)
+		if self.verbose:
+			print(f'Validation accuracy increased ({self.acc_validation_min:.6f} --> {acc_validation:.6f}).  Saving model ...')
+		import os
+		if not os.path.isdir(self.path):
+			# define the name of the directory to be created
+			try:
+				os.mkdir(self.path)
+			except OSError:
+				print ("Creation of the directory %s failed" % self.path)
+			else:
+				print ("Successfully created the directory %s " % self.path)
+		model.save_pretrained(self.path)
+		self.acc_validation_min = acc_validation

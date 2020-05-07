@@ -26,11 +26,9 @@ class Generation:
 				 
 		Example::
 		
-			from Manteia.Classification import Classification
-			# Initializing a list of texts,labels
-			documents=['a text','text b']
-			labels=['a','b']
-			Classification(documents,labels)
+			from Manteia.Generation import Generation 
+						
+			Generation(seed='What do you do if a bird shits on your car?')
 			
 		Attributes:
 	"""

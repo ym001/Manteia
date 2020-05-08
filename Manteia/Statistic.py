@@ -53,14 +53,18 @@ class Statistic:
 			
 		Attributes:
 	"""
-	def __init__(self,documents=[],labels=[],dataset_name='',path='',statistic=True):
-		self.documents=documents
-		self.labels=labels
-		self.path=path
-		self.dataset_name=dataset_name
+	def __init__(self,documents=[],labels=[],dataset_name='',path='',statistic=True,verbose=True):
+		
+		self.documents    = documents
+		self.labels       = labels
+		self.path         = path
+		self.dataset_name = dataset_name
+		self.verbose      = verbose
+		
 		if statistic==True and documents!=[] and labels!=[]:
 			self.list_labels=self.list_labels(labels)
-			self.print_report()
+			if verbose:
+				self.print_report()
 		
 	def test(self):
 		return "Mantéïa Statistic."
@@ -143,8 +147,7 @@ class Statistic:
 		for lab in list_labels:
 			dic_doc[lab]= 0
 		for doc,lab in zip(documents,labels):
-			for l in lab:
-				dic_doc[l]=dic_doc[l]+1
+			dic_doc[lab]=dic_doc[lab]+1
 		return dic_doc
 		
 	def len_doc(self):

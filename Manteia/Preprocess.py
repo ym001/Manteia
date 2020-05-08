@@ -75,14 +75,16 @@ class Preprocess:
 			
 		Attributes:
 	"""
-	def __init__(self,documents=[],labels=[],percentage=1.0,size_by_nb_sample=False,nb_sample=None,path='./Document/',lang='english',preprocess=True):
+	def __init__(self,documents=[],labels=[],percentage=1.0,nb_sample=0,path='./Document/',lang='english',preprocess=True,verbose=True):
 
 		self.documents=documents
 		self.labels=labels
 		self.percentage=percentage
-		self.size_by_nb_sample=size_by_nb_sample
+		self.nb_sample=nb_sample
 		self.path=path
 		self.lang=lang
+		self.verbose=verbose
+		
 		if preprocess and documents!=[] and labels!=[]:
 			print('Preprocess...')
 			################
@@ -111,11 +113,15 @@ class Preprocess:
 			#self.df_labels[LABEL_COLUMN] = self.df_labels[LABEL_COLUMN].apply(lambda x: x[0])
 
 	def reduction(self):
-		if self.size_by_nb_sample==True:
+		stratify=True#!!!!!!!!!!!!!!!!!!!!!!
+		if self.nb_sample!=0:
 			if self.nb_sample<self.df_documents.shape[0]:
 				self.percentage=1-self.nb_sample*1.0/self.df_documents.shape[0]
 		if self.percentage<1.0:
-			self.df_documents, self.df_test_documents, self.df_labels, self.df_test_labels = train_test_split(self.df_documents, self.df_labels, test_size=self.percentage, random_state=42,stratify=self.df_labels)
+			if stratify:
+				self.df_documents, self.df_test_documents, self.df_labels, self.df_test_labels = train_test_split(self.df_documents, self.df_labels, test_size=self.percentage, random_state=42,stratify=self.df_labels)
+			else:
+				self.df_documents, self.df_test_documents, self.df_labels, self.df_test_labels = train_test_split(self.df_documents, self.df_labels, test_size=self.percentage, random_state=42)
 		
 	def get_labels_int(self):
 		return self.df_labels.values.tolist()

@@ -96,18 +96,31 @@ class Model:
 			
 		Attributes:
 	"""
-	def __init__(self,model_name ='bert',num_labels=0,early_stopping=False,path='./model'): # constructeur
-		self.model_name = model_name
-		self.early_stopping=early_stopping
-		self.num_labels=num_labels
-		self.path=path
+	def __init__(self,model_name ='bert',num_labels=0,MAX_SEQ_LEN = 128,early_stopping=False,path='./model',verbose=True): 
+		
+		self.model_name     = model_name
+		self.early_stopping = early_stopping
+		self.num_labels     = num_labels
+		self.MAX_SEQ_LEN    = MAX_SEQ_LEN
+		self.path           = path
+		self.verbose        = verbose
+		
 		if self.early_stopping:
 			self.es=EarlyStopping(path=path)
+			
+		seed_val = 42
+		random.seed(seed_val)
+		np.random.seed(seed_val)
+		torch.manual_seed(seed_val)
+		torch.cuda.manual_seed_all(seed_val)
+		
 	def test(self):
 		return "Model Mantéïa."
+		
 	def load(self):
 		# Load the tokenizer.
-		print('Loading {} tokenizer...'.format(self.model_name))
+		if self.verbose==True:
+			print('Loading {} tokenizer...'.format(self.model_name))
 		num_labels = self.num_labels # The number of output labels
 		if self.model_name=='bert':
 			#model_type='bert-base-uncased'
@@ -155,38 +168,38 @@ class Model:
 		if torch.cuda.is_available():    
 			# Tell PyTorch to use the GPU.    
 			self.device = torch.device("cuda")
-			print('There are %d GPU(s) available.' % torch.cuda.device_count())
-			print('We will use the GPU:', torch.cuda.get_device_name(0))
+			if self.verbose==True:
+				print('There are %d GPU(s) available.' % torch.cuda.device_count())
+				print('We will use the GPU:', torch.cuda.get_device_name(0))
 
 		else:
-			print('No GPU available, using the CPU instead.')
+			if self.verbose==True:
+				print('No GPU available, using the CPU instead.')
 			self.device = torch.device("cpu")
 
-	def configuration(self,train_dataloader,batch_size = 16,epochs = 20,MAX_SEQ_LEN = 128):
-		self.batch_size = batch_size
-		self.epochs = epochs
-		self.MAX_SEQ_LEN = MAX_SEQ_LEN
-		
+	def configuration(self,train_dataloader,batch_size = 16,epochs = 20,n_gpu=1):
+		self.batch_size  = batch_size
+		self.epochs      = epochs
+		self.n_gpu       = n_gpu
 		self.model.cuda()
-		self.optimizer = AdamW(self.model.parameters(),lr = 2e-5,eps = 1e-8)
+		self.optimizer   = AdamW(self.model.parameters(),lr = 2e-5,eps = 1e-8)
 		self.total_steps = len(train_dataloader) * self.epochs
-		self.scheduler = get_linear_schedule_with_warmup(self.optimizer,num_warmup_steps = 0,num_training_steps = self.total_steps)
+		self.scheduler   = get_linear_schedule_with_warmup(self.optimizer,num_warmup_steps = 0,num_training_steps = self.total_steps)
 
 		
 	def fit(self,train_dataloader,validation_dataloader):
-		seed_val = 42
-		random.seed(seed_val)
-		np.random.seed(seed_val)
-		torch.manual_seed(seed_val)
-		torch.cuda.manual_seed_all(seed_val)
-
+		
+		if self.n_gpu > 1:
+			self.model = torch.nn.DataParallel(self.model)
+            
 		loss_values = []
 
 		for epoch_i in range(0, self.epochs):
-    
-			print("")
-			print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, self.epochs))
-			print('Training...')
+			if self.verbose==True:
+
+				print("")
+				print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, self.epochs))
+				print('Training...')
 
 			t0 = time.time()
 			total_loss = 0
@@ -196,7 +209,8 @@ class Model:
 			for step, batch in enumerate(train_dataloader):
 				if step % 40 == 0 and not step == 0:
 						elapsed = format_time(time.time() - t0)
-						print('  Batch {:>5,}  of  {:>5,}.    Elapsed: {:}.'.format(step, len(train_dataloader), elapsed))
+						if self.verbose==True:
+							print('  Batch {:>5,}  of  {:>5,}.    Elapsed: {:}.'.format(step, len(train_dataloader), elapsed))
 
 
 				b_input_ids = batch[0].to(self.device)
@@ -209,27 +223,27 @@ class Model:
 						outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
 				else:
 						outputs = self.model(b_input_ids, attention_mask=b_input_mask, labels=b_labels)
-        
+
+				
 				loss = outputs[0]
+				if self.n_gpu > 1:
+					loss = loss.mean()
+				loss.backward()
 				total_loss += loss.item()
 
-				loss.backward()
 
 				torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
-
 				self.optimizer.step()
-
 				self.scheduler.step()
 
 				avg_train_loss = total_loss / len(train_dataloader)            
     
 				loss_values.append(avg_train_loss)
-
-			print("")
-			print("  Average training loss: {0:.2f}".format(avg_train_loss))
-			print("  Training epoch took: {:}".format(format_time(time.time() - t0)))
-			
-			print("Running Validation...")
+			if self.verbose==True:
+				print("")
+				print("  Average training loss: {0:.2f}".format(avg_train_loss))
+				print("  Training epoch took: {:}".format(format_time(time.time() - t0)))
+				print("Running Validation...")
 
 			t0 = time.time()
 
@@ -238,6 +252,9 @@ class Model:
 			eval_loss, eval_accuracy = 0, 0
 			nb_eval_steps, nb_eval_examples = 0, 0
 
+			tab_logits=None
+			tab_labels=None
+			
 			for batch in validation_dataloader:
         
 					batch = tuple(t.to(self.device) for t in batch)
@@ -254,28 +271,39 @@ class Model:
 
 						logits = logits.detach().cpu().numpy()
 						label_ids = b_labels.to('cpu').numpy()
-        
+						
+						if tab_logits==None:tab_logits=logits
+						else:tab_logits=np.vstack((tab_logits,logits))
+						if tab_labels==None:tab_labels=label_ids
+						else:tab_labels=np.vstack((tab_labels,label_ids))
+						
 					tmp_eval_accuracy = flat_accuracy(logits, label_ids)
         
 					eval_accuracy += tmp_eval_accuracy
 
 					nb_eval_steps += 1
 			acc_validation=eval_accuracy/nb_eval_steps
-			print("  Accuracy: {0:.2f}".format(acc_validation))
-			print("  Validation took: {:}".format(format_time(time.time() - t0)))
+			if self.verbose==True:
+				print("  Accuracy: {0:.2f}".format(acc_validation))
+				print("  Accuracy tab: {0:.2f}".format(flat_accuracy(tab_logits, tab_labels)))
+				print("  Validation took: {:}".format(format_time(time.time() - t0)))
 
 			if self.early_stopping:
 				self.es(acc_validation, self.model)
                  
 				if self.es.early_stop:
-					print("Early stopping")
+					if self.verbose==True:
+						print("Early stopping")
 					break
-		print("")
-		print("Training complete!")
+		if self.verbose==True:
+			print("")
+			print("Training complete!")
 		
 	def predict(self,predict_dataloader):
 		if self.early_stopping:
 			self.model.from_pretrained(self.path)
+			if self.verbose==True:
+				print('loading model early...')
 		self.model.eval()
 		prediction=[]
 		for batch in predict_dataloader:
@@ -309,9 +337,9 @@ class Model:
 		tmp_jokes_tens = None
 
 		for epoch in range(self.EPOCHS):
-    
-			print('EPOCH :'+str(epoch ))
-    
+			if self.verbose==True:
+				print('EPOCH :'+str(epoch ))
+  
 			for idx,text in enumerate(text_loader):
         
 				#################### "Fit as many joke sequences into MAX_SEQ_LEN sequence as possible" logic start ####
@@ -351,7 +379,8 @@ class Model:
 					model.zero_grad()
 
 				if batch_count == 100:
-					print("sum loss :"+str(sum_loss))
+					if self.verbose==True:
+						print("sum loss :"+str(sum_loss))
 					batch_count = 0
 					sum_loss = 0.0
 
@@ -392,12 +421,13 @@ def choose_from_top(probs, n=5):
 		
 
 def Create_DataLoader_train(inputs,masks,labels,batch_size=16):
-		td = TensorDataset(totensors(inputs), totensors(masks), totensors(labels))
-		rs = RandomSampler(td)
-		return DataLoader(td, sampler=rs, batch_size=batch_size)
-
-def Create_DataLoader_predict(predict_inputs,predict_masks,batch_size=16):
-		predict_data = TensorDataset(totensors(predict_inputs), totensors(predict_masks))
+	td = TensorDataset(totensors(inputs), totensors(masks), totensors(labels))
+	rs = RandomSampler(td)
+	return DataLoader(td, sampler=rs, batch_size=batch_size)
+		
+#a supprimer!!!!!!
+def Create_DataLoader_predict(inputs,masks,batch_size=16):
+		predict_data = TensorDataset(totensors(inputs), totensors(masks))
 		predict_sampler = RandomSampler(predict_data)
 		return DataLoader(predict_data, sampler=predict_sampler, batch_size=batch_size)
 
@@ -419,16 +449,16 @@ class TextDataset():
 	def __getitem__(self, item):
 		return self.joke_list[item]
 		
-def encode_text(sentences=None,tokenizer=None,MAX_SEQ_LEN=128):
+def encode_text(sentences=None,tokenizer=None,MAX_SEQ_LEN=128,verbose=True):
 		# Get the lists of sentences and their labels.
+		if verbose==True:
+			print(' Original: ', sentences[0])
 
-		print(' Original: ', sentences[0])
+			# Print the sentence split into tokens.
+			print('Tokenized: ', tokenizer.tokenize(sentences[0]))
 
-		# Print the sentence split into tokens.
-		print('Tokenized: ', tokenizer.tokenize(sentences[0]))
-
-		# Print the sentence mapped to token ids.
-		print('Token IDs: ', tokenizer.convert_tokens_to_ids(tokenizer.tokenize(sentences[0])))
+			# Print the sentence mapped to token ids.
+			print('Token IDs: ', tokenizer.convert_tokens_to_ids(tokenizer.tokenize(sentences[0])))
 
 		# Tokenize all of the sentences and map the tokens to thier word IDs.
 		input_ids = []
@@ -465,7 +495,8 @@ def encode_text(sentences=None,tokenizer=None,MAX_SEQ_LEN=128):
 		for dico in dico_input_and_mask:
 			input_ids.append(dico['input_ids'])
 			attention_masks.append(dico['attention_mask'])
-		print('\nPadding/truncating all sentences to %d values...' % MAX_SEQ_LEN)
+		if verbose==True:
+			print('\nPadding/truncating all sentences to %d values...' % MAX_SEQ_LEN)
 
 		#attention_masks = []
 
@@ -516,7 +547,13 @@ def flat_accuracy(preds, labels):
 	return np.sum(pred_flat == labels_flat) / len(labels_flat)
 
 def accuracy(preds, labels):
-	return np.sum(preds == labels) / len(labels)
+	sum=0
+	for p,l in zip(preds, labels):
+		if p==l:
+			sum+=1
+	return sum*1.0 / len(labels)
+	
+	#return np.sum(preds == labels)*1.0 / len(labels)
 
 def flat_prediction(preds):
 	return np.argmax(preds, axis=1).flatten()
@@ -563,7 +600,6 @@ class EarlyStopping:
 
 	def save_checkpoint(self, acc_validation, model):
 		'''Saves model when validation loss decrease.'''
-		print(self.path)
 		if self.verbose:
 			print(f'Validation accuracy increased ({self.acc_validation_min:.6f} --> {acc_validation:.6f}).  Saving model ...')
 		import os

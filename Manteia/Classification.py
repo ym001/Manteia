@@ -52,7 +52,7 @@ class Classification:
 		if model!=None:
 			self.model = model
 		else:
-			self.model = Model(num_labels=len(pp.list_labels),early_stopping=True)
+			self.model = Model(num_labels=len(pp.list_labels))
 
 		if process:
 			print('Process...')
@@ -78,7 +78,7 @@ class Classification:
 		inputs,masks   = encode_text(documents,self.model.tokenizer)
 		predict_inputs = totensors(inputs)
 		predict_masks  = totensors(masks)
-		dt             = Create_DataLoader_predict(predict_inputs,predict_masks)
+		dt             = Create_DataLoader_predict(inputs=predict_inputs,masks=predict_masks)
 		prediction     = self.model.predict(dt)
 		prediction     = decode_label(prediction,self.list_labels)
 		return prediction

@@ -1,9 +1,9 @@
 """
-.. module:: useful_1
+.. module:: Classification
    :platform: Unix, Windows
    :synopsis: A useful module indeed.
 
-.. moduleauthor:: Andrew Carter <andrew@invalid.com>
+.. moduleauthor:: Yves Mercadier <manteia.ym001@gmail.com>
 
 
 """

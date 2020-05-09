@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Statistic &mdash; Mantéïa 0.0.10 documentation</title>
+  <title>Augmentation &mdash; Mantéïa 0.0.10 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Task" href="Task.html" />
-    <link rel="prev" title="Visualisation" href="Visualisation.html" /> 
+    <link rel="next" title="ActiveLearning" href="ActiveLearning.html" />
+    <link rel="prev" title="Dataset" href="Dataset.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,12 +84,12 @@
 <li class="toctree-l1"><a class="reference internal" href="Classification.html">Classification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Generation.html">Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Dataset.html">Dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Augmentation.html">Augmentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Augmentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ActiveLearning.html">ActiveLearning</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Model.html">Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Preprocess.html">Preprocess</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Visualisation.html">Visualisation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Statistic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Statistic.html">Statistic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Task.html">Task</a></li>
 </ul>
 <ul>
@@ -141,13 +141,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Statistic</li>
+      <li>Augmentation</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/Statistic.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/Augmentation.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -160,12 +160,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-Manteia.Statistic">
-<span id="statistic"></span><h1>Statistic<a class="headerlink" href="#module-Manteia.Statistic" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-Statistic"></span><dl class="py class">
-<dt id="Manteia.Statistic.Statistic">
-<em class="property">class </em><code class="sig-prename descclassname">Manteia.Statistic.</code><code class="sig-name descname">Statistic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labels</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">dataset_name</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">statistic</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Statistic.Statistic" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is the class to make statistic of text.</p>
+  <div class="section" id="module-Manteia.Augmentation">
+<span id="augmentation"></span><h1>Augmentation<a class="headerlink" href="#module-Manteia.Augmentation" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-Augmentation"></span><dl class="py class">
+<dt id="Manteia.Augmentation.Augmentation">
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Augmentation.</code><code class="sig-name descname">Augmentation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labels</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">strategy</span><span class="o">=</span><span class="default_value">'daia'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Augmentation.Augmentation" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the class to do data augmentation.</p>
 <p>Args:</p>
 <blockquote>
 <div><dl class="simple">
@@ -189,6 +189,54 @@
 <p>Attributes:</p>
 </dd></dl>
 
+<dl class="py class">
+<dt id="Manteia.Augmentation.EfficientRandomGen">
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Augmentation.</code><code class="sig-name descname">EfficientRandomGen</code><a class="headerlink" href="#Manteia.Augmentation.EfficientRandomGen" title="Permalink to this definition">¶</a></dt>
+<dd><p>A base class that generate multiple random numbers at the same time.</p>
+<dl class="py method">
+<dt id="Manteia.Augmentation.EfficientRandomGen.get_random_prob">
+<code class="sig-name descname">get_random_prob</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Augmentation.EfficientRandomGen.get_random_prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a random number.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Augmentation.EfficientRandomGen.get_random_token">
+<code class="sig-name descname">get_random_token</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Augmentation.EfficientRandomGen.get_random_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a random token.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Augmentation.EfficientRandomGen.reset_random_prob">
+<code class="sig-name descname">reset_random_prob</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Augmentation.EfficientRandomGen.reset_random_prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate many random numbers at the same time and cache them.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="Manteia.Augmentation.TfIdfWordRep">
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Augmentation.</code><code class="sig-name descname">TfIdfWordRep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">token_prob</span></em>, <em class="sig-param"><span class="n">data_stats</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Augmentation.TfIdfWordRep" title="Permalink to this definition">¶</a></dt>
+<dd><p>TF-IDF Based Word Replacement.</p>
+<dl class="py method">
+<dt id="Manteia.Augmentation.TfIdfWordRep.get_replace_prob">
+<code class="sig-name descname">get_replace_prob</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">all_words</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Augmentation.TfIdfWordRep.get_replace_prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the probability of replacing tokens in a sentence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Augmentation.TfIdfWordRep.replace_tokens">
+<code class="sig-name descname">replace_tokens</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word_list</span></em>, <em class="sig-param"><span class="n">replace_prob</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Augmentation.TfIdfWordRep.replace_tokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace tokens in a sentence.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="Manteia.Augmentation.get_data_stats">
+<code class="sig-prename descclassname">Manteia.Augmentation.</code><code class="sig-name descname">get_data_stats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">texts</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Augmentation.get_data_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the IDF score for each word. Then compute the TF-IDF score.</p>
+</dd></dl>
+
 </div>
 
 
@@ -199,10 +247,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Task.html" class="btn btn-neutral float-right" title="Task" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="ActiveLearning.html" class="btn btn-neutral float-right" title="ActiveLearning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Visualisation.html" class="btn btn-neutral float-left" title="Visualisation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Dataset.html" class="btn btn-neutral float-left" title="Dataset" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

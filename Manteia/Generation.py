@@ -1,4 +1,12 @@
+"""
+.. module:: Generation
+   :platform: Unix, Windows
+   :synopsis: A useful module indeed.
 
+.. moduleauthor:: Yves Mercadier <manteia.ym001@gmail.com>
+
+
+"""
 import numpy as np
 import random
 import pandas as pd

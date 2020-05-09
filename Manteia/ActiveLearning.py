@@ -1,5 +1,5 @@
 """
-.. module:: useful_1
+.. module:: ActiveLearning
    :platform: Unix, Windows
    :synopsis: A useful module indeed.
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Task &mdash; Mantéïa 0.0.10 documentation</title>
+  <title>Dataset &mdash; Mantéïa 0.0.10 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="License" href="license.html" />
-    <link rel="prev" title="Statistic" href="Statistic.html" /> 
+    <link rel="next" title="Augmentation" href="Augmentation.html" />
+    <link rel="prev" title="Generation" href="Generation.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,14 +83,14 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Classification.html">Classification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Generation.html">Generation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Dataset.html">Dataset</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Augmentation.html">Augmentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ActiveLearning.html">ActiveLearning</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Model.html">Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Preprocess.html">Preprocess</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Visualisation.html">Visualisation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Statistic.html">Statistic</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Task.html">Task</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
@@ -141,13 +141,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Task</li>
+      <li>Dataset</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/Task.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/Dataset.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -160,21 +160,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-Manteia.Task">
-<span id="task"></span><h1>Task<a class="headerlink" href="#module-Manteia.Task" title="Permalink to this headline">¶</a></h1>
-<p>This module proclaims the good word. May they
-regain total freedom of artificial thought towards a new age
-reminiscent.</p>
-<p>You can install it with pip:</p>
+  <div class="section" id="module-Manteia.Dataset">
+<span id="dataset"></span><h1>Dataset<a class="headerlink" href="#module-Manteia.Dataset" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-Dataset"></span><dl class="py class">
+<dt id="Manteia.Dataset.Dataset">
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Dataset.</code><code class="sig-name descname">Dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'20newsgroups'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the class to give datasets.</p>
+<p>Args:</p>
 <blockquote>
-<div><p>pip install Manteia</p>
+<div><dl class="simple">
+<dt>dataset_name (<code class="xref py py-obj docutils literal notranslate"><span class="pre">string</span></code>, optional, defaults to ‘’):</dt><dd><p>Name of the dataset.</p>
+</dd>
+</dl>
 </div></blockquote>
-<p>Example of use:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Manteia</span> <span class="kn">import</span> <span class="n">testManteia</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">testManteia</span> <span class="p">()</span>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;20newsgroups&#39;</span><span class="p">)</span>
+<span class="n">documents</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">get_documents</span><span class="p">()</span>
+<span class="n">labels</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">get_labels</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">documents</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">labels</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>This code is licensed under MIT.</p>
+<p>Attributes:</p>
+</dd></dl>
+
 </div>
 
 
@@ -185,10 +197,10 @@ reminiscent.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Augmentation.html" class="btn btn-neutral float-right" title="Augmentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Statistic.html" class="btn btn-neutral float-left" title="Statistic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Generation.html" class="btn btn-neutral float-left" title="Generation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

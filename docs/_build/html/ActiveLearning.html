@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Task &mdash; Mantéïa 0.0.10 documentation</title>
+  <title>ActiveLearning &mdash; Mantéïa 0.0.10 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="License" href="license.html" />
-    <link rel="prev" title="Statistic" href="Statistic.html" /> 
+    <link rel="next" title="Model" href="Model.html" />
+    <link rel="prev" title="Augmentation" href="Augmentation.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -85,12 +85,12 @@
 <li class="toctree-l1"><a class="reference internal" href="Generation.html">Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Dataset.html">Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Augmentation.html">Augmentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ActiveLearning.html">ActiveLearning</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ActiveLearning</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Model.html">Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Preprocess.html">Preprocess</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Visualisation.html">Visualisation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Statistic.html">Statistic</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Task.html">Task</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
@@ -141,13 +141,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Task</li>
+      <li>ActiveLearning</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/Task.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/ActiveLearning.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -160,21 +160,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-Manteia.Task">
-<span id="task"></span><h1>Task<a class="headerlink" href="#module-Manteia.Task" title="Permalink to this headline">¶</a></h1>
-<p>This module proclaims the good word. May they
-regain total freedom of artificial thought towards a new age
-reminiscent.</p>
-<p>You can install it with pip:</p>
-<blockquote>
-<div><p>pip install Manteia</p>
-</div></blockquote>
-<p>Example of use:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Manteia</span> <span class="kn">import</span> <span class="n">testManteia</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">testManteia</span> <span class="p">()</span>
-</pre></div>
-</div>
-<p>This code is licensed under MIT.</p>
+  <div class="section" id="module-Manteia.ActiveLearning">
+<span id="activelearning"></span><h1>ActiveLearning<a class="headerlink" href="#module-Manteia.ActiveLearning" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-ActiveLearning"></span><dl class="py class">
+<dt id="Manteia.ActiveLearning.RandomSampling">
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.ActiveLearning.</code><code class="sig-name descname">RandomSampling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.ActiveLearning.RandomSampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>A random sampling query strategy baseline.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="Manteia.ActiveLearning.UncertaintyEntropySampling">
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.ActiveLearning.</code><code class="sig-name descname">UncertaintyEntropySampling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.ActiveLearning.UncertaintyEntropySampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>The basic uncertainty sampling query strategy, querying the examples with the top entropy.</p>
+</dd></dl>
+
 </div>
 
 
@@ -185,10 +184,10 @@ reminiscent.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Model.html" class="btn btn-neutral float-right" title="Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Statistic.html" class="btn btn-neutral float-left" title="Statistic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Augmentation.html" class="btn btn-neutral float-left" title="Augmentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

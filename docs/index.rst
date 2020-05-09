@@ -10,12 +10,14 @@ Classes
 
    Classification
    Generation
+   Dataset
+   Augmentation
+   ActiveLearning
    Model
    Preprocess
    Visualisation
    Statistic
    Task
-
 
 
 Indices and tables
@@ -32,4 +34,5 @@ Licence
    :maxdepth: 2
    
    license
+   help
 

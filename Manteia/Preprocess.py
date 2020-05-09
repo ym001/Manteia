@@ -112,8 +112,7 @@ class Preprocess:
 			#multiclass
 			#self.df_labels[LABEL_COLUMN] = self.df_labels[LABEL_COLUMN].apply(lambda x: x[0])
 
-	def reduction(self):
-		stratify=True#!!!!!!!!!!!!!!!!!!!!!!
+	def reduction(self,startitfy=False):
 		if self.nb_sample!=0:
 			if self.nb_sample<self.df_documents.shape[0]:
 				self.percentage=1-self.nb_sample*1.0/self.df_documents.shape[0]

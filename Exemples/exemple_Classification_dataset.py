@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  __init__.py
+#  exemple_Data.py
 #  
 #  Copyright 2020 Yves <yves@mercadier>
 #  
@@ -20,26 +20,22 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #  
-#  
+#
+from Manteia.Classification import Classification 
+from Manteia.Preprocess import Preprocess
+from Manteia.Dataset import Dataset
+			
+def main(args):
+	
+	ds        = Dataset('20newsgroups')
+	documents = ds.get_documents()
+	labels    = ds.get_labels()
+	pp        = Preprocess(documents=documents,labels=labels,nb_sample=50)
+	cl        = Classification(documents=pp.documents,labels=pp.labels,process=True)
+	print(cl.predict(documents[:5]))
 
-"""
-	This module proclaims the good word. May they
-	regain total freedom of artificial thought towards a new age
-	reminiscent.
-"""
- 
-__version__ = "0.0.12"
+	return 0
 
-
-from Manteia import Classification
-from Manteia import Generation
-from Manteia import Preprocess
-from Manteia import Model
-from Manteia import Statistic
-from Manteia import Visualisation
-from Manteia import Dataset
-from Manteia import ActiveLearning
-from Manteia import Augmentation
-from Manteia import Task
-
-
+if __name__ == '__main__':
+    import sys
+    sys.exit(main(sys.argv))

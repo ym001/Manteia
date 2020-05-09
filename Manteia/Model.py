@@ -20,7 +20,8 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #  
-#  
+#
+import os
 import torch
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 from transformers import AdamW, get_linear_schedule_with_warmup
@@ -105,8 +106,7 @@ class Model:
 		self.path           = path
 		self.verbose        = verbose
 		
-		if self.early_stopping:
-			self.es=EarlyStopping(path=path)
+		
 			
 		seed_val = 42
 		random.seed(seed_val)
@@ -161,9 +161,9 @@ class Model:
 			self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2-medium')
 			self.model     = GPT2LMHeadModel.from_pretrained('gpt2-medium')
 
-		self.device()
+		#self.device()
 		
-	def device(self):
+	def devices(self):
 		# If there's a GPU available...
 		if torch.cuda.is_available():    
 			# Tell PyTorch to use the GPU.    
@@ -181,14 +181,21 @@ class Model:
 		self.batch_size  = batch_size
 		self.epochs      = epochs
 		self.n_gpu       = n_gpu
-		self.model.cuda()
+		#self.model.cuda()
 		self.optimizer   = AdamW(self.model.parameters(),lr = 2e-5,eps = 1e-8)
 		self.total_steps = len(train_dataloader) * self.epochs
 		self.scheduler   = get_linear_schedule_with_warmup(self.optimizer,num_warmup_steps = 0,num_training_steps = self.total_steps)
+		self.devices()
 
 		
 	def fit(self,train_dataloader,validation_dataloader):
 		
+		self.model.to(self.device)
+		#self.model.cuda()
+		
+		if self.early_stopping:
+			self.es=EarlyStopping(path=self.path)
+			
 		if self.n_gpu > 1:
 			self.model = torch.nn.DataParallel(self.model)
             
@@ -249,11 +256,9 @@ class Model:
 
 			self.model.eval()
 
-			eval_loss, eval_accuracy = 0, 0
-			nb_eval_steps, nb_eval_examples = 0, 0
+			tab_logits = None
+			tab_labels = None
 
-			tab_logits=None
-			tab_labels=None
 			
 			for batch in validation_dataloader:
         
@@ -271,26 +276,21 @@ class Model:
 
 						logits = logits.detach().cpu().numpy()
 						label_ids = b_labels.to('cpu').numpy()
-						
-						if tab_logits==None:tab_logits=logits
-						else:tab_logits=np.vstack((tab_logits,logits))
-						if tab_labels==None:tab_labels=label_ids
-						else:tab_labels=np.vstack((tab_labels,label_ids))
-						
-					tmp_eval_accuracy = flat_accuracy(logits, label_ids)
-        
-					eval_accuracy += tmp_eval_accuracy
 
-					nb_eval_steps += 1
-			acc_validation=eval_accuracy/nb_eval_steps
+						
+						if tab_logits is None:tab_logits=np.argmax(logits, axis=1)
+						else:tab_logits=np.append(tab_logits,np.argmax(logits, axis=1), axis=0)
+						if tab_labels is None:tab_labels=label_ids
+						else:tab_labels=np.append(tab_labels,label_ids, axis=0)
+						
+			acc_validation=accuracy(tab_logits, tab_labels)
 			if self.verbose==True:
 				print("  Accuracy: {0:.2f}".format(acc_validation))
-				print("  Accuracy tab: {0:.2f}".format(flat_accuracy(tab_logits, tab_labels)))
 				print("  Validation took: {:}".format(format_time(time.time() - t0)))
 
 			if self.early_stopping:
-				self.es(acc_validation, self.model)
-                 
+				self.es(acc_validation, self.model,self.device)
+                
 				if self.es.early_stop:
 					if self.verbose==True:
 						print("Early stopping")
@@ -298,14 +298,25 @@ class Model:
 		if self.verbose==True:
 			print("")
 			print("Training complete!")
-		
-	def predict(self,predict_dataloader):
+	"""
+	p_type='class' or 'probability' or 'logits'
+	"""
+	def predict(self,predict_dataloader,p_type='class'):
 		if self.early_stopping:
-			self.model.from_pretrained(self.path)
+			#by torch
+			#pour charger uniquement la classe du modèle!
+			self.load()
+			self.model.load_state_dict(torch.load(self.path+'state_dict_validation.pt'))
+			#self.model.cuda()
+			self.model.to(self.device)
+
+			#by transformer
+			#self.model.from_pretrained(self.path)
 			if self.verbose==True:
 				print('loading model early...')
 		self.model.eval()
-		prediction=[]
+		predictions = None
+
 		for batch in predict_dataloader:
         
 					batch = tuple(t.to(self.device) for t in batch)
@@ -318,11 +329,19 @@ class Model:
 							outputs = self.model(b_input_ids, token_type_ids=None,attention_mask=b_input_mask)
 						else:
 							outputs = self.model(b_input_ids,attention_mask=b_input_mask)
-						tmp_logits = outputs[0]
+						logits = outputs[0]
 
-						tmp_logits = tmp_logits.detach().cpu().numpy()
-					prediction.extend(flat_prediction(tmp_logits))
-		return prediction
+						logits = logits.detach().cpu()
+					if p_type=='class':
+						if predictions is None:predictions=np.argmax(logits.numpy(), axis=1)
+						else:predictions=np.append(predictions,np.argmax(logits.numpy(), axis=1), axis=0)
+					if p_type=='logits':
+						if predictions is None:predictions=logits.numpy()
+						else:predictions=np.append(predictions,logits.numpy(), axis=0)
+					if p_type=='probability':
+						if predictions is None:predictions=torch.softmax(logits, dim=1).numpy()
+						else:predictions=np.append(predictions,torch.softmax(logits, dim=1).numpy(), axis=0)
+		return predictions
 		
 	def fit_generation(self,text_loader):
 
@@ -427,9 +446,9 @@ def Create_DataLoader_train(inputs,masks,labels,batch_size=16):
 		
 #a supprimer!!!!!!
 def Create_DataLoader_predict(inputs,masks,batch_size=16):
-		predict_data = TensorDataset(totensors(inputs), totensors(masks))
-		predict_sampler = RandomSampler(predict_data)
-		return DataLoader(predict_data, sampler=predict_sampler, batch_size=batch_size)
+		td = TensorDataset(totensors(inputs), totensors(masks))
+		ss = SequentialSampler(td)
+		return DataLoader(td, sampler=ss, batch_size=batch_size)
 
 def Create_DataLoader_generation(text):
 		return DataLoader(TextDataset(text), batch_size=1, shuffle=True)
@@ -449,7 +468,7 @@ class TextDataset():
 	def __getitem__(self, item):
 		return self.joke_list[item]
 		
-def encode_text(sentences=None,tokenizer=None,MAX_SEQ_LEN=128,verbose=True):
+def encode_text(sentences=None,tokenizer=None,MAX_SEQ_LEN=128,verbose=False):
 		# Get the lists of sentences and their labels.
 		if verbose==True:
 			print(' Original: ', sentences[0])
@@ -498,13 +517,6 @@ def encode_text(sentences=None,tokenizer=None,MAX_SEQ_LEN=128,verbose=True):
 		if verbose==True:
 			print('\nPadding/truncating all sentences to %d values...' % MAX_SEQ_LEN)
 
-		#attention_masks = []
-
-		# For each sentence...
-		#for sent in input_ids:  
-		#	att_mask = [int(token_id > 0) for token_id in sent]
-		#	attention_masks.append(att_mask)
-
 		return input_ids,attention_masks
 		
 def encode_label(labels,list_labels):
@@ -515,7 +527,7 @@ def encode_label(labels,list_labels):
 	labels_int=[]
 	for lab in labels:
 		labels_int.append(label_int(lab))
-	return labels_int
+	return np.array(labels_int)
 	
 def decode_label(labels_int,list_labels):
 		labels_string = []
@@ -541,23 +553,8 @@ def format_time(elapsed):
     return str(datetime.timedelta(seconds=elapsed_rounded))
 
 # Function to calculate the accuracy of our predictions vs labels
-def flat_accuracy(preds, labels):
-	pred_flat = np.argmax(preds, axis=1).flatten()
-	labels_flat = labels.flatten()
-	return np.sum(pred_flat == labels_flat) / len(labels_flat)
-
 def accuracy(preds, labels):
-	sum=0
-	for p,l in zip(preds, labels):
-		if p==l:
-			sum+=1
-	return sum*1.0 / len(labels)
-	
-	#return np.sum(preds == labels)*1.0 / len(labels)
-
-def flat_prediction(preds):
-	return np.argmax(preds, axis=1).flatten()
-
+	return (preds == labels).mean()
 
 class EarlyStopping:
 	"""Early stops the training if validation loss doesn't improve after a given patience."""
@@ -579,14 +576,16 @@ class EarlyStopping:
 		self.acc_validation_min = 0
 		self.delta = delta
 		self.path=path
+		if os.path.isfile(self.path+'state_dict_validation.pt'):
+			os. remove(self.path+'state_dict_validation.pt') 
 
-	def __call__(self, acc_validation , model):
+	def __call__(self, acc_validation , model,device_model):
         
 		score = acc_validation
 
 		if self.best_score is None:
 			self.best_score = score
-			self.save_checkpoint(acc_validation, model)
+			self.save_checkpoint(acc_validation, model,device_model)
 		elif score < self.best_score:
 			self.counter += 1
 			print(f'EarlyStopping counter: {self.counter} out of {self.patience}')
@@ -595,14 +594,13 @@ class EarlyStopping:
 		else:
 			print(f'Save model : {self.counter} out of {self.patience}')
 			self.best_score = score
-			self.save_checkpoint(acc_validation, model)
+			self.save_checkpoint(acc_validation, model,device_model)
 			self.counter = 0
 
-	def save_checkpoint(self, acc_validation, model):
+	def save_checkpoint(self, acc_validation, model,device_model):
 		'''Saves model when validation loss decrease.'''
 		if self.verbose:
 			print(f'Validation accuracy increased ({self.acc_validation_min:.6f} --> {acc_validation:.6f}).  Saving model ...')
-		import os
 		if not os.path.isdir(self.path):
 			# define the name of the directory to be created
 			try:
@@ -611,5 +609,11 @@ class EarlyStopping:
 				print ("Creation of the directory %s failed" % self.path)
 			else:
 				print ("Successfully created the directory %s " % self.path)
-		model.save_pretrained(self.path)
+		#save by torch
+		device = torch.device('cpu')
+		model.to(device)
+		torch.save(model.module.state_dict(),self.path+'state_dict_validation.pt')
+		model.to(device_model)
+		#save by transformer
+		#model.save_pretrained(self.path)
 		self.acc_validation_min = acc_validation

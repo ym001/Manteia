@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  __init__.py
+#  test_Manteia.py
 #  
 #  Copyright 2020 Yves <yves@mercadier>
 #  
@@ -22,24 +22,24 @@
 #  
 #  
 
-"""
-	This module proclaims the good word. May they
-	regain total freedom of artificial thought towards a new age
-	reminiscent.
-"""
- 
-__version__ = "0.0.12"
+import unittest
+from Manteia.Preprocess import Preprocess
 
+class PreprocessTest(unittest.TestCase):
 
-from Manteia import Classification
-from Manteia import Generation
-from Manteia import Preprocess
-from Manteia import Model
-from Manteia import Statistic
-from Manteia import Visualisation
-from Manteia import Dataset
-from Manteia import ActiveLearning
-from Manteia import Augmentation
-from Manteia import Task
+	"""Test case used to test the functions of the 'Manteia' module."""
 
+	def Preprocess_test(self):
+		print("Test the functioning of the class Manteia.Preprocess.")
+		pp=Preprocess()
+        
+		# Vérifie que 'mant' est une 'str'
+		self.assertEqual(type(pp.test()), str)
 
+	def Preprocess_init(self):
+		print("Test the functioning of the class Manteia.Preprocess.")
+		pp=Preprocess(documents=['a','b'],labels=['a','b'])
+        
+		self.assertEqual(len(pp.documents), 2)
+        
+unittest.main()

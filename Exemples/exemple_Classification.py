@@ -41,7 +41,7 @@ def main(args):
 			['funny'],['not funny'],['funny'],['not funny'],['funny'],['not funny'],['not funny'],['not funny'],['funny'],['not funny'],
 			]
 			
-	cl=Classification(documents=documents,labels=labels,process=True)
+	cl=Classification(model_name ='roberta',documents,labels,process=True)
 	print(cl.predict(documents[:2]))
 	return 0
 

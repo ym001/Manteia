@@ -15,6 +15,7 @@ from nltk.corpus import stopwords
 
 from sklearn.model_selection import train_test_split
 
+from Manteia.Utils import load_animation
 
 TEXT_COLUMN = 'texts'
 LABEL_COLUMN = 'labels'
@@ -72,7 +73,8 @@ class Preprocess:
 		self.verbose=verbose
 		
 		if preprocess and documents!=[] and labels!=[]:
-			print('Preprocess...')
+			#print('Preprocess.')
+			load_animation('preprocess.',2)
 			################
 			for i in range(len(documents)):
 				documents[i]=str(documents[i])
@@ -98,7 +100,7 @@ class Preprocess:
 			#multiclass
 			#self.df_labels[LABEL_COLUMN] = self.df_labels[LABEL_COLUMN].apply(lambda x: x[0])
 
-	def reduction(self,startitfy=False):
+	def reduction(self,stratify=False):
 		if self.nb_sample!=0:
 			if self.nb_sample<self.df_documents.shape[0]:
 				self.percentage=1-self.nb_sample*1.0/self.df_documents.shape[0]

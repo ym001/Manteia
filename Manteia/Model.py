@@ -33,6 +33,8 @@ from transformers import CamembertForSequenceClassification
 from transformers import FlaubertForSequenceClassification
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
+from Manteia.Utils import progress
+
 import numpy as np
 import random
 import pandas as pd
@@ -103,16 +105,37 @@ class Model:
 	def test(self):
 		return "Model Mantéïa."
 		
-	def load(self):
+	def load_tokenizer(self):
 		# Load the tokenizer.
 		if self.verbose==True:
 			print('Loading {} tokenizer...'.format(self.model_name))
+		if self.model_name=='bert':
+			#model_type='bert-base-uncased'
+			model_type='bert-base-multilingual-cased'
+			self.tokenizer = BertTokenizer.from_pretrained      (model_type, do_lower_case=True)
+		if self.model_name=='distilbert':
+			self.tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', do_lower_case=True)
+		if self.model_name=='albert':
+			self.tokenizer = AlbertTokenizer.from_pretrained    ('albert-base-v1', do_lower_case=True)	
+		if self.model_name=='xlnet':
+			self.tokenizer = XLNetTokenizer.from_pretrained     ('xlnet-base-cased', do_lower_case=True)
+		if self.model_name=='roberta':
+			self.tokenizer = RobertaTokenizer.from_pretrained   ('roberta-base', do_lower_case=True)
+		if self.model_name=='camenbert':
+			self.tokenizer = CamembertTokenizer.from_pretrained ('camembert-base', do_lower_case=True)
+		if self.model_name=='flaubert':
+			self.tokenizer = FlaubertTokenizer.from_pretrained  ('flaubert-base-uncased', do_lower_case=True)
+		if self.model_name=='gpt2-medium':
+			self.tokenizer = GPT2Tokenizer.from_pretrained      ('gpt2-medium')
+			
+	def load_class(self):
+		# Load the tokenizer.
+		if self.verbose==True:
+			print('Loading {} class...'.format(self.model_name))
 		num_labels = self.num_labels # The number of output labels
 		if self.model_name=='bert':
 			#model_type='bert-base-uncased'
 			model_type='bert-base-multilingual-cased'
-			self.tokenizer = BertTokenizer.from_pretrained(model_type, do_lower_case=True)
-
 			# Load BertForSequenceClassification, the pretrained BERT model with a single 
 			# linear classification layer on top. 
 			self.model     = BertForSequenceClassification.from_pretrained(model_type, # Use the 12-layer BERT model, with an uncased vocab.
@@ -121,33 +144,19 @@ class Model:
 			output_hidden_states = False, # Whether the model returns all hidden-states.
 		)
 		if self.model_name=='distilbert':
-			self.tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', do_lower_case=True)
 			self.model     = DistilBertForSequenceClassification.from_pretrained("distilbert-base-uncased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
-
 		if self.model_name=='albert':
-			self.tokenizer = AlbertTokenizer.from_pretrained('albert-base-v1', do_lower_case=True)
-			self.model     = AlbertForSequenceClassification.from_pretrained("albert-base-v1",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
-	
+			self.model     = AlbertForSequenceClassification.from_pretrained    ("albert-base-v1",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='xlnet':
-			self.tokenizer = XLNetTokenizer.from_pretrained('xlnet-base-cased', do_lower_case=True)
-			self.model     = XLNetForSequenceClassification.from_pretrained("xlnet-base-cased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
-
+			self.model     = XLNetForSequenceClassification.from_pretrained     ("xlnet-base-cased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='roberta':
-			self.tokenizer = RobertaTokenizer.from_pretrained('roberta-base', do_lower_case=True)
-			self.model     = RobertaForSequenceClassification.from_pretrained("roberta-base",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
-
+			self.model     = RobertaForSequenceClassification.from_pretrained   ("roberta-base",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='camenbert':
-			self.tokenizer = CamembertTokenizer.from_pretrained('camembert-base', do_lower_case=True)
-			self.model     = CamembertForSequenceClassification.from_pretrained("camembert-base",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
-
+			self.model     = CamembertForSequenceClassification.from_pretrained ("camembert-base",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='flaubert':
-			self.tokenizer = FlaubertTokenizer.from_pretrained('flaubert-base-uncased', do_lower_case=True)
-			self.model     = FlaubertForSequenceClassification.from_pretrained("flaubert-base-uncased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = FlaubertForSequenceClassification.from_pretrained  ("flaubert-base-uncased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='gpt2-medium':
-			self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2-medium')
 			self.model     = GPT2LMHeadModel.from_pretrained('gpt2-medium')
-
-		#self.device()
 		
 	def devices(self):
 		# If there's a GPU available...
@@ -163,7 +172,7 @@ class Model:
 				print('No GPU available, using the CPU instead.')
 			self.device = torch.device("cpu")
 
-	def configuration(self,train_dataloader,batch_size = 16,epochs = 20,n_gpu=1):
+	def configuration(self,train_dataloader,batch_size = 16,epochs = 4,n_gpu=1):
 		self.batch_size  = batch_size
 		self.epochs      = epochs
 		self.n_gpu       = n_gpu
@@ -192,7 +201,7 @@ class Model:
 
 				print("")
 				print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, self.epochs))
-				print('Training...')
+				print('Training :')
 
 			t0 = time.time()
 			total_loss = 0
@@ -200,11 +209,12 @@ class Model:
 			self.model.train()
 
 			for step, batch in enumerate(train_dataloader):
+				'''
 				if step % 40 == 0 and not step == 0:
 						elapsed = format_time(time.time() - t0)
 						if self.verbose==True:
 							print('  Batch {:>5,}  of  {:>5,}.    Elapsed: {:}.'.format(step, len(train_dataloader), elapsed))
-
+				'''
 
 				b_input_ids = batch[0].to(self.device)
 				b_input_mask = batch[1].to(self.device)
@@ -232,11 +242,13 @@ class Model:
 				avg_train_loss = total_loss / len(train_dataloader)            
     
 				loss_values.append(avg_train_loss)
+				progress(count=step+1, total=len(train_dataloader))
+
 			if self.verbose==True:
 				print("")
 				print("  Average training loss: {0:.2f}".format(avg_train_loss))
 				print("  Training epoch took: {:}".format(format_time(time.time() - t0)))
-				print("Running Validation...")
+				print("Validation :")
 
 			t0 = time.time()
 
@@ -246,7 +258,7 @@ class Model:
 			tab_labels = None
 
 			
-			for batch in validation_dataloader:
+			for step,batch in enumerate(validation_dataloader):
         
 					batch = tuple(t.to(self.device) for t in batch)
         
@@ -268,9 +280,12 @@ class Model:
 						else:tab_logits=np.append(tab_logits,np.argmax(logits, axis=1), axis=0)
 						if tab_labels is None:tab_labels=label_ids
 						else:tab_labels=np.append(tab_labels,label_ids, axis=0)
+					progress(count=step+1, total=len(validation_dataloader))
+
 						
 			acc_validation=accuracy(tab_logits, tab_labels)
 			if self.verbose==True:
+				print("")
 				print("  Accuracy: {0:.2f}".format(acc_validation))
 				print("  Validation took: {:}".format(format_time(time.time() - t0)))
 
@@ -291,7 +306,7 @@ class Model:
 		if self.early_stopping:
 			#by torch
 			#pour charger uniquement la classe du modèle!
-			self.load()
+			self.load_class()
 			self.model.load_state_dict(torch.load(self.path+'state_dict_validation.pt'))
 			#self.model.cuda()
 			self.model.to(self.device)
@@ -415,6 +430,24 @@ class Model:
                                 
 			output_list = list(cur_ids.squeeze().to('cpu').numpy())
 		return output_list
+		
+	def save(self,file_name):
+		if not os.path.isdir(self.path):
+			# define the name of the directory to be created
+			try:
+				os.mkdir(self.path)
+			except OSError:
+				print ("Creation of the directory %s failed" % self.path)
+			else:
+				print ("Successfully created the directory %s " % self.path)
+		self.model.to(torch.device('cpu'))
+		torch.save(self.model.module.state_dict(),self.path+file_name+'.pt')
+		model.to(self.device)
+		
+	def load(self,file_name):
+			self.load_class()
+			self.model.load_state_dict(torch.load(self.path+file_name))
+			self.model.to(self.device)
 
 def choose_from_top(probs, n=5):
     ind = np.argpartition(probs, -n)[-n:]
@@ -574,11 +607,13 @@ class EarlyStopping:
 			self.save_checkpoint(acc_validation, model,device_model)
 		elif score < self.best_score:
 			self.counter += 1
-			print(f'EarlyStopping counter: {self.counter} out of {self.patience}')
+			if self.verbose==True:
+				print('EarlyStopping counter: {} out of {}'.format(self.counter,self.patience))
 			if self.counter >= self.patience:
 				self.early_stop = True
 		else:
-			print(f'Save model : {self.counter} out of {self.patience}')
+			if self.verbose==True:
+				print('Save model : {} out of {}'.format(self.counter,self.patience))
 			self.best_score = score
 			self.save_checkpoint(acc_validation, model,device_model)
 			self.counter = 0
@@ -586,7 +621,7 @@ class EarlyStopping:
 	def save_checkpoint(self, acc_validation, model,device_model):
 		'''Saves model when validation loss decrease.'''
 		if self.verbose:
-			print(f'Validation accuracy increased ({self.acc_validation_min:.6f} --> {acc_validation:.6f}).  Saving model ...')
+			print('Validation accuracy increased ({:.6f} --> {acc_validation:.6f}).  Saving model ...'.format(self.acc_validation_min))
 		if not os.path.isdir(self.path):
 			# define the name of the directory to be created
 			try:
@@ -603,3 +638,42 @@ class EarlyStopping:
 		#save by transformer
 		#model.save_pretrained(self.path)
 		self.acc_validation_min = acc_validation
+
+'''
+bert-base-uncased,bert-large-uncased,bert-base-cased,bert-large-cased,bert-base-multilingual-uncased,bert-base-multilingual-cased,bert-base-chinese
+,bert-base-german-cased,bert-large-uncased-whole-word-masking,bert-large-cased-whole-word-masking,bert-large-uncased-whole-word-masking-finetuned-squad
+,bert-large-cased-whole-word-masking-finetuned-squad,bert-base-cased-finetuned-mrpc,bert-base-german-dbmdz-cased
+,bert-base-german-dbmdz-uncased,bert-base-japanese,bert-base-japanese-whole-word-masking,bert-base-japanese-char,bert-base-japanese-char-whole-word-masking
+,bert-base-finnish-cased-v1,bert-base-finnish-uncased-v1,bert-base-dutch-cased
+
+
+openai-gpt,GPT-2,gpt2,gpt2-medium,gpt2-large,gpt2-xl,Transformer-XL,transfo-xl-wt103
+
+xlnet-base-cased,xlnet-large-cased,
+xlm-mlm-en-2048,xlm-mlm-ende-1024,xlm-mlm-enfr-1024,xlm-mlm-enro-1024,xlm-mlm-xnli15-1024,xlm-mlm-tlm-xnli15-1024,xlm-clm-enfr-1024,xlm-clm-ende-1024
+,xlm-mlm-17-1280,xlm-mlm-100-1280
+
+roberta-base,roberta-large,roberta-large-mnli,distilroberta-base,roberta-base-openai-detector,roberta-large-openai-detector
+
+,distilbert-base-uncased,distilbert-base-uncased-distilled-squad,distilbert-base-cased,distilbert-base-cased-distilled-squad
+
+distilgpt2,distilbert-base-german-cased,distilbert-base-multilingual-cased
+
+ctrl
+
+camembert-base,
+
+albert-base-v1,albert-large-v1,albert-xlarge-v1,albert-xxlarge-v1,albert-base-v2,albert-large-v2,albert-xlarge-v2,albert-xxlarge-v2
+
+t5-small,t5-base,t5-large,t5-3B,t5-11B
+
+,xlm-roberta-base,xlm-roberta-large
+
+flaubert-small-cased,flaubert-base-uncased,flaubert-base-cased,flaubert-large-cased
+
+bart-large,bart-large-mnli,bart-large-cnn,mbart-large-en-ro
+
+DialoGPT-small,DialoGPT-medium,DialoGPT-large
+
+reformer-crime-and-punishment
+'''

@@ -62,6 +62,9 @@ class Generation:
 	def test(self):
 		return "Generation Mantéïa."
 		
-
+'''
+https://huggingface.co/transformers/main_classes/model.html
+see exemple!!!!
+'''
 		
 

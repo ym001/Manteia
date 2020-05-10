@@ -82,6 +82,7 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#a-complete-example">A complete example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Generation.html">Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Dataset.html">Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Augmentation.html">Augmentation</a></li>
@@ -179,15 +180,101 @@
 </div></blockquote>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Classification</span> <span class="kn">import</span> <span class="n">Classification</span>
-<span class="c1"># Initializing a list of texts,labels</span>
 <span class="n">documents</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a text&#39;</span><span class="p">,</span><span class="s1">&#39;text b&#39;</span><span class="p">]</span>
 <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
 <span class="n">Classification</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Attributes:</p>
+<dl class="py method">
+<dt id="Manteia.Classification.Classification.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Classification.Classification.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the description of the predict function of the Classification class.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>documents (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>, optional, defaults to None):</dt><dd><p>A list of documents.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Classification</span> <span class="kn">import</span> <span class="n">Classification</span>
+<span class="n">documents</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a text&#39;</span><span class="p">,</span><span class="s1">&#39;text b&#39;</span><span class="p">]</span>
+<span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+<span class="n">cl</span> <span class="o">=</span> <span class="n">Classification</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">documents</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
 </dd></dl>
 
+</dd></dl>
+
+</div>
+<div class="section" id="a-complete-example">
+<h1>A complete example<a class="headerlink" href="#a-complete-example" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>from Manteia.Classification import Classification
+&gt;&gt;&gt;from Manteia.Preprocess import Preprocess</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29</pre></div></td><td class="code"><div class="highlight"><pre><span></span>     <span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+     <span class="kn">from</span> <span class="nn">Manteia.Classification</span> <span class="kn">import</span> <span class="n">Classification</span>
+     <span class="kn">from</span> <span class="nn">Manteia.Preprocess</span> <span class="kn">import</span> <span class="n">Preprocess</span>
+
+     <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+
+             <span class="n">ds</span>             <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;20newsgroups&#39;</span><span class="p">)</span>
+             <span class="n">documents</span>      <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_documents</span><span class="p">()</span>
+             <span class="n">labels</span>         <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_labels</span><span class="p">()</span>
+             <span class="n">pp</span>             <span class="o">=</span> <span class="n">Preprocess</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">nb_sample</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+             <span class="n">documents</span>      <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">documents</span>
+             <span class="n">labels</span>         <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">labels</span>
+             <span class="n">cl</span>             <span class="o">=</span> <span class="n">Classification</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+             <span class="n">cl</span><span class="o">.</span><span class="n">list_labels</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">list_labels</span>
+
+             <span class="n">cl</span><span class="o">.</span><span class="n">load_model</span><span class="p">()</span>
+             <span class="n">dt_train</span> <span class="p">,</span><span class="n">dt_validation</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">process_text</span><span class="p">()</span>
+             <span class="n">cl</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">configuration</span><span class="p">(</span><span class="n">dt_train</span><span class="p">)</span>
+             <span class="n">cl</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dt_train</span><span class="p">,</span><span class="n">dt_validation</span><span class="p">)</span>
+
+             <span class="nb">print</span><span class="p">(</span><span class="n">cl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">documents</span><span class="p">[:</span><span class="mi">5</span><span class="p">]))</span>
+
+             <span class="k">return</span> <span class="mi">0</span>
+
+     <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+             <span class="kn">import</span> <span class="nn">sys</span>
+             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">))</span>
+
+<span class="n">code</span>
+</pre></div>
+</td></tr></table></div>
 </div>
 
 

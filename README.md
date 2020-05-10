@@ -12,17 +12,17 @@ You can install it with pip :
 Example of use Classification :
 
 
-	>>> from Manteia.Classification import Classification
-	>>> # Initializing a list of texts,labels
-	>>> documents=['a text','text b']  
-	>>> labels=['a','b']'  
-	>>> Classification(documents,labels)
+	from Manteia.Classification import Classification
+	documents=['a text','text b']  
+	labels=['a','b']'  
+	Classification(documents,labels,process=True)
+
 
 Example of use Generation :
 
 
-	>>> from Manteia.Generation import Generation
-	>>> Generation(seed='What do you do if a bird shits on your car?')
+	from Manteia.Generation import Generation
+	Generation(seed='What do you do if a bird shits on your car?')
 	If you're a car owner, you're supposed to be able to call the police and have them take the bird off the car.
 
 [documentation](https://manteia.readthedocs.io/en/latest/#)

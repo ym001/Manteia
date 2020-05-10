@@ -19,8 +19,10 @@ setup(
     author="Yves Mercadier",
  
     author_email="manteia.ym001@gmail.com",
- 
-    description="deep learning,NLP,classification,text,bert,distilbert,albert,xlnet,roberta,gpt2",
+
+    url='https://pypi.org/project/Manteia/',
+
+    description="deep learning,NLP,classification,text,bert,distilbert,albert,xlnet,roberta,gpt2,torch,pytorch,active learning,augmentation,data",
  
     long_description=open('README.md').read(),
 
@@ -31,8 +33,11 @@ setup(
     # Active la prise en compte du fichier MANIFEST.in
     include_package_data=True,
  
-    url='https://github.com/ym001/Manteia',
- 
+    project_urls={
+        "Pypi": "https://pypi.org/project/Manteia/",
+        "Documentation": "https://manteia.readthedocs.io/en/latest/index.html",
+        "Source Code": "https://github.com/ym001/Manteia",
+    },
     classifiers=[
         "Programming Language :: Python",
         "Development Status :: 1 - Planning",
@@ -40,7 +45,8 @@ setup(
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.6",
-        "Topic :: Communications",
+        "Topic :: deep learning :: classification :: generation",
+        "Topic :: NLP :: text :: intelligence artificial :: torch :: pytorch",
     ],
  
  

@@ -1,5 +1,4 @@
 wget==3.2
-Manteia==0.0.13
 matplotlib==3.2.1
 nltk==3.5
 numpy==1.18.4
@@ -7,3 +6,4 @@ pandas==1.0.3
 scikit_learn==0.22.2.post1
 torch==1.5.0
 transformers==2.9.0
+Manteia==0.0.13

@@ -45,8 +45,8 @@ setup(
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.6",
-        "Topic :: deep learning :: classification :: generation",
         "Topic :: NLP :: text :: intelligence artificial :: torch :: pytorch",
+
     ],
  
  

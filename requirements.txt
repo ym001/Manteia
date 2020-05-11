@@ -1,3 +1,5 @@
+wget==3.2
+Manteia==0.0.13
 matplotlib==3.2.1
 nltk==3.5
 numpy==1.18.4

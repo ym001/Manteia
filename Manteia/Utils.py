@@ -16,7 +16,26 @@ def progress(count, total):
 		sys.stdout.write(str_p+'\r')
 
 	sys.stdout.flush()  # As suggested by Rom Ruben
+	
+def bar_progress(current, total, width=80):
+	bar_len = 60
+	filled_len = int(round(bar_len * current / float(total)))
 
+	percents = round(100.0 * current / float(total), 1)
+	bar = '=' * filled_len + '-' * (bar_len - filled_len)
+	str_print = '%s%s [%s] %s/%s\r' % (percents, '%',bar ,current,total)
+	if current < total :
+		sys.stdout.write(str_print)
+	else :
+		str_p=''
+		for i in range(len(str_print)):
+			str_p+=' '
+		sys.stdout.write(str_p+'\r')
+	#progress_message = "Downloading: %d%% [%d / %d] bytes" % (current / total * 100, current, total)
+	# Don't use print() as it will print in new line every time.
+	#sys.stdout.write("\r" + progress_message)
+	sys.stdout.flush()
+	
 # Function for implementing the loading animation 
 def load_animation(load_str,nb_animation): 
   

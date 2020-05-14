@@ -22,6 +22,7 @@
 #  
 #
 from Manteia.Classification import Classification 
+from Manteia.Model import Model 
 			
 def main(args):
 	documents = [
@@ -38,10 +39,11 @@ def main(args):
 			]
 			
 	labels = [
-			['funny'],['not funny'],['funny'],['not funny'],['funny'],['not funny'],['not funny'],['not funny'],['funny'],['not funny'],
+			'funny','not funny','funny','not funny','funny','not funny','not funny','not funny','funny','not funny'
 			]
 			
-	cl=Classification(model_name ='roberta',documents,labels,process=True)
+	model = Model(model_name ='roberta')
+	cl=Classification(model,documents,labels,process_classif=True)
 	print(cl.predict(documents[:2]))
 	return 0
 

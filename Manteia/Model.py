@@ -308,13 +308,15 @@ class Model:
 			#pour charger uniquement la classe du modèle!
 			self.load_class()
 			self.model.load_state_dict(torch.load(self.path+'state_dict_validation.pt'))
-			#self.model.cuda()
-			self.model.to(self.device)
 
 			#by transformer
 			#self.model.from_pretrained(self.path)
 			if self.verbose==True:
 				print('loading model early...')
+				
+		#self.model.cuda()
+		self.model.to(self.device)
+
 		self.model.eval()
 		predictions = None
 
@@ -539,7 +541,10 @@ def encode_text(sentences=None,tokenizer=None,MAX_SEQ_LEN=128,verbose=False):
 		return input_ids,attention_masks
 		
 def encode_label(labels,list_labels):
+	
 	def label_int(label):
+			print(list_labels)
+			print(label)
 			if label in list_labels:
 				idx_label=list_labels.index(label)
 			return idx_label

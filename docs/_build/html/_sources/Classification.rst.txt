@@ -7,27 +7,23 @@ Classification
 A complete example
 ==================
 
-
-    from Manteia.Classification import Classification 
-    >>>from Manteia.Preprocess import Preprocess
-
 .. code-block:: python
    :linenos:
 
 
-	from Manteia.Dataset import Dataset
 	from Manteia.Classification import Classification 
 	from Manteia.Preprocess import Preprocess
-	
+	from Manteia.Dataset import Dataset
+			
 	def main(args):
 	
 		ds             = Dataset('20newsgroups')
-		documents      = ds.get_documents()
-		labels         = ds.get_labels()
+		documents      = ds.documents_train
+		labels         = ds.labels_train
 		pp             = Preprocess(documents=documents,labels=labels,nb_sample=500)
 		documents      = pp.documents
 		labels         = pp.labels
-		cl             = Classification(documents=documents,labels=labels)
+		cl             = Classification(documents_train=documents,labels_train=labels)
 		cl.list_labels = pp.list_labels
 
 		cl.load_model()
@@ -42,5 +38,3 @@ A complete example
 	if __name__ == '__main__':
 		import sys
 		sys.exit(main(sys.argv))
-    
-   code

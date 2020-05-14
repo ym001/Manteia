@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 .. module:: Classification
    :platform: Unix, Windows
@@ -16,7 +18,7 @@ import time
 import datetime
 import gc
 from .Model import *
-from .Preprocess import Preprocess
+from .Preprocess import Preprocess,list_labels
 
 class Classification:
 	r"""
@@ -32,47 +34,126 @@ class Classification:
 				
 			labels (:obj:`float`, optional, defaults to None):
 				A list of labels.
+
 				 
-		Example::
+		Example 1::
+
 		
-			from Manteia.Classification import Classification
-			documents=['a text','text b']
-			labels=['a','b']
-			Classification(documents,labels)
+			from Manteia.Classification import Classification 
+			from Manteia.Model import Model 
 			
-		Attributes:
+			documents = ['What should you do before criticizing Pac-Man? WAKA WAKA WAKA mile in his shoe.'
+			,'What did Arnold Schwarzenegger say at the abortion clinic? Hasta last vista, baby.',]
+			
+			labels = ['funny','not funny']
+			
+			model = Model(model_name ='roberta')
+			cl=Classification(model,documents,labels,process_classif=True)
+			
+			>>>Training complete!
 	"""
-	def __init__(self,documents = [],labels = [],model=None,process=False,verbose=True):
-		self.process   = process
-		self.verbose   = verbose
-		self.model     = model
-		self.documents = documents
-		self.labels    = labels
-		if self.process:
-			if self.verbose:
-				print('Classification process.')
-			pp               = Preprocess(documents=self.documents,labels=self.labels)
-			self.list_labels = pp.list_labels
-			self.documents   = pp.documents
-			self.labels      = pp.labels
-			self.load_model()
-			dt_train ,dt_validation=self.process_text()
-			self.model.configuration(dt_train)
-			self.model.fit(dt_train,dt_validation)
+	def __init__(self,model=None,documents_train = [],labels_train = [],documents_test = [],labels_test = [],process_classif=False,verbose=True):
+		
+		self.process_classif = process_classif
+		self.verbose         = verbose
+		self.model           = model
+		self.documents_train = documents_train
+		self.labels_train    = labels_train
+		self.documents_test  = documents_test
+		self.labels_test     = labels_test
+		
+		if self.process_classif and self.documents_train!=[] and self.labels_train!=[]:
+			
+			self.list_labels     = list_labels(self.labels_train)
+			self.process()
+			
 			
 	def test(self):
-		return "Classification Mantéïa."
 		
+		return "Classification Mantéïa."
+
+
+	def process(self):
+		"""
+		Example 2::
+		
+			from Manteia.Classification import Classification 
+			from Manteia.Preprocess import list_labels 
+			from Manteia.Model import Model 
+			
+			documents = ['What should you do before criticizing Pac-Man? WAKA WAKA WAKA mile in his shoe.'
+			,'What did Arnold Schwarzenegger say at the abortion clinic? Hasta last vista, baby.',]
+			
+			labels = ['funny','not funny']
+			
+			model = Model(model_name ='roberta')
+			cl=Classification(model,documents,labels)
+			cl.list_labels     = list_labels(labels)
+			cl.process()
+			print(cl.predict(documents[:2]))
+			>>>['funny', 'funny']
+		"""
+		self.load_model()
+		dt_train ,dt_validation=self.process_text()
+		self.model.configuration(dt_train)
+		self.model.fit(dt_train,dt_validation)
+		if self.documents_test != []:
+			predictions_test=self.predict(self.documents_test)
+			if self.labels_test !=[]:
+				if self.verbose:
+					print("accuracy : ".format(accuracy(predictions_test, self.labels_test)))
+					
 	def load_model(self):
-		if self.model is not None:
-			self.model = model
-		else:
-			self.model = Model(num_labels=len(self.list_labels))
+		"""
+		Example 3::
+		
+			from Manteia.Classification import Classification 
+			from Manteia.Preprocess import list_labels 
+			
+			documents = ['What should you do before criticizing Pac-Man? WAKA WAKA WAKA mile in his shoe.'
+			,'What did Arnold Schwarzenegger say at the abortion clinic? Hasta last vista, baby.',]
+			
+			labels = ['funny','not funny']
+			
+			cl=Classification(documents_train = documents,labels_train = labels)
+			cl.list_labels     = list_labels(labels)
+			cl.load_model()
+			cl.model.devices()
+			print(cl.predict(documents[:2]))
+			>>>['funny', 'funny']
+		"""
+		if self.model is None:
+			self.model = Model()
 		self.model.load_tokenizer()
+		self.model.num_labels=len(self.list_labels)
 		self.model.load_class()
 		
+	
+
 	def process_text(self):
-		train_text, validation_text, train_labels, validation_labels = train_test_split(self.documents,self.labels, random_state=2018, test_size=0.1)
+		r"""
+		This is the description of the process_text function.
+		
+		Example 4::
+		
+			from Manteia.Classification import Classification 
+			from Manteia.Preprocess import list_labels 
+			
+			documents = ['What should you do before criticizing Pac-Man? WAKA WAKA WAKA mile in his shoe.'
+			,'What did Arnold Schwarzenegger say at the abortion clinic? Hasta last vista, baby.',]
+			
+			labels = ['funny','not funny']
+			
+			cl=Classification(documents_train = documents,labels_train = labels)
+			cl.list_labels     = list_labels(labels)
+			cl.load_model()
+			dt_train ,dt_validation=cl.process_text()
+			cl.model.configuration(dt_train)
+			cl.model.fit(dt_train,dt_validation)
+
+			>>>Training complete!
+		"""
+		train_text, validation_text, train_labels, validation_labels = train_test_split(self.documents_train,self.labels_train, random_state=2018, test_size=0.1)
 
 		train_ids,train_masks           = encode_text(train_text,self.model.tokenizer,self.model.MAX_SEQ_LEN)
 		validation_ids,validation_masks = encode_text(validation_text,self.model.tokenizer,self.model.MAX_SEQ_LEN)
@@ -85,21 +166,29 @@ class Classification:
 		
 	def predict(self,documents):
 		r"""
-		This is the description of the predict function of the Classification class.
+		This is the description of the predict function.
 		
 		Args:
 		
 			documents (:obj:`list`, optional, defaults to None):
-				A list of documents.
+				A list of documents (str).
 				 
-		Example::
+					 
+		Example 5::
 		
-			from Manteia.Classification import Classification
-			documents=['a text','text b']
-			labels=['a','b']
-			cl = Classification(documents,labels)
-			print(cl.predict(documents[0]))
-
+			from Manteia.Classification import Classification 
+			from Manteia.Model import Model 
+			
+			documents = ['What should you do before criticizing Pac-Man? WAKA WAKA WAKA mile in his shoe.'
+			,'What did Arnold Schwarzenegger say at the abortion clinic? Hasta last vista, baby.',]
+			
+			labels = ['funny','not funny']
+			
+			model = Model(model_name ='roberta')
+			cl=Classification(model,documents,labels,process_classif=True)
+			print(cl.predict(documents[:2]))
+			
+			>>>['funny', 'funny']
 		"""
 		inputs,masks   = encode_text(documents,self.model.tokenizer)
 		predict_inputs = totensors(inputs)

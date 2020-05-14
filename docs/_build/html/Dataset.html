@@ -178,17 +178,67 @@
 </dl>
 </div></blockquote>
 <p>Example:</p>
+<p>Attributes:</p>
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_DBPedia">
+<code class="sig-name descname">load_DBPedia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_DBPedia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example DBPedia:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
-<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;20newsgroups&#39;</span><span class="p">)</span>
-<span class="n">documents</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">get_documents</span><span class="p">()</span>
-<span class="n">labels</span><span class="o">=</span><span class="n">ds</span><span class="o">.</span><span class="n">get_labels</span><span class="p">()</span>
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;DBPedia&#39;</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">documents</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">labels</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>Attributes:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_Yahoo_Answers">
+<code class="sig-name descname">load_Yahoo_Answers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_Yahoo_Answers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example Yahoo_Answers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;Yahoo! Answers&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_drugscom">
+<code class="sig-name descname">load_drugscom</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_drugscom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example pubmed_rct20k:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;drugscom&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_pubmed_rct20k">
+<code class="sig-name descname">load_pubmed_rct20k</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_pubmed_rct20k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example pubmed_rct20k:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;pubmed_rct20k&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </dd></dl>
 
 </div>

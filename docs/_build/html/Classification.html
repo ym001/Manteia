@@ -168,7 +168,7 @@
 <span id="classification"></span><h1>Classification<a class="headerlink" href="#module-Manteia.Classification" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-Classification"></span><dl class="py class">
 <dt id="Manteia.Classification.Classification">
-<em class="property">class </em><code class="sig-prename descclassname">Manteia.Classification.</code><code class="sig-name descname">Classification</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labels</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">process</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Classification.Classification" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Classification.</code><code class="sig-name descname">Classification</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">documents_train</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labels_train</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">documents_test</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">labels_test</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">process_classif</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Classification.Classification" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is the class to classify text in categorie a NLP task.</p>
 <p>Args:</p>
 <blockquote>
@@ -181,31 +181,116 @@
 </dd>
 </dl>
 </div></blockquote>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Classification</span> <span class="kn">import</span> <span class="n">Classification</span>
-<span class="n">documents</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a text&#39;</span><span class="p">,</span><span class="s1">&#39;text b&#39;</span><span class="p">]</span>
-<span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
-<span class="n">Classification</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="p">)</span>
+<p>Example 1:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>from Manteia.Classification import Classification 
+from Manteia.Model import Model 
+
+documents = [&#39;What should you do before criticizing Pac-Man? WAKA WAKA WAKA mile in his shoe.&#39;
+,&#39;What did Arnold Schwarzenegger say at the abortion clinic? Hasta last vista, baby.&#39;,]
+
+labels = [&#39;funny&#39;,&#39;not funny&#39;]
+
+model = Model(model_name =&#39;roberta&#39;)
+cl=Classification(model,documents,labels,process_classif=True)
+
+&gt;&gt;&gt;Training complete!
 </pre></div>
 </div>
-<p>Attributes:</p>
+<dl class="py method">
+<dt id="Manteia.Classification.Classification.load_model">
+<code class="sig-name descname">load_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Classification.Classification.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example 3:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Classification</span> <span class="kn">import</span> <span class="n">Classification</span> 
+<span class="kn">from</span> <span class="nn">Manteia.Preprocess</span> <span class="kn">import</span> <span class="n">list_labels</span> 
+
+<span class="n">documents</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;What should you do before criticizing Pac-Man? WAKA WAKA WAKA mile in his shoe.&#39;</span>
+<span class="p">,</span><span class="s1">&#39;What did Arnold Schwarzenegger say at the abortion clinic? Hasta last vista, baby.&#39;</span><span class="p">,]</span>
+
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;funny&#39;</span><span class="p">,</span><span class="s1">&#39;not funny&#39;</span><span class="p">]</span>
+
+<span class="n">cl</span><span class="o">=</span><span class="n">Classification</span><span class="p">(</span><span class="n">documents_train</span> <span class="o">=</span> <span class="n">documents</span><span class="p">,</span><span class="n">labels_train</span> <span class="o">=</span> <span class="n">labels</span><span class="p">)</span>
+<span class="n">cl</span><span class="o">.</span><span class="n">list_labels</span>     <span class="o">=</span> <span class="n">list_labels</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+<span class="n">cl</span><span class="o">.</span><span class="n">load_model</span><span class="p">()</span>
+<span class="n">cl</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">devices</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">documents</span><span class="p">[:</span><span class="mi">2</span><span class="p">]))</span>
+<span class="o">&gt;&gt;&gt;</span><span class="p">[</span><span class="s1">&#39;funny&#39;</span><span class="p">,</span> <span class="s1">&#39;funny&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="py method">
 <dt id="Manteia.Classification.Classification.predict">
 <code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Classification.Classification.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is the description of the predict function of the Classification class.</p>
+<dd><p>This is the description of the predict function.</p>
 <p>Args:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>documents (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>, optional, defaults to None):</dt><dd><p>A list of documents.</p>
+<dt>documents (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>, optional, defaults to None):</dt><dd><p>A list of documents (str).</p>
 </dd>
 </dl>
 </div></blockquote>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Classification</span> <span class="kn">import</span> <span class="n">Classification</span>
-<span class="n">documents</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a text&#39;</span><span class="p">,</span><span class="s1">&#39;text b&#39;</span><span class="p">]</span>
-<span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
-<span class="n">cl</span> <span class="o">=</span> <span class="n">Classification</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">cl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">documents</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<p>Example 5:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Classification</span> <span class="kn">import</span> <span class="n">Classification</span> 
+<span class="kn">from</span> <span class="nn">Manteia.Model</span> <span class="kn">import</span> <span class="n">Model</span> 
+
+<span class="n">documents</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;What should you do before criticizing Pac-Man? WAKA WAKA WAKA mile in his shoe.&#39;</span>
+<span class="p">,</span><span class="s1">&#39;What did Arnold Schwarzenegger say at the abortion clinic? Hasta last vista, baby.&#39;</span><span class="p">,]</span>
+
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;funny&#39;</span><span class="p">,</span><span class="s1">&#39;not funny&#39;</span><span class="p">]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">model_name</span> <span class="o">=</span><span class="s1">&#39;roberta&#39;</span><span class="p">)</span>
+<span class="n">cl</span><span class="o">=</span><span class="n">Classification</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="p">,</span><span class="n">process_classif</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">documents</span><span class="p">[:</span><span class="mi">2</span><span class="p">]))</span>
+
+<span class="o">&gt;&gt;&gt;</span><span class="p">[</span><span class="s1">&#39;funny&#39;</span><span class="p">,</span> <span class="s1">&#39;funny&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Classification.Classification.process">
+<code class="sig-name descname">process</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Classification.Classification.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example 2:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Classification</span> <span class="kn">import</span> <span class="n">Classification</span> 
+<span class="kn">from</span> <span class="nn">Manteia.Preprocess</span> <span class="kn">import</span> <span class="n">list_labels</span> 
+<span class="kn">from</span> <span class="nn">Manteia.Model</span> <span class="kn">import</span> <span class="n">Model</span> 
+
+<span class="n">documents</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;What should you do before criticizing Pac-Man? WAKA WAKA WAKA mile in his shoe.&#39;</span>
+<span class="p">,</span><span class="s1">&#39;What did Arnold Schwarzenegger say at the abortion clinic? Hasta last vista, baby.&#39;</span><span class="p">,]</span>
+
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;funny&#39;</span><span class="p">,</span><span class="s1">&#39;not funny&#39;</span><span class="p">]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">model_name</span> <span class="o">=</span><span class="s1">&#39;roberta&#39;</span><span class="p">)</span>
+<span class="n">cl</span><span class="o">=</span><span class="n">Classification</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="p">)</span>
+<span class="n">cl</span><span class="o">.</span><span class="n">list_labels</span>     <span class="o">=</span> <span class="n">list_labels</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+<span class="n">cl</span><span class="o">.</span><span class="n">process</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">documents</span><span class="p">[:</span><span class="mi">2</span><span class="p">]))</span>
+<span class="o">&gt;&gt;&gt;</span><span class="p">[</span><span class="s1">&#39;funny&#39;</span><span class="p">,</span> <span class="s1">&#39;funny&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Classification.Classification.process_text">
+<code class="sig-name descname">process_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Classification.Classification.process_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the description of the process_text function.</p>
+<p>Example 4:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>from Manteia.Classification import Classification 
+from Manteia.Preprocess import list_labels 
+
+documents = [&#39;What should you do before criticizing Pac-Man? WAKA WAKA WAKA mile in his shoe.&#39;
+,&#39;What did Arnold Schwarzenegger say at the abortion clinic? Hasta last vista, baby.&#39;,]
+
+labels = [&#39;funny&#39;,&#39;not funny&#39;]
+
+cl=Classification(documents_train = documents,labels_train = labels)
+cl.list_labels     = list_labels(labels)
+cl.load_model()
+dt_train ,dt_validation=cl.process_text()
+cl.model.configuration(dt_train)
+cl.model.fit(dt_train,dt_validation)
+
+&gt;&gt;&gt;Training complete!
 </pre></div>
 </div>
 </dd></dl>
@@ -215,10 +300,6 @@
 </div>
 <div class="section" id="a-complete-example">
 <h1>A complete example<a class="headerlink" href="#a-complete-example" title="Permalink to this headline">¶</a></h1>
-<blockquote>
-<div><p>from Manteia.Classification import Classification
-&gt;&gt;&gt;from Manteia.Preprocess import Preprocess</p>
-</div></blockquote>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -245,21 +326,19 @@
 24
 25
 26
-27
-28
-29</pre></div></td><td class="code"><div class="highlight"><pre><span></span>     <span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
-     <span class="kn">from</span> <span class="nn">Manteia.Classification</span> <span class="kn">import</span> <span class="n">Classification</span>
+27</pre></div></td><td class="code"><div class="highlight"><pre><span></span>     <span class="kn">from</span> <span class="nn">Manteia.Classification</span> <span class="kn">import</span> <span class="n">Classification</span>
      <span class="kn">from</span> <span class="nn">Manteia.Preprocess</span> <span class="kn">import</span> <span class="n">Preprocess</span>
+     <span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
      <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
 
              <span class="n">ds</span>             <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;20newsgroups&#39;</span><span class="p">)</span>
-             <span class="n">documents</span>      <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_documents</span><span class="p">()</span>
-             <span class="n">labels</span>         <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_labels</span><span class="p">()</span>
+             <span class="n">documents</span>      <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span>
+             <span class="n">labels</span>         <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span>
              <span class="n">pp</span>             <span class="o">=</span> <span class="n">Preprocess</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">nb_sample</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
              <span class="n">documents</span>      <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">documents</span>
              <span class="n">labels</span>         <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">labels</span>
-             <span class="n">cl</span>             <span class="o">=</span> <span class="n">Classification</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+             <span class="n">cl</span>             <span class="o">=</span> <span class="n">Classification</span><span class="p">(</span><span class="n">documents_train</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span><span class="n">labels_train</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
              <span class="n">cl</span><span class="o">.</span><span class="n">list_labels</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">list_labels</span>
 
              <span class="n">cl</span><span class="o">.</span><span class="n">load_model</span><span class="p">()</span>
@@ -274,8 +353,6 @@
      <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
              <span class="kn">import</span> <span class="nn">sys</span>
              <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">))</span>
-
-<span class="n">code</span>
 </pre></div>
 </td></tr></table></div>
 </div>

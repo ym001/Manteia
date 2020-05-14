@@ -35,14 +35,7 @@ class Dataset:
 				 
 		Example::
 
-			from Manteia.Dataset import Dataset
-
-			ds=Dataset('20newsgroups')
-			documents=ds.get_documents()
-			labels=ds.get_labels()
-
-			print(documents[:5])
-			print(labels[:5])
+			
 
 		Attributes:
 	"""
@@ -59,7 +52,7 @@ class Dataset:
 
 	def load(self):
 		if self.name=="20newsgroups":
-			self.documents,self.labels=self.load_20newsgroups()
+			self.load_20newsgroups()
 			
 		if self.name=="SST-2":
 			self.load_SST_2()
@@ -88,6 +81,14 @@ class Dataset:
 			self.load_Amazon_Review_Full()
 		if self.name=="Amazon Review Polarity":
 			self.load_Amazon_Review_Polarity()
+		if self.name=="Sogou News":
+			self.load_Sogou_News()
+		if self.name=="Yahoo! Answers":
+			self.load_Yahoo_Answers()
+		if self.name=="Yelp Review Full":
+			self.load_Yelp_Review_Full()
+		if self.name=="Yelp Review Polarity":
+			self.load_Yelp_Review_Polarity()
 			
 	def load_20newsgroups(self):
 		if self.verbose:
@@ -95,11 +96,152 @@ class Dataset:
 		#categorie = ['sci.crypt', 'sci.electronics','sci.med', 'sci.space']
 		categorie = ['sci.crypt', 'sci.electronics','sci.med', 'sci.space','rec.autos','rec.motorcycles','rec.sport.baseball','rec.sport.hockey','talk.politics.guns','talk.politics.mideast','talk.politics.misc','talk.religion.misc']
 		twenty_train = fetch_20newsgroups(subset='train',categories=categorie, shuffle=True, random_state=42)
-		doc=twenty_train.data
-		label=[]
+		self.documents_train = twenty_train.data
+		self.labels_train=[]
 		for i in range(len(twenty_train.target)):
-			label.append(categorie[twenty_train.target[i]])
-		return doc,label
+			self.labels_train.append(categorie[twenty_train.target[i]])
+		
+	def load_Yelp_Review_Polarity(self):
+		
+		self.path_dir = os.path.join(self.path,'yelp_review_polarity')
+		#!!!!!!!!!!!!!!!!!!!!
+		self.del_dir(self.path_dir)
+		#!!!!!!!!!!!!!!!!!!!!
+		if not os.path.isdir(self.path_dir):
+			os.mkdir(self.path_dir)
+
+			file_list=['yelp_review_polarity00.zip','yelp_review_polarity01.zip','yelp_review_polarity02.zip']
+			load_multiple_file(file_list,self.path,self.path_dir)
+				
+		self.path_train = os.path.join(self.path_dir,'train.csv')
+		if os.path.isfile(self.path_train):
+			self.documents_train,self.labels_train=construct_sample(self.path_train)
+		
+		self.path_test = os.path.join(self.path_dir,'test.csv')
+		if os.path.isfile(self.path_test):
+			self.documents_test,self.labels_test=construct_sample(self.path_test)
+
+		self.path_description = os.path.join(self.path_dir,'readme.txt')
+		if os.path.isfile(self.path_description):
+			self.description=''
+			fi = open(self.path_description, "r")
+			rows = fi.readlines()
+			for row in rows:
+				self.description+=row
+				
+	def load_Yelp_Review_Full(self):
+		
+		self.path_dir = os.path.join(self.path,'yelp_review_full')
+		#!!!!!!!!!!!!!!!!!!!!
+		self.del_dir(self.path_dir)
+		#!!!!!!!!!!!!!!!!!!!!
+		if not os.path.isdir(self.path_dir):
+			os.mkdir(self.path_dir)
+
+			file_list=['yelp_review_full00.zip','yelp_review_full01.zip','yelp_review_full02.zip']
+			load_multiple_file(file_list,self.path,self.path_dir)
+				
+		self.path_train = os.path.join(self.path_dir,'train.csv')
+		if os.path.isfile(self.path_train):
+			self.documents_train,self.labels_train=construct_sample(self.path_train)
+		
+		self.path_test = os.path.join(self.path_dir,'test.csv')
+		if os.path.isfile(self.path_test):
+			self.documents_test,self.labels_test=construct_sample(self.path_test)
+
+		self.path_description = os.path.join(self.path_dir,'readme.txt')
+		if os.path.isfile(self.path_description):
+			self.description=''
+			fi = open(self.path_description, "r")
+			rows = fi.readlines()
+			for row in rows:
+				self.description+=row
+
+	def load_Yahoo_Answers(self):
+		"""
+		Example Yahoo_Answers::
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('Yahoo! Answers')
+
+			print('Test : ')
+			print(ds.documents_test[:5])
+			print(ds.labels_test[:5])
+		"""
+		self.path_dir = os.path.join(self.path,'yahoo_answers')
+		#!!!!!!!!!!!!!!!!!!!!
+		self.del_dir(self.path_dir)
+		#!!!!!!!!!!!!!!!!!!!!
+		if not os.path.isdir(self.path_dir):
+			os.mkdir(self.path_dir)
+
+			file_list=['yahoo_answers00.zip','yahoo_answers01.zip','yahoo_answers02.zip','yahoo_answers03.zip',
+						'yahoo_answers04.zip']
+			load_multiple_file(file_list,self.path,self.path_dir)
+			
+		self.path_classes = os.path.join(self.path_dir,'classes.txt')
+		classes=['']
+		if os.path.isfile(self.path_classes):
+			fi = open(self.path_classes, "r")
+			rows = fi.readlines()
+			for row in rows:
+				classes.append(row.strip())
+				
+		self.path_train = os.path.join(self.path_dir,'train.csv')
+		if os.path.isfile(self.path_train):
+			self.documents_train,self.labels_train=construct_sample(self.path_train,classes)
+		
+		self.path_test = os.path.join(self.path_dir,'test.csv')
+		if os.path.isfile(self.path_test):
+			self.documents_test,self.labels_test=construct_sample(self.path_test,classes)
+
+		self.path_description = os.path.join(self.path_dir,'readme.txt')
+		if os.path.isfile(self.path_description):
+			self.description=''
+			fi = open(self.path_description, "r")
+			rows = fi.readlines()
+			for row in rows:
+				self.description+=row
+	"""
+	
+	"""
+	def load_Sogou_News(self):
+		
+		self.path_dir = os.path.join(self.path,'sogou_news')
+		#!!!!!!!!!!!!!!!!!!!!
+		#self.del_dir(self.path_dir)
+		#!!!!!!!!!!!!!!!!!!!!
+		if not os.path.isdir(self.path_dir):
+			os.mkdir(self.path_dir)
+
+			file_list=['sogou_news00.zip','sogou_news01.zip','sogou_news02.zip','sogou_news03.zip',
+						'sogou_news04.zip','sogou_news05.zip']
+			load_multiple_file(file_list,self.path,self.path_dir)
+		self.path_classes = os.path.join(self.path_dir,'classes.txt')
+		classes=['']
+		if os.path.isfile(self.path_classes):
+			fi = open(self.path_classes, "r")
+			rows = fi.readlines()
+			for row in rows:
+				classes.append(row.strip())
+				
+		self.path_train = os.path.join(self.path_dir,'train.csv')
+		if os.path.isfile(self.path_train):
+			self.documents_train,self.labels_train = construct_sample(self.path_train,classes)
+		
+		self.path_test = os.path.join(self.path_dir,'test.csv')
+		if os.path.isfile(self.path_test):
+			self.documents_test,self.labels_test   = construct_sample(self.path_test,classes)
+
+		self.path_description = os.path.join(self.path_dir,'readme.txt')
+		if os.path.isfile(self.path_description):
+			self.description=''
+			fi = open(self.path_description, "r")
+			rows = fi.readlines()
+			for row in rows:
+				self.description+=row
+
 	"""
 	
 	"""
@@ -118,13 +260,15 @@ class Dataset:
 			load_multiple_file(file_list,self.path,self.path_dir)
 				
 		self.path_train = os.path.join(self.path_dir,'train.csv')
-		self.documents_train,self.labels_train=construct_sample(self.path_train)
+		if os.path.isfile(self.path_train):
+			self.documents_train,self.labels_train=construct_sample(self.path_train)
 		
 		self.path_test = os.path.join(self.path_dir,'test.csv')
-		self.documents_test,self.labels_test=construct_sample(self.path_test)
+		if os.path.isfile(self.path_test):
+			self.documents_test,self.labels_test=construct_sample(self.path_test)
 
 		self.path_description = os.path.join(self.path_dir,'readme.txt')
-		if os.path.isfile(self.path_test):
+		if os.path.isfile(self.path_description):
 			self.description=''
 			fi = open(self.path_description, "r")
 			rows = fi.readlines()
@@ -147,13 +291,15 @@ class Dataset:
 			load_multiple_file(file_list,self.path,self.path_dir)
 				
 		self.path_train = os.path.join(self.path_dir,'train.csv')
-		self.documents_train,self.labels_train=construct_sample(self.path_train)
+		if os.path.isfile(self.path_train):
+			self.documents_train,self.labels_train=construct_sample(self.path_train)
 		
 		self.path_test = os.path.join(self.path_dir,'test.csv')
-		self.documents_test,self.labels_test=construct_sample(self.path_test)
+		if os.path.isfile(self.path_test):
+			self.documents_test,self.labels_test=construct_sample(self.path_test)
 
 		self.path_description = os.path.join(self.path_dir,'readme.txt')
-		if os.path.isfile(self.path_test):
+		if os.path.isfile(self.path_description):
 			self.description=''
 			fi = open(self.path_description, "r")
 			rows = fi.readlines()
@@ -161,7 +307,17 @@ class Dataset:
 				self.description+=row
 		
 	def load_DBPedia(self):
-		
+		"""
+		Example DBPedia::
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('DBPedia')
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
+		"""
 		self.documents_train,self.labels_train = [],[]
 		self.documents_test,self.labels_test = [],[]
 		self.path_dir = os.path.join(self.path,'DBPedia')
@@ -203,7 +359,7 @@ class Dataset:
 				self.documents_test.append(row[1].strip('"')+' '+row[2].strip('"'))
 				self.labels_test.append(classes[int(row[0])])
 		self.path_description = os.path.join(self.path_dir,'readme.txt')
-		if os.path.isfile(self.path_test):
+		if os.path.isfile(self.path_description):
 			self.description=''
 			fi = open(self.path_description, "r")
 			rows = fi.readlines()
@@ -296,6 +452,17 @@ class Dataset:
 				print("\tCompleted!")
 				
 	def load_drugscom(self):
+		"""
+		Example pubmed_rct20k::
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('drugscom')
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
+		"""
 		self.path_dir = os.path.join(self.path,'drugscom')
 		if not os.path.isdir(self.path_dir):
 			os.mkdir(path_dir)
@@ -393,7 +560,17 @@ class Dataset:
 			self.labels_test     = df_test['label'].values
 
 	def load_pubmed_rct20k(self):
-		
+		"""
+		Example pubmed_rct20k::
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('pubmed_rct20k')
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
+		"""
 		self.documents_train,self.labels_train = [],[]
 		self.documents_test,self.labels_test   = [],[]
 		self.documents_dev,self.labels_dev     = [],[]
@@ -469,7 +646,7 @@ def clear_folder(dir):
                 print(e)
         os.rmdir(dir)
         
-def construct_sample(path_train):
+def construct_sample(path_train,classes=None):
 	documents_train,labels_train = [],[]
 	if os.path.isfile(path_train):
 			fi = open(path_train, "r")
@@ -477,8 +654,15 @@ def construct_sample(path_train):
 			for row in rows:
 				row.strip()
 				row=row.split(',')
-				documents_train.append(row[1].strip('"')+' '+row[2].strip('"'))
-				labels_train.append(row[0].strip('"'))
+				if len(row)>2:
+					documents_train.append(row[1].strip('"')+' '+row[2].strip('"'))
+				else:
+					documents_train.append(row[1].strip('"'))
+				if classes is None:
+					labels_train.append(row[0].strip('"'))
+				else:
+					labels_train.append(classes[int(row[0].strip('"'))])
+
 	return documents_train,labels_train
 	
 def load_multiple_file(file_list,path,path_dir):

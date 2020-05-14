@@ -84,7 +84,7 @@ class Preprocess:
 			self.load()
 			self.reduction()
 			self.df_documents=clean(self.df_documents)
-			self.list_labels=self.list_labels(self.df_labels[LABEL_COLUMN].values.tolist())
+			self.list_labels=list_labels(self.df_labels[LABEL_COLUMN].values.tolist())
 		
 			self.documents=self.df_documents[TEXT_COLUMN].values.tolist()
 			self.labels=self.df_labels[LABEL_COLUMN].values.tolist()
@@ -126,9 +126,9 @@ class Preprocess:
 		return pd.DataFrame({TEXT_COLUMN:self.df_documents[TEXT_COLUMN] , LABEL_COLUMN:self.df_labels[LABEL_COLUMN]})
 
 	
-	def list_labels(self,labels):
+def list_labels(labels):
 		return list(np.sort(np.unique(np.array(labels)), axis=0))
-	'''
+'''
 	def list_labels(self,labels):
 		label=[]
 		for l in labels:
@@ -136,7 +136,7 @@ class Preprocess:
 					label.append(l)
 		label.sort(reverse=False)
 		return label
-	'''
+'''
 		
 def clean_stop_word(df,lang='english'):
 		stop_unicode = stopwords.words(lang)

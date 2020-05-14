@@ -28,12 +28,12 @@ from Manteia.Dataset import Dataset
 def main(args):
 	
 	ds             = Dataset('20newsgroups')
-	documents      = ds.get_documents()
-	labels         = ds.get_labels()
+	documents      = ds.documents_train
+	labels         = ds.labels_train
 	pp             = Preprocess(documents=documents,labels=labels,nb_sample=500)
 	documents      = pp.documents
 	labels         = pp.labels
-	cl             = Classification(documents=documents,labels=labels)
+	cl             = Classification(documents_train=documents,labels_train=labels)
 	cl.list_labels = pp.list_labels
 
 	cl.load_model()

@@ -543,8 +543,6 @@ def encode_text(sentences=None,tokenizer=None,MAX_SEQ_LEN=128,verbose=False):
 def encode_label(labels,list_labels):
 	
 	def label_int(label):
-			print(list_labels)
-			print(label)
 			if label in list_labels:
 				idx_label=list_labels.index(label)
 			return idx_label
@@ -626,7 +624,7 @@ class EarlyStopping:
 	def save_checkpoint(self, acc_validation, model,device_model):
 		'''Saves model when validation loss decrease.'''
 		if self.verbose:
-			print('Validation accuracy increased ({:.6f} --> {acc_validation:.6f}).  Saving model ...'.format(self.acc_validation_min))
+			print('Validation accuracy increased ({:.6f} --> {:.6f}).  Saving model ...'.format(self.acc_validation_min,acc_validation))
 		if not os.path.isdir(self.path):
 			# define the name of the directory to be created
 			try:
@@ -638,7 +636,9 @@ class EarlyStopping:
 		#save by torch
 		device = torch.device('cpu')
 		model.to(device)
+		print(type(model))
 		torch.save(model.module.state_dict(),self.path+'state_dict_validation.pt')
+		
 		model.to(device_model)
 		#save by transformer
 		#model.save_pretrained(self.path)

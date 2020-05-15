@@ -28,19 +28,25 @@ class Dataset:
 	r"""
 		This is the class to give datasets.
 		
-		Args:
-
-			dataset_name (:obj:`string`, optional, defaults to ''):
-				Name of the dataset.
-				 
-		Example::
-
+		
+		* **name** - name of the dataset (str)
+		* **train** - load the dataset train Default: ‘True’.
+		* **test** - load the dataset test Default: ‘False’.
+		* **dev** - load the dataset dev Default: ‘False’.
+		* **description** - load description Default: ‘False’.
+		* **url** - 
+		* **verbose** - 
+		* **path** - Path to the data file.
 			
+		.. code-block:: python
 
-		Attributes:
+			print('hello')
+		
+				 
 	"""
-	def __init__(self,name='20newsgroups',path='./dataset',verbose=True):
-
+	def __init__(self,name='20newsgroups',train=True,test=False,dev=False,description=False,url=False,path='./dataset',verbose=True):
+		r"""
+		"""
 		self.name=name
 		self.path=path
 		self.verbose=verbose
@@ -91,6 +97,11 @@ class Dataset:
 			self.load_Yelp_Review_Polarity()
 			
 	def load_20newsgroups(self):
+		r"""
+		This is the function to give 20newsgroups datasets.
+		
+		"""
+		
 		if self.verbose:
 			print('Downloading 20newsgroups...')
 		#categorie = ['sci.crypt', 'sci.electronics','sci.med', 'sci.space']
@@ -102,7 +113,14 @@ class Dataset:
 			self.labels_train.append(categorie[twenty_train.target[i]])
 		
 	def load_Yelp_Review_Polarity(self):
-		
+		"""
+		Defines YelpReviewPolarity datasets.
+			The labels includes:
+			
+			* 0 : Negative polarity.
+
+			* 1 : Positive polarity.
+		"""
 		self.path_dir = os.path.join(self.path,'yelp_review_polarity')
 		#!!!!!!!!!!!!!!!!!!!!
 		self.del_dir(self.path_dir)
@@ -158,7 +176,7 @@ class Dataset:
 				self.description+=row
 
 	def load_Yahoo_Answers(self):
-		"""
+		r"""
 		Example Yahoo_Answers::
 
 			from Manteia.Dataset import Dataset
@@ -171,7 +189,7 @@ class Dataset:
 		"""
 		self.path_dir = os.path.join(self.path,'yahoo_answers')
 		#!!!!!!!!!!!!!!!!!!!!
-		self.del_dir(self.path_dir)
+		#self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 		if not os.path.isdir(self.path_dir):
 			os.mkdir(self.path_dir)
@@ -249,7 +267,7 @@ class Dataset:
 		
 		self.path_dir = os.path.join(self.path,'amazon_review_polarity')
 		#!!!!!!!!!!!!!!!!!!!!
-		self.del_dir(self.path_dir)
+		#self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 		if not os.path.isdir(self.path_dir):
 			os.mkdir(self.path_dir)
@@ -307,7 +325,7 @@ class Dataset:
 				self.description+=row
 		
 	def load_DBPedia(self):
-		"""
+		r"""
 		Example DBPedia::
 
 			from Manteia.Dataset import Dataset
@@ -452,7 +470,7 @@ class Dataset:
 				print("\tCompleted!")
 				
 	def load_drugscom(self):
-		"""
+		r"""
 		Example pubmed_rct20k::
 
 			from Manteia.Dataset import Dataset
@@ -560,7 +578,7 @@ class Dataset:
 			self.labels_test     = df_test['label'].values
 
 	def load_pubmed_rct20k(self):
-		"""
+		r"""
 		Example pubmed_rct20k::
 
 			from Manteia.Dataset import Dataset

@@ -168,34 +168,50 @@
 <span id="dataset"></span><h1>Dataset<a class="headerlink" href="#module-Manteia.Dataset" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-Dataset"></span><dl class="py class">
 <dt id="Manteia.Dataset.Dataset">
-<em class="property">class </em><code class="sig-prename descclassname">Manteia.Dataset.</code><code class="sig-name descname">Dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'20newsgroups'</span></em>, <em class="sig-param"><span class="n">train</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">test</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">dev</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">'./dataset'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Dataset.</code><code class="sig-name descname">Dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'20newsgroups'</span></em>, <em class="sig-param"><span class="n">train</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">test</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">dev</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">classe</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">desc</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">'./dataset'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is the class to give datasets.</p>
 <ul class="simple">
-<li><p><strong>name</strong> - name of the dataset (str)</p></li>
-<li><p><strong>train</strong> - load the dataset train Default: ‘True’.</p></li>
-<li><p><strong>test</strong> - load the dataset test Default: ‘False’.</p></li>
-<li><p><strong>dev</strong> - load the dataset dev Default: ‘False’.</p></li>
+<li><p><strong>name</strong>        - name of the dataset (str)</p></li>
+<li><p><strong>train</strong>       - load the dataset train Default: ‘True’.</p></li>
+<li><p><strong>test</strong>        - load the dataset test Default: ‘False’.</p></li>
+<li><p><strong>dev</strong>         - load the dataset dev Default: ‘False’.</p></li>
 <li><p><strong>description</strong> - load description Default: ‘False’.</p></li>
-<li><p><strong>url</strong> -</p></li>
-<li><p><strong>verbose</strong> -</p></li>
-<li><p><strong>path</strong> - Path to the data file.</p></li>
+<li><p><strong>url</strong>         -</p></li>
+<li><p><strong>verbose</strong>     -</p></li>
+<li><p><strong>path</strong>        - Path to the data file.</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py method">
-<dt id="Manteia.Dataset.Dataset.load_20newsgroups">
-<code class="sig-name descname">load_20newsgroups</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_20newsgroups" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is the function to give 20newsgroups datasets.</p>
+<dt id="Manteia.Dataset.Dataset.del_dir">
+<code class="sig-name descname">del_dir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.del_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete file of the dataset.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="Manteia.Dataset.Dataset.load_DBPedia">
-<code class="sig-name descname">load_DBPedia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_DBPedia" title="Permalink to this definition">¶</a></dt>
-<dd><p>Example DBPedia:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<dt id="Manteia.Dataset.Dataset.load_20newsgroups">
+<code class="sig-name descname">load_20newsgroups</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_20newsgroups" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Defines 20newsgroups datasets.</dt><dd><p>The labels includes:</p>
+<ul class="simple">
+<li><p>0 : sci.crypt.</p></li>
+<li><p>1 : sci.electronics.</p></li>
+<li><p>2 : sci.med.</p></li>
+<li><p>3 : sci.space.</p></li>
+<li><p>4 : rec.autos.</p></li>
+<li><p>5 : rec.sport.baseball.</p></li>
+<li><p>6 : rec.sport.hockey.</p></li>
+<li><p>7 : talk.politics.guns.</p></li>
+<li><p>8 : talk.politics.mideast.</p></li>
+<li><p>9 : talk.politics.misc.</p></li>
+<li><p>10 : talk.religion.misc.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
-<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;DBPedia&#39;</span><span class="p">)</span>
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;20newsgroups&#39;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
@@ -205,16 +221,158 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="Manteia.Dataset.Dataset.load_Yahoo_Answers">
-<code class="sig-name descname">load_Yahoo_Answers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_Yahoo_Answers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Example Yahoo_Answers:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<dt id="Manteia.Dataset.Dataset.load_DBPedia">
+<code class="sig-name descname">load_DBPedia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_DBPedia" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Defines DBPedia datasets.</dt><dd><p>The labels includes:</p>
+<ul class="simple">
+<li><p>Company</p></li>
+<li><p>EducationalInstitution</p></li>
+<li><p>Artist</p></li>
+<li><p>Athlete</p></li>
+<li><p>OfficeHolder</p></li>
+<li><p>MeanOfTransportation</p></li>
+<li><p>Building</p></li>
+<li><p>NaturalPlace</p></li>
+<li><p>Village</p></li>
+<li><p>Animal</p></li>
+<li><p>Plant</p></li>
+<li><p>Album</p></li>
+<li><p>Film</p></li>
+<li><p>WrittenWork</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
-<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;Yahoo! Answers&#39;</span><span class="p">)</span>
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;DBPedia&#39;</span><span class="p">,</span><span class="n">test</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">desc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">classe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test : &#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Description :&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;List labels :&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">list_labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_SST_2">
+<code class="sig-name descname">load_SST_2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_SST_2" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Defines SST 2 datasets.</dt><dd><p>The labels includes:</p>
+<ul class="simple">
+<li><p>Negative polarity.</p></li>
+<li><p>Positive polarity.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;SST-2&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_SST_5">
+<code class="sig-name descname">load_SST_5</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_SST_5" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Defines SST 5 datasets.</dt><dd><p>The labels includes:</p>
+<ul class="simple">
+<li><p>very negative.</p></li>
+<li><p>negative.</p></li>
+<li><p>neutral.</p></li>
+<li><p>positive.</p></li>
+<li><p>very positive.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;SST-5&#39;</span><span class="p">,</span><span class="n">dev</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dev : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_dev</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_dev</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_Yahoo_Answers">
+<code class="sig-name descname">load_Yahoo_Answers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_Yahoo_Answers" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Defines Yahoo! Answers datasets.</dt><dd><p>The labels includes:</p>
+<ul class="simple">
+<li><p>Society &amp; Culture</p></li>
+<li><p>Science &amp; Mathematics</p></li>
+<li><p>Health</p></li>
+<li><p>Education &amp; Reference</p></li>
+<li><p>Computers &amp; Internet</p></li>
+<li><p>Sports</p></li>
+<li><p>Business &amp; Finance</p></li>
+<li><p>Entertainment &amp; Music</p></li>
+<li><p>Family &amp; Relationships</p></li>
+<li><p>Politics &amp; Government</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;Yahoo! Answers&#39;</span><span class="p">,</span><span class="n">test</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">desc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Description :&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;List labels :&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">list_labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_Yelp_Review_Full">
+<code class="sig-name descname">load_Yelp_Review_Full</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_Yelp_Review_Full" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Defines Yelp Review Full Star Dataset.</dt><dd><p>The labels includes:</p>
+<p><strong>1 - 5</strong> : rating classes (5 is highly recommended).</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;Yelp Review Full&#39;</span><span class="p">,</span><span class="n">test</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">desc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Description :&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -223,20 +381,60 @@
 <dt id="Manteia.Dataset.Dataset.load_Yelp_Review_Polarity">
 <code class="sig-name descname">load_Yelp_Review_Polarity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_Yelp_Review_Polarity" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
-<dt>Defines YelpReviewPolarity datasets.</dt><dd><p>The labels includes:</p>
+<dt>Defines Yelp Review Polarity datasets.</dt><dd><p>The labels includes:</p>
 <ul class="simple">
-<li><p>0 : Negative polarity.</p></li>
-<li><p>1 : Positive polarity.</p></li>
+<li><p>1 : Negative polarity.</p></li>
+<li><p>2 : Positive polarity.</p></li>
 </ul>
 </dd>
 </dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;Yelp Review Polarity&#39;</span><span class="p">,</span><span class="n">test</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">desc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_agnews">
+<code class="sig-name descname">load_agnews</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_agnews" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Defines Agnews datasets.</dt><dd><p>The labels includes:</p>
+<ul class="simple">
+<li><p>0 : World</p></li>
+<li><p>1 : Sports</p></li>
+<li><p>2 : Business</p></li>
+<li><p>3 : Sci/Tech</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;agnews&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt id="Manteia.Dataset.Dataset.load_drugscom">
 <code class="sig-name descname">load_drugscom</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_drugscom" title="Permalink to this definition">¶</a></dt>
-<dd><p>Example pubmed_rct20k:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<dd><dl>
+<dt>Defines Drugs.com Dataset.</dt><dd><p>The labels includes:</p>
+<p><strong>0 - 9</strong> : rating classes (9 is highly).</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
 <span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;drugscom&#39;</span><span class="p">)</span>
 
@@ -250,10 +448,46 @@
 <dl class="py method">
 <dt id="Manteia.Dataset.Dataset.load_pubmed_rct20k">
 <code class="sig-name descname">load_pubmed_rct20k</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_pubmed_rct20k" title="Permalink to this definition">¶</a></dt>
-<dd><p>Example pubmed_rct20k:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<dd><dl class="simple">
+<dt>Defines Pubmed RCT20k datasets.</dt><dd><p>The labels includes:</p>
+<ul class="simple">
+<li><p>BACKGROUND.</p></li>
+<li><p>CONCLUSIONS.</p></li>
+<li><p>METHODS.</p></li>
+<li><p>OBJECTIVE.</p></li>
+<li><p>RESULTS.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
 <span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;pubmed_rct20k&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_trec">
+<code class="sig-name descname">load_trec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_trec" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Defines Trec datasets.</dt><dd><p>The labels includes:</p>
+<ul class="simple">
+<li><p>ABBREVIATION</p></li>
+<li><p>ENTITY</p></li>
+<li><p>DESCRIPTION</p></li>
+<li><p>HUMAN</p></li>
+<li><p>LOCATION</p></li>
+<li><p>NUMERIC</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;agnews&#39;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>

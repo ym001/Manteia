@@ -29,14 +29,14 @@ class Dataset:
 		This is the class to give datasets.
 		
 		
-		* **name** - name of the dataset (str)
-		* **train** - load the dataset train Default: ‘True’.
-		* **test** - load the dataset test Default: ‘False’.
-		* **dev** - load the dataset dev Default: ‘False’.
+		* **name**        - name of the dataset (str)
+		* **train**       - load the dataset train Default: ‘True’.
+		* **test**        - load the dataset test Default: ‘False’.
+		* **dev**         - load the dataset dev Default: ‘False’.
 		* **description** - load description Default: ‘False’.
-		* **url** - 
-		* **verbose** - 
-		* **path** - Path to the data file.
+		* **url**         - 
+		* **verbose**     - 
+		* **path**        - Path to the data file.
 			
 		.. code-block:: python
 
@@ -44,10 +44,15 @@ class Dataset:
 		
 				 
 	"""
-	def __init__(self,name='20newsgroups',train=True,test=False,dev=False,description=False,url=False,path='./dataset',verbose=True):
+	def __init__(self,name='20newsgroups',train=True,test=False,dev=False,classe=False,desc=False,path='./dataset',verbose=True):
 		r"""
 		"""
 		self.name=name
+		self.train=train
+		self.test=test
+		self.dev=dev
+		self.classe=classe
+		self.desc=desc
 		self.path=path
 		self.verbose=verbose
 		
@@ -62,6 +67,8 @@ class Dataset:
 			
 		if self.name=="SST-2":
 			self.load_SST_2()
+		if self.name=="SST-5":
+			self.load_SST_5()
 			
 		if self.name=="SST-B":
 			self.load_SST_B()
@@ -98,8 +105,30 @@ class Dataset:
 			
 	def load_20newsgroups(self):
 		r"""
-		This is the function to give 20newsgroups datasets.
-		
+		Defines 20newsgroups datasets.
+			The labels includes:
+			
+			* 0 : sci.crypt.
+			* 1 : sci.electronics.
+			* 2 : sci.med.
+			* 3 : sci.space.
+			* 4 : rec.autos.
+			* 5 : rec.sport.baseball.
+			* 6 : rec.sport.hockey.
+			* 7 : talk.politics.guns.
+			* 8 : talk.politics.mideast.
+			* 9 : talk.politics.misc.
+			* 10 : talk.religion.misc.
+
+		.. code-block:: python
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('20newsgroups')
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
 		"""
 		
 		if self.verbose:
@@ -114,16 +143,29 @@ class Dataset:
 		
 	def load_Yelp_Review_Polarity(self):
 		"""
-		Defines YelpReviewPolarity datasets.
+		Defines Yelp Review Polarity datasets.
 			The labels includes:
 			
-			* 0 : Negative polarity.
+			* 1 : Negative polarity.
 
-			* 1 : Positive polarity.
+			* 2 : Positive polarity.
+
+		.. code-block:: python
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('Yelp Review Polarity',test=True,desc=True)
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
+			print(ds.documents_test[:5])
+			print(ds.labels_test[:5])
+			print(ds.description)
 		"""
 		self.path_dir = os.path.join(self.path,'yelp_review_polarity')
 		#!!!!!!!!!!!!!!!!!!!!
-		self.del_dir(self.path_dir)
+		#self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 		if not os.path.isdir(self.path_dir):
 			os.mkdir(self.path_dir)
@@ -132,15 +174,15 @@ class Dataset:
 			load_multiple_file(file_list,self.path,self.path_dir)
 				
 		self.path_train = os.path.join(self.path_dir,'train.csv')
-		if os.path.isfile(self.path_train):
+		if os.path.isfile(self.path_train) and self.train:
 			self.documents_train,self.labels_train=construct_sample(self.path_train)
 		
 		self.path_test = os.path.join(self.path_dir,'test.csv')
-		if os.path.isfile(self.path_test):
+		if os.path.isfile(self.path_test) and self.test:
 			self.documents_test,self.labels_test=construct_sample(self.path_test)
 
 		self.path_description = os.path.join(self.path_dir,'readme.txt')
-		if os.path.isfile(self.path_description):
+		if os.path.isfile(self.path_description) and self.desc:
 			self.description=''
 			fi = open(self.path_description, "r")
 			rows = fi.readlines()
@@ -148,10 +190,32 @@ class Dataset:
 				self.description+=row
 				
 	def load_Yelp_Review_Full(self):
-		
+		r"""
+		Defines Yelp Review Full Star Dataset.
+			The labels includes:
+			
+			**1 - 5** : rating classes (5 is highly recommended).
+
+		.. code-block:: python
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('Yelp Review Full',test=True,desc=True)
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
+
+			print('Test : ')
+			print(ds.documents_test[:5])
+			print(ds.labels_test[:5])
+
+			print('Description :')
+			print(ds.description)
+		"""
 		self.path_dir = os.path.join(self.path,'yelp_review_full')
 		#!!!!!!!!!!!!!!!!!!!!
-		self.del_dir(self.path_dir)
+		#self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 		if not os.path.isdir(self.path_dir):
 			os.mkdir(self.path_dir)
@@ -160,15 +224,15 @@ class Dataset:
 			load_multiple_file(file_list,self.path,self.path_dir)
 				
 		self.path_train = os.path.join(self.path_dir,'train.csv')
-		if os.path.isfile(self.path_train):
+		if os.path.isfile(self.path_train) and self.train:
 			self.documents_train,self.labels_train=construct_sample(self.path_train)
 		
 		self.path_test = os.path.join(self.path_dir,'test.csv')
-		if os.path.isfile(self.path_test):
+		if os.path.isfile(self.path_test)and self.test:
 			self.documents_test,self.labels_test=construct_sample(self.path_test)
 
 		self.path_description = os.path.join(self.path_dir,'readme.txt')
-		if os.path.isfile(self.path_description):
+		if os.path.isfile(self.path_description)and self.desc:
 			self.description=''
 			fi = open(self.path_description, "r")
 			rows = fi.readlines()
@@ -177,15 +241,39 @@ class Dataset:
 
 	def load_Yahoo_Answers(self):
 		r"""
-		Example Yahoo_Answers::
+		Defines Yahoo! Answers datasets.
+			The labels includes:
+			
+			* Society & Culture
+			* Science & Mathematics
+			* Health
+			* Education & Reference
+			* Computers & Internet
+			* Sports
+			* Business & Finance
+			* Entertainment & Music
+			* Family & Relationships
+			* Politics & Government
+
+		.. code-block:: python
 
 			from Manteia.Dataset import Dataset
 
-			ds=Dataset('Yahoo! Answers')
+			ds=Dataset('Yahoo! Answers',test=True,desc=True)
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
 
 			print('Test : ')
 			print(ds.documents_test[:5])
 			print(ds.labels_test[:5])
+
+			print('Description :')
+			print(ds.description)
+
+			print('List labels :')
+			print(ds.list_labels)
 		"""
 		self.path_dir = os.path.join(self.path,'yahoo_answers')
 		#!!!!!!!!!!!!!!!!!!!!
@@ -200,30 +288,29 @@ class Dataset:
 			
 		self.path_classes = os.path.join(self.path_dir,'classes.txt')
 		classes=['']
-		if os.path.isfile(self.path_classes):
+		if os.path.isfile(self.path_classes)and classes:
 			fi = open(self.path_classes, "r")
 			rows = fi.readlines()
 			for row in rows:
 				classes.append(row.strip())
+			self.list_labels=classes
+
 				
 		self.path_train = os.path.join(self.path_dir,'train.csv')
-		if os.path.isfile(self.path_train):
+		if os.path.isfile(self.path_train)and self.train:
 			self.documents_train,self.labels_train=construct_sample(self.path_train,classes)
 		
 		self.path_test = os.path.join(self.path_dir,'test.csv')
-		if os.path.isfile(self.path_test):
+		if os.path.isfile(self.path_test)and self.test:
 			self.documents_test,self.labels_test=construct_sample(self.path_test,classes)
 
 		self.path_description = os.path.join(self.path_dir,'readme.txt')
-		if os.path.isfile(self.path_description):
+		if os.path.isfile(self.path_description)and self.desc:
 			self.description=''
 			fi = open(self.path_description, "r")
 			rows = fi.readlines()
 			for row in rows:
 				self.description+=row
-	"""
-	
-	"""
 	def load_Sogou_News(self):
 		
 		self.path_dir = os.path.join(self.path,'sogou_news')
@@ -260,9 +347,7 @@ class Dataset:
 			for row in rows:
 				self.description+=row
 
-	"""
 	
-	"""
 	def load_Amazon_Review_Polarity(self):
 		
 		self.path_dir = os.path.join(self.path,'amazon_review_polarity')
@@ -326,21 +411,49 @@ class Dataset:
 		
 	def load_DBPedia(self):
 		r"""
-		Example DBPedia::
+		Defines DBPedia datasets.
+			The labels includes:
+			
+			* Company
+			* EducationalInstitution
+			* Artist
+			* Athlete
+			* OfficeHolder
+			* MeanOfTransportation
+			* Building
+			* NaturalPlace
+			* Village
+			* Animal
+			* Plant
+			* Album
+			* Film
+			* WrittenWork
+
+		.. code-block:: python
 
 			from Manteia.Dataset import Dataset
 
-			ds=Dataset('DBPedia')
+			ds=Dataset('DBPedia',test=True,desc=True,classe=True)
 
 			print('Train : ')
 			print(ds.documents_train[:5])
 			print(ds.labels_train[:5])
+
+			print('Test : ')
+			print(ds.documents_test[:5])
+			print(ds.labels_test[:5])
+
+			print('Description :')
+			print(ds.description)
+
+			print('List labels :')
+			print(ds.list_labels)
 		"""
 		self.documents_train,self.labels_train = [],[]
 		self.documents_test,self.labels_test = [],[]
 		self.path_dir = os.path.join(self.path,'DBPedia')
 		#!!!!!!!!!!!!!!!!!!!!
-		self.del_dir(self.path_dir)
+		#self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 
 		if not os.path.isdir(self.path_dir):
@@ -352,14 +465,15 @@ class Dataset:
 			
 		self.path_classes = os.path.join(self.path_dir,'classes.txt')
 		classes=['']
-		if os.path.isfile(self.path_classes):
+		if os.path.isfile(self.path_classes) and self.classe:
 			fi = open(self.path_classes, "r")
 			rows = fi.readlines()
 			for row in rows:
 				classes.append(row.strip())
+			self.list_labels=classes
 				
 		self.path_train = os.path.join(self.path_dir,'train.csv')
-		if os.path.isfile(self.path_train):
+		if os.path.isfile(self.path_train)and self.train:
 			fi = open(self.path_train, "r")
 			rows = fi.readlines()
 			for row in rows:
@@ -368,7 +482,7 @@ class Dataset:
 				self.documents_train.append(row[1].strip('"')+' '+row[2].strip('"'))
 				self.labels_train.append(classes[int(row[0])])
 		self.path_test = os.path.join(self.path_dir,'test.csv')
-		if os.path.isfile(self.path_test):
+		if os.path.isfile(self.path_test)and self.test:
 			fi = open(self.path_test, "r")
 			rows = fi.readlines()
 			for row in rows:
@@ -377,7 +491,7 @@ class Dataset:
 				self.documents_test.append(row[1].strip('"')+' '+row[2].strip('"'))
 				self.labels_test.append(classes[int(row[0])])
 		self.path_description = os.path.join(self.path_dir,'readme.txt')
-		if os.path.isfile(self.path_description):
+		if os.path.isfile(self.path_description)and self.desc:
 			self.description=''
 			fi = open(self.path_description, "r")
 			rows = fi.readlines()
@@ -385,6 +499,25 @@ class Dataset:
 				self.description+=row
 		
 	def load_agnews(self):
+		r"""
+		Defines Agnews datasets.
+			The labels includes:
+			
+			* 0 : World
+			* 1 : Sports
+			* 2 : Business
+			* 3 : Sci/Tech
+
+		.. code-block:: python
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('agnews')
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
+		"""
 		self.documents_train,self.labels_train = [],[]
 		#!!!!!!!!!!!!!!!!!!!!
 		self.del_dir('agnews')
@@ -393,31 +526,48 @@ class Dataset:
 			os.mkdir(self.path_dir)
 
 		self.path_train = os.path.join(self.path_dir,'train.csv')
+		classes=['World','Sports','Business','Sci/Tech']
+		if self.classe:
+			self.list_labels=classes
 		if not os.path.isfile(self.path_train):
 			if self.verbose:
-				print('Downloading agnews...')
+				print('Downloading Agnews...')
 			url='https://raw.githubusercontent.com/mhjabreel/CharCnn_Keras/master/data/ag_news_csv/train.csv'
 			wget.download(url, out=self.path_train)
-			'''
-			with bz2.open('temp.bz2', "rb") as f:
-				# Decompress data from file
-				content = f.read()
-			with open(self.path_train, "w") as fichier:
-				fichier.write(str(content))
-			os.remove('temp.bz2')
-			'''
 			if self.verbose:
 				print("\tCompleted!")
-		if os.path.isfile(self.path_train):
+		if os.path.isfile(self.path_train) and self.train:
 			path_file=os.path.join(self.path_dir,'train.csv')
 			fi = open(path_file, "r")
 			rows = fi.readlines()
 			for row in rows:
 				row=row.split('","')
 				self.documents_train.append(row[1]+row[2])
-				self.labels_train.append(row[0][1:])
+				self.labels_train.append(classes[int(row[0][1:])-1])
+		
 			
 	def load_trec(self):
+		r"""
+		Defines Trec datasets.
+			The labels includes:
+			
+			* ABBREVIATION
+			* ENTITY
+			* DESCRIPTION
+			* HUMAN
+			* LOCATION
+			* NUMERIC
+
+		.. code-block:: python
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('agnews')
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
+		"""
 		self.path_dir = os.path.join(self.path,'trec')
 		if not os.path.isdir(self.path_dir):
 			os.mkdir(self.path_dir)
@@ -433,7 +583,7 @@ class Dataset:
 			wget.download(url, out=self.path_test)
 			if self.verbose:
 				print("\tCompleted!")
-		if os.path.isfile(self.path_train):
+		if os.path.isfile(self.path_train) and self.train:
 			self.documents_train=[]
 			self.labels_train=[]
 			fi = open(self.path_train, encoding="ISO-8859-1")
@@ -443,7 +593,7 @@ class Dataset:
 				self.documents_train.append(row[1])
 				self.labels_train.append(row[0])
 				
-		if os.path.isfile(self.path_test):
+		if os.path.isfile(self.path_test)and self.train:
 			self.documents_test=[]
 			self.labels_test=[]
 			fi = open(self.path_train, encoding="ISO-8859-1")
@@ -452,26 +602,15 @@ class Dataset:
 				row=row.split(':')
 				self.documents_test.append(row[1])
 				self.labels_test.append(row[0])
-
-	def load_yelp(self):
-		self.path_dir = os.path.join(self.path,'yelp')
-		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
-
-		self.path_train = os.path.join(self.path_dir,'kkk')
-		self.path_test  = os.path.join(self.path_dir,'kk')
-		
-		if not os.path.isfile(self.path_train) or not os.path.isfile(self.path_test):
-			if self.verbose:
-				print('Downloading Yelp...')
-			url='https://www.kaggle.com/yelp-dataset/yelp-dataset/download/yelp-dataset.zip'
-			download_and_extract(url,self.path_dir)
-			if self.verbose:
-				print("\tCompleted!")
 				
 	def load_drugscom(self):
 		r"""
-		Example pubmed_rct20k::
+		Defines Drugs.com Dataset.
+			The labels includes:
+			
+			**0 - 9** : rating classes (9 is highly).
+
+		.. code-block:: python
 
 			from Manteia.Dataset import Dataset
 
@@ -496,7 +635,7 @@ class Dataset:
 			if self.verbose:
 				print("\tCompleted!")
 				
-		if os.path.isfile(self.path_train):
+		if os.path.isfile(self.path_train)and self.train:
 			self.documents_train=[]
 			self.labels_train=[]
 			fi = open(self.path_train)
@@ -504,7 +643,7 @@ class Dataset:
 			for row in reader:
 				self.documents_train.append(row['review'])
 				self.labels_train.append(row['rating'])
-		if os.path.isfile(self.path_test):
+		if os.path.isfile(self.path_test)and self.test:
 			self.documents_test=[]
 			self.labels_test=[]
 			fi = open(self.path_test)
@@ -514,72 +653,214 @@ class Dataset:
 				self.labels_test.append(row['rating'])
 
 	def load_SST_2(self):
-		file_train=self.path+'/SST-2/train.tsv'
-		file_dev=self.path+'/SST-2/dev.tsv'
-		file_test=self.path+'/SST-2/test.tsv'
-		if not os.path.isfile(file_train) and not os.path.isfile(file_test):
-			url='https://firebasestorage.googleapis.com/v0/b/mtl-sentence-representations.appspot.com/o/data%2FSST-2.zip?alt=media&token=aabc5f6b-e466-44a2-b9b4-cf6337f84ac8'
+		"""
+		Defines SST 2 datasets.
+			The labels includes:
+			
+			* Negative polarity.
+
+			* Positive polarity.
+
+		.. code-block:: python
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('SST-2')
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
+		"""
+
+		self.path_dir = os.path.join(self.path,'stanfordSentimentTreebank')
+		#!!!!!!!!!!!!!!!!!!!!
+		#self.del_dir(self.path_dir)
+		#!!!!!!!!!!!!!!!!!!!!
+		if not os.path.isdir(self.path_dir):
+			os.mkdir(self.path_dir)
+			print('dossier')
+		file_sentiment = os.path.join(self.path_dir,'stanfordSentimentTreebank')
+		file_sentiment = os.path.join(file_sentiment,'sentiment_labels.txt')
+
+		if not os.path.isfile(file_sentiment):
+			url='http://nlp.stanford.edu/~socherr/stanfordSentimentTreebank.zip'
+
 			if self.verbose:
 				print("Downloading and extracting SST-2...")
-			download_and_extract(url,'./dataset')
+			download_and_extract(url,self.path_dir)
 			if self.verbose:
 				print("\tCompleted!")
-		else:
-			df_train = pd.read_csv(file_train,sep = "	", header = 0,names=['sentence','label'])
-			df_dev = pd.read_csv(file_dev,sep = "	", header = 0,names=['sentence','label'])
-			df_test = pd.read_csv(file_test,sep = "	", header = 0,names=['sentence'])
-			if self.verbose==True:
-				print(df_train.head())
-				print(df_dev.head())
-				print(df_test.head())
-				
-			self.documents_train = df_train['sentence'].values
-			self.labels_train    = df_train['label'].values
 
-			self.documents_dev   = df_dev['sentence'].values
-			self.labels_dev      = df_dev['label'].values
+		sentiments = {}
+		fi = open(file_sentiment, "r")
+		rows = fi.readlines()
+		for row in rows:
+				row=row.split('|')
+				if len(row)==2:
+					sentiments[row[0]]=row[1].strip()
+		file_Sentences = os.path.join(self.path_dir,'stanfordSentimentTreebank')
+		file_Sentences = os.path.join(file_Sentences,'datasetSentences.txt')
+		sentences= {}
+		fi = open(file_Sentences, "r")
+		rows = fi.readlines()
+		for i,row in enumerate(rows):
+			if i>0:
+				row=row.split('	')
+				sentences[row[0]]=row[1].strip()
+					
+		file_Split = os.path.join(self.path_dir,'stanfordSentimentTreebank')
+		file_Split = os.path.join(file_Split,'datasetSplit.txt')
+		ids_train,ids_test,ids_dev = [],[],[]
+		fi = open(file_Split, "r")
+		rows = fi.readlines()
+		for row in rows:
+				row=row.strip()
+				row=row.split(',')
+				if row[1]=='1':
+						ids_train.append(row[0])
+				if row[1]=='2':
+						ids_test.append(row[0])
+				if row[1]=='3':
+						ids_dev.append(row[0])
+		self.documents_train,self.labels_train = [],[]
+		self.documents_test,self.labels_test = [],[]
+		self.documents_dev,self.labels_dev = [],[]
 
-			self.documents_test  = df_test['sentence'].values
-			self.labels_test     = df_test['label'].values
+		for ids in sentences.keys():
+				sentence=sentences[ids]
+				sentiment=float(sentiments[ids])
+				if sentiment < 0.5:
+					label = 'negative'
+				else:
+					label = 'positive'
+				if self.train and ids in ids_train: 
+					self.documents_train.append(sentence)
+					self.labels_train.append(label)
+				if self.test and ids in ids_test: 
+					self.documents_test.append(sentence)
+					self.labels_test.append(label)
+				if self.dev and ids in ids_dev: 
+					self.documents_dev.append(sentence)
+					self.labels_dev.append(label)
 
-
-	def del_dir(self,name):
-		clear_folder(name)
+	def load_SST_5(self):
+		"""
+		Defines SST 5 datasets.
+			The labels includes:
 			
-	def load_SST_B(self):
-		file_train = self.path+'/STS-B/train.tsv'
-		file_dev   = self.path+'/STS-B/dev.tsv'
-		file_test  = self.path+'/STS-B/test.tsv'
-		if not os.path.isfile(file_train) and not os.path.isfile(file_test):
-			url='https://firebasestorage.googleapis.com/v0/b/mtl-sentence-representations.appspot.com/o/data%2FSTS-B.zip?alt=media&token=bddb94a7-8706-4e0d-a694-1109e12273b5'
+			* very negative.
+			* negative.
+			* neutral.
+			* positive.
+			* very positive.
+
+		.. code-block:: python
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('SST-5',dev=True)
+
+			print('Dev : ')
+			print(ds.documents_dev[:5])
+			print(ds.labels_dev[:5])
+		"""
+
+		self.path_dir = os.path.join(self.path,'stanfordSentimentTreebank')
+		#!!!!!!!!!!!!!!!!!!!!
+		#self.del_dir(self.path_dir)
+		#!!!!!!!!!!!!!!!!!!!!
+		if not os.path.isdir(self.path_dir):
+			os.mkdir(self.path_dir)
+			print('dossier')
+		file_sentiment = os.path.join(self.path_dir,'stanfordSentimentTreebank')
+		file_sentiment = os.path.join(file_sentiment,'sentiment_labels.txt')
+
+		if not os.path.isfile(file_sentiment):
+			url='http://nlp.stanford.edu/~socherr/stanfordSentimentTreebank.zip'
+
 			if self.verbose:
-				print("Downloading and extracting SST-B...")
-			download_and_extract(url,'./dataset')
+				print("Downloading and extracting SST-2...")
+			download_and_extract(url,self.path_dir)
 			if self.verbose:
 				print("\tCompleted!")
-		else:
-			if self.verbose:
-				print("Loading and extracting SST-B...")
-			df_train = pd.read_csv(file_train,sep = "	", header = 0,names=['sentence','label'])
-			df_dev   = pd.read_csv(file_dev,sep = "	", header = 0,names=['sentence','label'])
-			df_test  = pd.read_csv(file_test,sep = "	", header = 0,names=['sentence'])
-			if self.verbose==True:
-				print(df_train.head())
-				print(df_dev.head())
-				print(df_test.head())
-				
-			self.documents_train = df_train['sentence'].values
-			self.labels_train    = df_train['label'].values
 
-			self.documents_dev   = df_dev['sentence'].values
-			self.labels_dev      = df_dev['label'].values
+		sentiments = {}
+		fi = open(file_sentiment, "r")
+		rows = fi.readlines()
+		for row in rows:
+				row=row.split('|')
+				if len(row)==2:
+					sentiments[row[0]]=row[1].strip()
+		file_Sentences = os.path.join(self.path_dir,'stanfordSentimentTreebank')
+		file_Sentences = os.path.join(file_Sentences,'datasetSentences.txt')
+		sentences= {}
+		fi = open(file_Sentences, "r")
+		rows = fi.readlines()
+		for i,row in enumerate(rows):
+			if i>0:
+				row=row.split('	')
+				sentences[row[0]]=row[1].strip()
+					
+		file_Split = os.path.join(self.path_dir,'stanfordSentimentTreebank')
+		file_Split = os.path.join(file_Split,'datasetSplit.txt')
+		ids_train,ids_test,ids_dev = [],[],[]
+		fi = open(file_Split, "r")
+		rows = fi.readlines()
+		for row in rows:
+				row=row.strip()
+				row=row.split(',')
+				if row[1]=='1':
+						ids_train.append(row[0])
+				if row[1]=='2':
+						ids_test.append(row[0])
+				if row[1]=='3':
+						ids_dev.append(row[0])
+		self.documents_train,self.labels_train = [],[]
+		self.documents_test,self.labels_test = [],[]
+		self.documents_dev,self.labels_dev = [],[]
+		for ids in sentences.keys():
+				sentence=sentences[ids]
+				sentiment=float(sentiments[ids])
+				if sentiment <= 0.2:
+					label = 'very negative'
+				if sentiment > 0.2 and sentiment <= 0.4:
+					label = 'negative'
+				if sentiment > 0.4 and sentiment <= 0.6:
+					label = 'neutral'
+				if sentiment > 0.6 and sentiment <= 0.8:
+					label = 'positive'
+				if sentiment > 0.8:
+					label = 'very positive'
+				if self.train and ids in ids_train: 
+					self.documents_train.append(sentence)
+					self.labels_train.append(label)
+				if self.test and ids in ids_test: 
+					self.documents_test.append(sentence)
+					self.labels_test.append(label)
+				if self.dev and ids in ids_dev: 
+					self.documents_dev.append(sentence)
+					self.labels_dev.append(label)
 
-			self.documents_test  = df_test['sentence'].values
-			self.labels_test     = df_test['label'].values
+			
+	def del_dir(self,name):
+		"""
+		Delete file of the dataset.
+		"""
+		clear_folder(name)
 
 	def load_pubmed_rct20k(self):
+
 		r"""
-		Example pubmed_rct20k::
+		Defines Pubmed RCT20k datasets.
+			The labels includes:
+			
+			* BACKGROUND.
+			* CONCLUSIONS.
+			* METHODS.
+			* OBJECTIVE.
+			* RESULTS.
+
+		.. code-block:: python
 
 			from Manteia.Dataset import Dataset
 
@@ -605,30 +886,33 @@ class Dataset:
 			wget.download(url_train, out=path_dir)
 			wget.download(url_test, out=path_dir)
 			wget.download(url_dev, out=path_dir)
-		path_file=os.path.join(path_dir,'train.txt')
-		fi = open(path_file, "r")
-		rows = fi.readlines()
-		for row in rows:
-			row=row.split('	')
-			if len(row)==2:
-				self.documents_train.append(row[1])
-				self.labels_train.append(row[0])
-		path_file=os.path.join(path_dir,'test.txt')
-		fi = open(path_file, "r")
-		rows = fi.readlines()
-		for row in rows:
-			row=row.split('	')
-			if len(row)==2:
-				self.documents_test.append(row[1])
-				self.labels_test.append(row[0])
-		path_file=os.path.join(path_dir,'dev.txt')
-		fi = open(path_file, "r")
-		rows = fi.readlines()
-		for row in rows:
-			row=row.split('	')
-			if len(row)==2:
-				self.documents_dev.append(row[1])
-				self.labels_dev.append(row[0])
+		if self.train:
+			path_file=os.path.join(path_dir,'train.txt')
+			fi = open(path_file, "r")
+			rows = fi.readlines()
+			for row in rows:
+				row=row.split('	')
+				if len(row)==2:
+					self.documents_train.append(row[1])
+					self.labels_train.append(row[0])
+		if self.test:
+			path_file=os.path.join(path_dir,'test.txt')
+			fi = open(path_file, "r")
+			rows = fi.readlines()
+			for row in rows:
+				row=row.split('	')
+				if len(row)==2:
+					self.documents_test.append(row[1])
+					self.labels_test.append(row[0])
+		if self.dev:
+			path_file=os.path.join(path_dir,'dev.txt')
+			fi = open(path_file, "r")
+			rows = fi.readlines()
+			for row in rows:
+				row=row.split('	')
+				if len(row)==2:
+					self.documents_dev.append(row[1])
+					self.labels_dev.append(row[0])
 
 
 

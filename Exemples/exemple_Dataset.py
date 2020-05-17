@@ -1,5 +1,6 @@
 from Manteia.Dataset import Dataset
 
+'''
 ds=Dataset('20newsgroups')
 ##ds=Dataset('SST-2')
 ##ds=Dataset('SST-B')
@@ -22,3 +23,13 @@ print(ds.documents_test[:5])
 print(ds.labels_test[:5])
 print('Description : ')
 print(ds.description)
+
+'''
+import exemple_Dataset1
+import exemple_Dataset2
+import exemple_Dataset3
+import exemple_Dataset4
+import exemple_Dataset5
+import exemple_Dataset6
+import exemple_Dataset7
+

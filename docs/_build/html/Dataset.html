@@ -169,20 +169,16 @@
 <span class="target" id="module-Dataset"></span><dl class="py class">
 <dt id="Manteia.Dataset.Dataset">
 <em class="property">class </em><code class="sig-prename descclassname">Manteia.Dataset.</code><code class="sig-name descname">Dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'20newsgroups'</span></em>, <em class="sig-param"><span class="n">train</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">test</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">dev</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">classe</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">desc</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">'./dataset'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is the class to give datasets.</p>
+<dd><p>This is the class description in order to get some dataset.</p>
 <ul class="simple">
 <li><p><strong>name</strong>        - name of the dataset (str)</p></li>
 <li><p><strong>train</strong>       - load the dataset train Default: ‘True’.</p></li>
 <li><p><strong>test</strong>        - load the dataset test Default: ‘False’.</p></li>
 <li><p><strong>dev</strong>         - load the dataset dev Default: ‘False’.</p></li>
 <li><p><strong>description</strong> - load description Default: ‘False’.</p></li>
-<li><p><strong>url</strong>         -</p></li>
-<li><p><strong>verbose</strong>     -</p></li>
+<li><p><strong>verbose</strong>     - produce and display some explanation</p></li>
 <li><p><strong>path</strong>        - Path to the data file.</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
 <dl class="py method">
 <dt id="Manteia.Dataset.Dataset.del_dir">
 <code class="sig-name descname">del_dir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.del_dir" title="Permalink to this definition">¶</a></dt>
@@ -216,6 +212,57 @@
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_Amazon_Review_Full">
+<code class="sig-name descname">load_Amazon_Review_Full</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_Amazon_Review_Full" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Defines Amazon Review Full Star Dataset.</dt><dd><p>The labels includes:</p>
+<p><strong>1 - 5</strong> : rating classes (5 is highly recommended).</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;Amazon Review Full&#39;</span><span class="p">,</span><span class="n">test</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">desc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Test : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Description :&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_Amazon_Review_Polarity">
+<code class="sig-name descname">load_Amazon_Review_Polarity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_Amazon_Review_Polarity" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Defines Amazon Review Polarity datasets.</dt><dd><p>The labels includes:</p>
+<ul class="simple">
+<li><p>1 : Negative polarity.</p></li>
+<li><p>2 : Positive polarity.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;Amazon Review Polarity&#39;</span><span class="p">,</span><span class="n">test</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">desc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_test</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -307,6 +354,44 @@
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dev : &#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_dev</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_dev</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_Short_Jokes">
+<code class="sig-name descname">load_Short_Jokes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_Short_Jokes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines Short_Jokes dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;pubmed_rct20k&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Manteia.Dataset.Dataset.load_Tweeter_Airline_Sentiment">
+<code class="sig-name descname">load_Tweeter_Airline_Sentiment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.Dataset.load_Tweeter_Airline_Sentiment" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Defines Tweeter Airline Sentiment dataset.</dt><dd><p>The labels includes:</p>
+<ul class="simple">
+<li><p>positive.</p></li>
+<li><p>neutral.</p></li>
+<li><p>negative.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;Tweeter Airline Sentiment&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train : &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">labels_train</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -498,6 +583,25 @@
 
 </dd></dl>
 
+<dl class="py function">
+<dt id="Manteia.Dataset.clear_folder">
+<code class="sig-prename descclassname">Manteia.Dataset.</code><code class="sig-name descname">clear_folder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dir</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.clear_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Del directorie and is content.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Manteia.Dataset.download_and_extract">
+<code class="sig-prename descclassname">Manteia.Dataset.</code><code class="sig-name descname">download_and_extract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">data_dir</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Dataset.download_and_extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>download_and_extract file of dataset.</p>
+</dd></dl>
+
+<p>See <a class="bibtex reference internal" href="#nelson" id="id1">[1]</a> for an introduction to stylish blah, blah…</p>
+<p id="bibtex-bibliography-Dataset-0"><dl class="citation">
+<dt class="bibtex label" id="nelson"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Edward Nelson. <em>Radically Elementary Probability Theory</em>. Princeton University Press, 1987.</p>
+</dd>
+</dl>
+</p>
 </div>
 
 

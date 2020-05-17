@@ -26,7 +26,7 @@ from Manteia.Utils import bar_progress
 class Dataset:
 	
 	r"""
-		This is the class to give datasets.
+		This is the class description in order to get some dataset.
 		
 		
 		* **name**        - name of the dataset (str)
@@ -34,15 +34,9 @@ class Dataset:
 		* **test**        - load the dataset test Default: ‘False’.
 		* **dev**         - load the dataset dev Default: ‘False’.
 		* **description** - load description Default: ‘False’.
-		* **url**         - 
-		* **verbose**     - 
+		* **verbose**     - produce and display some explanation
 		* **path**        - Path to the data file.
-			
-		.. code-block:: python
-
-			print('hello')
 		
-				 
 	"""
 	def __init__(self,name='20newsgroups',train=True,test=False,dev=False,classe=False,desc=False,path='./dataset',verbose=True):
 		r"""
@@ -102,6 +96,13 @@ class Dataset:
 			self.load_Yelp_Review_Full()
 		if self.name=="Yelp Review Polarity":
 			self.load_Yelp_Review_Polarity()
+
+		if self.name=="Short_Jokes":
+			self.load_Short_Jokes()
+
+		if self.name=="Tweeter Airline Sentiment":
+			self.load_Tweeter_Airline_Sentiment()
+
 			
 	def load_20newsgroups(self):
 		r"""
@@ -349,7 +350,27 @@ class Dataset:
 
 	
 	def load_Amazon_Review_Polarity(self):
-		
+		"""
+		Defines Amazon Review Polarity datasets.
+			The labels includes:
+			
+			* 1 : Negative polarity.
+
+			* 2 : Positive polarity.
+
+		.. code-block:: python
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('Amazon Review Polarity',test=True,desc=True)
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
+			print(ds.documents_test[:5])
+			print(ds.labels_test[:5])
+			print(ds.description)
+		"""
 		self.path_dir = os.path.join(self.path,'amazon_review_polarity')
 		#!!!!!!!!!!!!!!!!!!!!
 		#self.del_dir(self.path_dir)
@@ -379,10 +400,32 @@ class Dataset:
 				self.description+=row
 
 	def load_Amazon_Review_Full(self):
-		
+		r"""
+		Defines Amazon Review Full Star Dataset.
+			The labels includes:
+			
+			**1 - 5** : rating classes (5 is highly recommended).
+
+		.. code-block:: python
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('Amazon Review Full',test=True,desc=True)
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
+
+			print('Test : ')
+			print(ds.documents_test[:5])
+			print(ds.labels_test[:5])
+
+			print('Description :')
+			print(ds.description)
+		"""
 		self.path_dir = os.path.join(self.path,'amazon_review_full')
 		#!!!!!!!!!!!!!!!!!!!!
-		#self.del_dir(self.path_dir)
+		self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 
 		if not os.path.isdir(self.path_dir):
@@ -914,9 +957,83 @@ class Dataset:
 					self.documents_dev.append(row[1])
 					self.labels_dev.append(row[0])
 
+	def load_Short_Jokes(self):
 
+		r"""
+		Defines Short_Jokes dataset.
+			
+
+		.. code-block:: python
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('pubmed_rct20k')
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
+		"""
+		self.documents_train = []
+		
+		path_dir=os.path.join(self.path,'Short_Jokes')
+		if not os.path.isdir(path_dir):
+			os.mkdir(path_dir)
+			url_train = 'https://github.com/ym001/Dune/raw/master/datasets/short-jokes.zip'
+			if self.verbose:
+				print("Downloading and extracting Short_Jokes...")
+			download_and_extract(url_train, path_dir)
+		if self.train:
+			path_file=os.path.join(path_dir,'shortjokes.csv')
+			fi = open(path_file, "r")
+			rows = fi.readlines()
+			for row in rows:
+				row=row.split(',')
+				if len(row)==2:
+					self.documents_train.append(row[1].strip())
+
+
+	def load_Tweeter_Airline_Sentiment(self):
+
+		r"""
+		Defines Tweeter Airline Sentiment dataset.
+			The labels includes:
+			
+			* positive.
+			* neutral.
+			* negative.
+
+		.. code-block:: python
+
+			from Manteia.Dataset import Dataset
+
+			ds=Dataset('Tweeter Airline Sentiment')
+
+			print('Train : ')
+			print(ds.documents_train[:5])
+			print(ds.labels_train[:5])
+		"""
+		self.documents_train = []
+		self.labels_train = []
+		
+		path_dir=os.path.join(self.path,'Tweeter_Airline_Sentiment')
+		if not os.path.isdir(path_dir):
+			os.mkdir(path_dir)
+			url_train = 'https://github.com/ym001/Dune/raw/master/datasets/Airline-Sentiment.zip'
+			if self.verbose:
+				print("Downloading and extracting Tweeter_Airline_Sentiment...")
+			download_and_extract(url_train, path_dir)
+		if self.train:
+			path_file=os.path.join(path_dir,'Airline-Sentiment.csv')
+			fi = open(path_file, "r")
+			reader = csv.DictReader(fi, delimiter = ',')
+			for row in reader:
+				self.documents_train.append(row['text'])
+				self.labels_train.append(row['airline_sentiment'])
 
 def download_and_extract(url, data_dir):
+		"""
+		download_and_extract file of dataset.
+		"""
 		data_file = "temp.zip"
 		if os.path.isfile(data_file):
 			os.remove(data_file)
@@ -930,23 +1047,24 @@ def download_and_extract(url, data_dir):
 		#clean
 		if os.path.isfile(data_file):
 			os.remove(data_file)
-"""
-del directorie and is content.
-"""
+
 def clear_folder(dir):
-    print('clear : '+dir)
-    if os.path.exists(dir):
-        for the_file in os.listdir(dir):
-            file_path = os.path.join(dir, the_file)
-            try:
-                if os.path.isfile(file_path):
-                    os.unlink(file_path)
-                else:
-                    clear_folder(file_path)
-                    os.rmdir(file_path)
-            except Exception as e:
-                print(e)
-        os.rmdir(dir)
+	"""
+	Del directorie and is content.
+	"""
+	print('clear : '+dir)
+	if os.path.exists(dir):
+		for the_file in os.listdir(dir):
+			file_path = os.path.join(dir, the_file)
+			try:
+				if os.path.isfile(file_path):
+					os.unlink(file_path)
+				else:
+					clear_folder(file_path)
+					os.rmdir(file_path)
+			except Exception as e:
+				rint(e)
+		os.rmdir(dir)
         
 def construct_sample(path_train,classes=None):
 	documents_train,labels_train = [],[]

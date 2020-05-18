@@ -1,31 +1,28 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-#  exemple_Data.py
-#  
-#  Copyright 2020 Yves <yves@mercadier>
-#  
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#  
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#  
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#  MA 02110-1301, USA.
-#  
-#
+
 from Manteia.Generation import Generation 
-			
+from Manteia.Dataset import Dataset
+from Manteia.Model import *
+
 def main(args):
-			
-	Generation(seed='What do you do if a bird shits on your car?')
+	
+	ds=Dataset('Short_Jokes')
+
+	model       = Model(model_name ='gpt2-medium')
+	text_loader = Create_DataLoader_generation(ds.documents_train[:3000])
+	model.load_tokenizer()
+	model.load_class()
+	model.devices()
+	model.configuration(text_loader)
+	
+	gn=Generation(model)
+	
+	gn.model.fit_generation(text_loader)
+	output      = model.predict_generation('What did you expect ?')
+	output_text = decode_text(output,model.tokenizer)
+	print(output_text)
+	
 	return 0
 
 if __name__ == '__main__':

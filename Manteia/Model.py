@@ -347,6 +347,7 @@ class Model:
 		return predictions
 		
 	def fit_generation(self,text_loader):
+		self.model.to(self.device)
 
 		self.model.train()
 		optimizer = AdamW(self.model.parameters(), lr=self.LEARNING_RATE)
@@ -362,7 +363,7 @@ class Model:
 			if self.verbose==True:
 				print('EPOCH :'+str(epoch ))
   
-			for idx,text in enumerate(text_loader):
+			for step,text in enumerate(text_loader):
         
 				#################### "Fit as many joke sequences into MAX_SEQ_LEN sequence as possible" logic start ####
 				joke_tens = torch.tensor(self.tokenizer.encode(text[0])).unsqueeze(0).to(self.device)
@@ -386,25 +387,26 @@ class Model:
 						continue
 				################## Sequence ready, process it trough the model ##################
             
-				outputs = model(work_jokes_tens, labels=work_jokes_tens)
+				outputs = self.model(work_jokes_tens, labels=work_jokes_tens)
 				loss, logits = outputs[:2]                        
 				loss.backward()
 				sum_loss = sum_loss + loss.detach().data
                        
 				proc_seq_count = proc_seq_count + 1
-				if proc_seq_count == BATCH_SIZE:
+				if proc_seq_count == self.batch_size:
 					proc_seq_count = 0    
 					batch_count += 1
 					optimizer.step()
 					scheduler.step() 
 					optimizer.zero_grad()
-					model.zero_grad()
+					self.model.zero_grad()
 
 				if batch_count == 100:
 					if self.verbose==True:
 						print("sum loss :"+str(sum_loss))
 					batch_count = 0
 					sum_loss = 0.0
+				progress(count=step+1, total=len(text_loader))
 
 
 	def predict_generation(self,seed):

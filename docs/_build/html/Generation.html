@@ -168,7 +168,7 @@
 <span id="generation"></span><h1>Generation<a class="headerlink" href="#module-Manteia.Generation" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-Generation"></span><dl class="py class">
 <dt id="Manteia.Generation.Generation">
-<em class="property">class </em><code class="sig-prename descclassname">Manteia.Generation.</code><code class="sig-name descname">Generation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">'gpt2-medium'</span></em>, <em class="sig-param"><span class="n">documents</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Generation.Generation" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Generation.</code><code class="sig-name descname">Generation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">documents</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Generation.Generation" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is the class to gnerate text in categorie a NLP task.</p>
 <p>Args:</p>
 <blockquote>
@@ -183,11 +183,26 @@
 </div></blockquote>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Manteia.Generation</span> <span class="kn">import</span> <span class="n">Generation</span> 
+<span class="kn">from</span> <span class="nn">Manteia.Dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">Manteia.Model</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">Generation</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="s1">&#39;What do you do if a bird shits on your car?&#39;</span><span class="p">)</span>
+<span class="n">ds</span><span class="o">=</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;Short_Jokes&#39;</span><span class="p">)</span>
+
+<span class="n">model</span>       <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">model_name</span> <span class="o">=</span><span class="s1">&#39;gpt2-medium&#39;</span><span class="p">)</span>
+<span class="n">text_loader</span> <span class="o">=</span> <span class="n">Create_DataLoader_generation</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">documents_train</span><span class="p">[:</span><span class="mi">3000</span><span class="p">])</span>
+<span class="n">model</span><span class="o">.</span><span class="n">load_tokenizer</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">load_class</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">devices</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">configuration</span><span class="p">(</span><span class="n">text_loader</span><span class="p">)</span>
+
+<span class="n">gn</span><span class="o">=</span><span class="n">Generation</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">gn</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit_generation</span><span class="p">(</span><span class="n">text_loader</span><span class="p">)</span>
+<span class="n">output</span>      <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_generation</span><span class="p">(</span><span class="s1">&#39;What did you expect ?&#39;</span><span class="p">)</span>
+<span class="n">output_text</span> <span class="o">=</span> <span class="n">decode_text</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output_text</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Attributes:</p>
 </dd></dl>
 
 </div>

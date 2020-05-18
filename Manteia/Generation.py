@@ -16,8 +16,8 @@ import time
 import datetime
 import gc
 ############
-from .Model import *
-from .Preprocess import Preprocess
+from Manteia.Model import *
+from Manteia.Preprocess import Preprocess
 
 class Generation:
 	r"""
@@ -34,22 +34,38 @@ class Generation:
 				 
 		Example::
 		
+
 			from Manteia.Generation import Generation 
-						
-			Generation(seed='What do you do if a bird shits on your car?')
-			
-		Attributes:
+			from Manteia.Dataset import Dataset
+			from Manteia.Model import *
+	
+			ds=Dataset('Short_Jokes')
+
+			model       = Model(model_name ='gpt2-medium')
+			text_loader = Create_DataLoader_generation(ds.documents_train[:3000])
+			model.load_tokenizer()
+			model.load_class()
+			model.devices()
+			model.configuration(text_loader)
+	
+			gn=Generation(model)
+	
+			gn.model.fit_generation(text_loader)
+			output      = model.predict_generation('What did you expect ?')
+			output_text = decode_text(output,model.tokenizer)
+			print(output_text)
+
 	"""
-	def __init__(self,model_name ='gpt2-medium',documents = None,seed = None):
+	def __init__(self,model = None,documents = None,seed = None):
 
-
-		model               = Model(model_name =model_name)
-		model.load()
-		model.BATCH_SIZE    = 16
-		model.EPOCHS        = 10
-		model.LEARNING_RATE = 3e-5
-		model.WARMUP_STEPS  = 500
-		model.MAX_SEQ_LEN   = 400
+		if model is None:self.model = Model(model_name ='gpt2-medium')
+		else : self.model=model
+		#model.load()
+		self.model.BATCH_SIZE    = 16
+		self.model.EPOCHS        = 2
+		self.model.LEARNING_RATE = 3e-5
+		self.model.WARMUP_STEPS  = 500
+		self.model.MAX_SEQ_LEN   = 400
 		if documents!=None:
 			text_loader         = Create_DataLoader_generation(documents)
 			model.fit_generation(text_loader)

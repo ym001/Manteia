@@ -27,9 +27,26 @@ Example of use Classification :
 Example of use Generation :
 
 
-	from Manteia.Generation import Generation
-	Generation(seed='What do you do if a bird shits on your car?')
-	If you're a car owner, you're supposed to be able to call the police and have them take the bird off the car.
+	from Manteia.Generation import Generation 
+	from Manteia.Dataset import Dataset
+	from Manteia.Model import *
+	
+	ds=Dataset('Short_Jokes')
+
+	model       = Model(model_name ='gpt2-medium')
+	text_loader = Create_DataLoader_generation(ds.documents_train[:10000],batch_size=32)
+	model.load_tokenizer()
+	model.load_class()
+	model.devices()
+	model.configuration(text_loader)
+	
+	gn=Generation(model)
+	
+	gn.model.fit_generation(text_loader)
+	output      = model.predict_generation('What did you expect ?')
+	output_text = decode_text(output,model.tokenizer)
+	print(output_text)
+
 
 [Documentation](https://manteia.readthedocs.io/en/latest/#)
 [Pypi](https://pypi.org/project/Manteia/)

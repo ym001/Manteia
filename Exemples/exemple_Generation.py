@@ -10,7 +10,7 @@ def main(args):
 	ds=Dataset('Short_Jokes')
 
 	model       = Model(model_name ='gpt2-medium')
-	text_loader = Create_DataLoader_generation(ds.documents_train[:3000])
+	text_loader = Create_DataLoader_generation(ds.documents_train[:10000],batch_size=32)
 	model.load_tokenizer()
 	model.load_class()
 	model.devices()

@@ -473,8 +473,8 @@ def Create_DataLoader_predict(inputs,masks,batch_size=16):
 		ss = SequentialSampler(td)
 		return DataLoader(td, sampler=ss, batch_size=batch_size)
 
-def Create_DataLoader_generation(text):
-		return DataLoader(TextDataset(text), batch_size=1, shuffle=True)
+def Create_DataLoader_generation(text,batch_size=16):
+		return DataLoader(TextDataset(text), batch_size=batch_size, shuffle=True)
 
 class TextDataset():
 	def __init__(self,list_texts):

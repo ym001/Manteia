@@ -12,7 +12,9 @@ from .Statistic import Statistic
 from .Model import Model
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 class Visualisation:
 
@@ -103,4 +105,17 @@ class Visualisation:
 			plt.savefig(self.path)
 		if self.show:
 			plt.show()
+
+	def plot_boxplot(self,labels,longueur_des_doc,ylim=200):
+		"""
+		figure for show exploration length of document.
+		"""
+		data = pd.DataFrame({'Labels':labels ,'Length of document':longueur_des_doc})
+		fig, ax = plt.subplots()
+		plt.xticks(rotation=90) 
+		sns.boxplot(x='Labels', y='Length of document', data=data, palette='Set2',notch=True,showfliers=True, showmeans=True, meanline=True)
+		ax.set_ylim(0, ylim)
+		plt.show()
+		#plt.savefig('/home/mercadier/these/resultat/image/longueur-doc-by-classe.png')
+		
 		

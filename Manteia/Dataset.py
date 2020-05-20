@@ -665,7 +665,7 @@ class Dataset:
 		"""
 		self.path_dir = os.path.join(self.path,'drugscom')
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(path_dir)
+			os.mkdir(self.path_dir)
 
 		self.path_train = os.path.join(self.path_dir,'drugsComTrain_raw.tsv')
 		self.path_test  = os.path.join(self.path_dir,'drugsComTest_raw.tsv')
@@ -917,9 +917,9 @@ class Dataset:
 		self.documents_test,self.labels_test   = [],[]
 		self.documents_dev,self.labels_dev     = [],[]
 		
-		path_dir=os.path.join(self.path,'PubMed_20k_RCT')
-		if not os.path.isdir(path_dir):
-			os.mkdir(path_dir)
+		self.path_dir=os.path.join(self.path,'PubMed_20k_RCT')
+		if not os.path.isdir(self.path_dir):
+			os.mkdir(self.path_dir)
 		
 			url_train = 'https://raw.githubusercontent.com/Franck-Dernoncourt/pubmed-rct/master/PubMed_20k_RCT/train.txt'
 			url_dev   = 'https://raw.githubusercontent.com/Franck-Dernoncourt/pubmed-rct/master/PubMed_20k_RCT/dev.txt'
@@ -975,9 +975,9 @@ class Dataset:
 		"""
 		self.documents_train = []
 		
-		path_dir=os.path.join(self.path,'Short_Jokes')
-		if not os.path.isdir(path_dir):
-			os.mkdir(path_dir)
+		self.path_dir=os.path.join(self.path,'Short_Jokes')
+		if not os.path.isdir(self.path_dir):
+			os.mkdir(self.path_dir)
 			url_train = 'https://github.com/ym001/Dune/raw/master/datasets/short-jokes.zip'
 			if self.verbose:
 				print("Downloading and extracting Short_Jokes...")
@@ -1015,9 +1015,9 @@ class Dataset:
 		self.documents_train = []
 		self.labels_train = []
 		
-		path_dir=os.path.join(self.path,'Tweeter_Airline_Sentiment')
-		if not os.path.isdir(path_dir):
-			os.mkdir(path_dir)
+		self.path_dir=os.path.join(self.path,'Tweeter_Airline_Sentiment')
+		if not os.path.isdir(self.path_dir):
+			os.mkdir(self.path_dir)
 			url_train = 'https://github.com/ym001/Dune/raw/master/datasets/Airline-Sentiment.zip'
 			if self.verbose:
 				print("Downloading and extracting Tweeter_Airline_Sentiment...")

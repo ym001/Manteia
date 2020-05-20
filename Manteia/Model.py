@@ -7,6 +7,10 @@
 
 
 """
+
+import warnings
+warnings.filterwarnings("ignore")
+
 import os
 import torch
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler

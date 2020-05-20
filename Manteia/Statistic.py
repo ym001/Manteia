@@ -84,15 +84,21 @@ class Statistic:
 		
 	def number_word(self):
 		return len(self.dictionary(self.documents))
+
 		
 	def dictionnary_stat_labels(self):
+		"""
+		récupére les stats de nombre de mot par label
+		"""
 		dic_word={}
+		print(self.list_labels)
 		for lab in self.list_labels:
 			dic_word[lab]= 0
 		for doc,lab in zip(self.documents,self.labels):
 			tab=doc.split(" ")
 			for l in lab:
-				dic_word[l]=dic_word[l]+len(tab)
+				if l in self.list_labels:
+					dic_word[l]=dic_word[l]+len(tab)
 		return dic_word
 		
 	def length_of_documents_by_class(self):
@@ -101,11 +107,11 @@ class Statistic:
 		classe=[]
 		for lab in self.list_labels:
 			dic_length[lab]= []
-		for doc,cl in zip(self.document,self.labels):
+		for doc,cl in zip(self.documents,self.labels):
 			sentence=doc.split(" ")
 			length_of_doc.append(len(sentence))
-			classe.append(cl[0])
-			dic_length[cl[0]].append(len(sentence))
+			classe.append(cl)
+			dic_length[cl].append(len(sentence))
 		for lab in self.list_labels:
 			tab=np.array(dic_length[lab])
 			dic_length[lab]=np.mean(tab)
@@ -119,6 +125,14 @@ class Statistic:
 		plt.savefig('/home/mercadier/these/resultat/image/longueur-doc-by-classe.png')
 		'''
 		return dic_length
+		
+	def length_of_documents(self):
+		length_of_doc=[]
+		for doc in self.documents:
+			sentence=doc.split(" ")
+			length_of_doc.append(len(sentence))
+			
+		return length_of_doc
 		
 	def word_by_doc(self):
 		c=0

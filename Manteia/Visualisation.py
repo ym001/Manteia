@@ -7,6 +7,8 @@
 
 
 """
+import os
+
 from .Preprocess import Preprocess
 from .Statistic import Statistic
 from .Model import Model
@@ -115,7 +117,36 @@ class Visualisation:
 		plt.xticks(rotation=90) 
 		sns.boxplot(x='Labels', y='Length of document', data=data, palette='Set2',notch=True,showfliers=True, showmeans=True, meanline=True)
 		ax.set_ylim(0, ylim)
-		plt.show()
-		#plt.savefig('/home/mercadier/these/resultat/image/longueur-doc-by-classe.png')
+		if self.show:
+			plt.show()
+		if self.save:
+			path=os.path.join(self.path,'boxplot.png')
+			plt.savefig(path)
+
+	def plot_train(self,loss,accuracy,granularity=None):
+		if granularity is not None:
+			
+			loss = np.resize(np.array(loss),(int(len(loss)/granularity),granularity))
+			loss = np.mean(loss, axis=1)
+			accuracy = np.resize(np.array(accuracy),(int(len(accuracy)/granularity),granularity))
+			accuracy = np.mean(accuracy, axis=1)
+		fig, ax1 = plt.subplots()
+		ax1.plot(accuracy, color='r')
+		
+		ax2 = ax1.twinx()
+		ax2.plot(loss, color='b')
+
+		plt.title('Model train')
+		ax1.set_xlabel('Step')
+		ax1.set_ylabel('Accuracy', color='r')
+		ax2.set_ylabel('Loss', color='b')
+
+		#plt.legend(['train'], loc='upper left')
+		if self.show:
+			plt.show()
+		if self.save:
+			path=os.path.join(self.path,'train.png')
+			plt.savefig(path)
+
 		
 		

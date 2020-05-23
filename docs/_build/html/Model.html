@@ -36,7 +36,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Preprocess" href="Preprocess.html" />
-    <link rel="prev" title="ActiveLearning" href="ActiveLearning.html" /> 
+    <link rel="prev" title="Generation" href="Generation.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -81,19 +81,21 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ActiveLearning.html">ActiveLearning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Augmentation.html">Augmentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Classification.html">Classification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Classification.html#a-complete-example">A complete example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Generation.html">Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Dataset.html">Dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Augmentation.html">Augmentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ActiveLearning.html">ActiveLearning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Generation.html">Generation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Preprocess.html">Preprocess</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Visualisation.html">Visualisation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Statistic.html">Statistic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Task.html">Task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visualisation.html">Visualisation</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/ym001/Manteia/tree/master/notebook">Notebooks</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/ym001/Manteia/tree/master/Exemples">Exemples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Need helps</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/Manteia/">Pypi</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/ym001/Manteia">Source</a></li>
@@ -180,7 +182,7 @@
 
 <dl class="py class">
 <dt id="Manteia.Model.Model">
-<em class="property">class </em><code class="sig-prename descclassname">Manteia.Model.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">'bert'</span></em>, <em class="sig-param"><span class="n">num_labels</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">MAX_SEQ_LEN</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">early_stopping</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">'./model'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Model.Model" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">Manteia.Model.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">'bert'</span></em>, <em class="sig-param"><span class="n">model_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_labels</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">epochs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">MAX_SEQ_LEN</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">early_stopping</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">'./model'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Manteia.Model.Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is the class to construct model.</p>
 <p>Args:</p>
 <blockquote>
@@ -238,7 +240,7 @@
         <a href="Preprocess.html" class="btn btn-neutral float-right" title="Preprocess" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="ActiveLearning.html" class="btn btn-neutral float-left" title="ActiveLearning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Generation.html" class="btn btn-neutral float-left" title="Generation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

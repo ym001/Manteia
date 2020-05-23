@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import Manteia
+#import Manteia
 
 from setuptools import setup, find_packages
  
-with open('requirements.txt') as f:
-    requirements = f.read().splitlines()
-    
+#with open('requirements.txt') as f:
+#    requirements = f.read().splitlines()
+requirements = ['wget==3.2','matplotlib==3.2.1','nltk==3.5','numpy==1.18.4','pandas==1.0.3','scikit_learn==0.23.1','seaborn==0.10.1','torch==1.5.0','transformers==2.9.1']
 setup(
  
     name='Manteia',
  
-    version=Manteia.__version__,
+#    version=Manteia.__version__,
+    version="0.0.25",
  
     packages=find_packages(),
  

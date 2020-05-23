@@ -124,6 +124,7 @@ class Classification:
 		"""
 		if self.model is None:
 			self.model = Model()
+		self.model.load_type()
 		self.model.load_tokenizer()
 		self.model.num_labels=len(self.list_labels)
 		self.model.load_class()
@@ -160,8 +161,8 @@ class Classification:
 		train_labels                    = encode_label(train_labels,self.list_labels)
 		validation_labels               = encode_label(validation_labels,self.list_labels)
 
-		dt_train          = Create_DataLoader_train(train_ids,train_masks,train_labels)
-		dt_validation     = Create_DataLoader_train(validation_ids,validation_masks,validation_labels)
+		dt_train          = Create_DataLoader(train_ids,train_masks,train_labels)
+		dt_validation     = Create_DataLoader(validation_ids,validation_masks,validation_labels)
 		return dt_train ,dt_validation 
 		
 	def predict(self,documents):
@@ -193,7 +194,7 @@ class Classification:
 		inputs,masks   = encode_text(documents,self.model.tokenizer)
 		predict_inputs = totensors(inputs)
 		predict_masks  = totensors(masks)
-		dt             = Create_DataLoader_predict(inputs=predict_inputs,masks=predict_masks)
+		dt             = Create_DataLoader(inputs=predict_inputs,masks=predict_masks)
 		prediction     = self.model.predict(dt)
 		prediction     = decode_label(prediction,self.list_labels)
 		return prediction

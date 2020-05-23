@@ -89,16 +89,20 @@ class Model:
 			
 		Attributes:
 	"""
-	def __init__(self,model_name ='bert',num_labels=0,MAX_SEQ_LEN = 128,early_stopping=False,path='./model',verbose=True): 
+	def __init__(self,model_name ='bert',model_type=None,num_labels=0,epochs=None,MAX_SEQ_LEN = 128,early_stopping=False,path='./model',verbose=True): 
 		
-		self.model_name     = model_name
-		self.early_stopping = early_stopping
-		self.num_labels     = num_labels
-		self.MAX_SEQ_LEN    = MAX_SEQ_LEN
-		self.path           = path
-		self.verbose        = verbose
-		
-		
+		self.model_name      = model_name
+		self.model_type      = model_type
+		self.early_stopping  = early_stopping
+		self.num_labels      = num_labels
+		self.MAX_SEQ_LEN     = MAX_SEQ_LEN
+		self.epochs           = epochs
+		self.path            = path
+		self.verbose         = verbose
+		self.history         = {}
+		self.history['loss'] = []
+		self.history['step'] = []
+		self.history['accuracy'] = []
 			
 		seed_val = 42
 		random.seed(seed_val)
@@ -108,15 +112,88 @@ class Model:
 		
 	def test(self):
 		return "Model Mantéïa."
-		
+	def load_type(self):
+		if self.model_name=='bert':
+			model_dict=['bert-base-uncased','bert-large-uncased','bert-base-cased','bert-large-cased','bert-base-multilingual-uncased','bert-base-multilingual-cased','bert-base-chinese'
+						,'bert-base-german-cased','bert-large-uncased-whole-word-masking','bert-large-cased-whole-word-masking','bert-large-uncased-whole-word-masking-finetuned-squad'
+						,'bert-large-cased-whole-word-masking-finetuned-squad','bert-base-cased-finetuned-mrpc','bert-base-german-dbmdz-cased'
+						,'bert-base-german-dbmdz-uncased','bert-base-japanese','bert-base-japanese-whole-word-masking','bert-base-japanese-char','bert-base-japanese-char-whole-word-masking'
+						,'bert-base-finnish-cased-v1','bert-base-finnish-uncased-v1','bert-base-dutch-cased']
+			if self.model_type is None:
+				self.model_type=model_dict[0]
+			else:
+				if self.model_type in model_dict:
+					print('type compatible')
+				else:
+					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
+
+		if self.model_name=='xlnet':
+			model_dict=['xlnet-base-cased','xlnet-large-cased']
+			if self.model_type is None:
+				self.model_type=model_dict[0]
+			else:
+				if self.model_type in model_dict:
+					print('type compatible')
+				else:
+					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
+					
+		if self.model_name=='xlnet':
+			model_dict=['albert-base-v1','albert-large-v1','albert-xlarge-v1','albert-xxlarge-v1','albert-base-v2','albert-large-v2','albert-xlarge-v2','albert-xxlarge-v2']
+			if self.model_type is None:
+				self.model_type=model_dict[0]
+			else:
+				if self.model_type in model_dict:
+					print('type compatible')
+				else:
+					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
+
+		if self.model_name=='roberta':
+			model_dict=['roberta-base','roberta-large','roberta-large-mnli','distilroberta-base','roberta-base-openai-detector','roberta-large-openai-detector','xlm-roberta-base','xlm-roberta-large']
+			if self.model_type is None:
+				self.model_type=model_dict[0]
+			else:
+				if self.model_type in model_dict:
+					print('type compatible')
+				else:
+					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
+					
+		if self.model_name=='distilbert':
+			model_dict=['distilbert-base-uncased','distilbert-base-uncased-distilled-squad','distilbert-base-cased','distilbert-base-cased-distilled-squad']
+			if self.model_type is None:
+				self.model_type=model_dict[0]
+			else:
+				if self.model_type in model_dict:
+					print('type compatible')
+				else:
+					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
+
+		if self.model_name=='gpt2':
+			model_dict=['openai-gpt','GPT-2','gpt2','gpt2-medium','gpt2-large','gpt2-xl']
+			if self.model_type is None:
+				self.model_type=model_dict[0]
+			else:
+				if self.model_type in model_dict:
+					print('type compatible')
+				else:
+					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
+
+		if self.model_name=='camembert':
+			model_dict=['camembert-base']
+			if self.model_type is None:
+				self.model_type=model_dict[0]
+			else:
+				if self.model_type in model_dict:
+					print('type compatible')
+				else:
+					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
+
+					
 	def load_tokenizer(self):
 		# Load the tokenizer.
 		if self.verbose==True:
 			print('Loading {} tokenizer...'.format(self.model_name))
 		if self.model_name=='bert':
-			#model_type='bert-base-uncased'
-			model_type='bert-base-multilingual-cased'
-			self.tokenizer = BertTokenizer.from_pretrained      (model_type, do_lower_case=True)
+			self.tokenizer = BertTokenizer.from_pretrained      (self.model_type, do_lower_case=True)
 		if self.model_name=='distilbert':
 			self.tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', do_lower_case=True)
 		if self.model_name=='albert':
@@ -129,39 +206,37 @@ class Model:
 			self.tokenizer = CamembertTokenizer.from_pretrained ('camembert-base', do_lower_case=True)
 		if self.model_name=='flaubert':
 			self.tokenizer = FlaubertTokenizer.from_pretrained  ('flaubert-base-uncased', do_lower_case=True)
-		if self.model_name=='gpt2-medium':
+		if self.model_name=='gpt2':
 			self.tokenizer = GPT2Tokenizer.from_pretrained      ('gpt2-medium')
 			
 	def load_class(self):
 		# Load the tokenizer.
 		if self.verbose==True:
 			print('Loading {} class...'.format(self.model_name))
-		num_labels = self.num_labels # The number of output labels
 		if self.model_name=='bert':
-			#model_type='bert-base-uncased'
-			model_type='bert-base-multilingual-cased'
 			# Load BertForSequenceClassification, the pretrained BERT model with a single 
 			# linear classification layer on top. 
-			self.model     = BertForSequenceClassification.from_pretrained(model_type, # Use the 12-layer BERT model, with an uncased vocab.
-			# You can increase this for multi-class tasks.   
+			self.model     = BertForSequenceClassification.from_pretrained(self.model_type, # Use the 12-layer BERT model, with an uncased vocab.
+			# You can increase this for multi-class tasks.
+			num_labels = self.num_labels,  
 			output_attentions = False, # Whether the model returns attentions weights.
 			output_hidden_states = False, # Whether the model returns all hidden-states.
 		)
 		if self.model_name=='distilbert':
-			self.model     = DistilBertForSequenceClassification.from_pretrained("distilbert-base-uncased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = DistilBertForSequenceClassification.from_pretrained("distilbert-base-uncased",num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='albert':
-			self.model     = AlbertForSequenceClassification.from_pretrained    ("albert-base-v1",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = AlbertForSequenceClassification.from_pretrained    ("albert-base-v1",num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='xlnet':
-			self.model     = XLNetForSequenceClassification.from_pretrained     ("xlnet-base-cased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = XLNetForSequenceClassification.from_pretrained     ("xlnet-base-cased",num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='roberta':
-			self.model     = RobertaForSequenceClassification.from_pretrained   ("roberta-base",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = RobertaForSequenceClassification.from_pretrained   ("roberta-base",num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='camenbert':
-			self.model     = CamembertForSequenceClassification.from_pretrained ("camembert-base",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = CamembertForSequenceClassification.from_pretrained ("camembert-base",num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='flaubert':
-			self.model     = FlaubertForSequenceClassification.from_pretrained  ("flaubert-base-uncased",num_labels = num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = FlaubertForSequenceClassification.from_pretrained  ("flaubert-base-uncased",num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='gpt2-medium':
 			self.model     = GPT2LMHeadModel.from_pretrained('gpt2-medium')
-		
+
 	def devices(self):
 		# If there's a GPU available...
 		if torch.cuda.is_available():    
@@ -176,11 +251,11 @@ class Model:
 				print('No GPU available, using the CPU instead.')
 			self.device = torch.device("cpu")
 
-	def configuration(self,train_dataloader,batch_size = 16,epochs = 4,n_gpu=1):
+	def configuration(self,train_dataloader,batch_size = 16,epochs = 20,n_gpu=1):
 		self.batch_size  = batch_size
-		self.epochs      = epochs
+		if self.epochs is None:
+			self.epochs      = epochs
 		self.n_gpu       = n_gpu
-		#self.model.cuda()
 		self.optimizer   = AdamW(self.model.parameters(),lr = 2e-5,eps = 1e-8)
 		self.total_steps = len(train_dataloader) * self.epochs
 		self.scheduler   = get_linear_schedule_with_warmup(self.optimizer,num_warmup_steps = 0,num_training_steps = self.total_steps)
@@ -232,13 +307,19 @@ class Model:
 						outputs = self.model(b_input_ids, attention_mask=b_input_mask, labels=b_labels)
 
 				
-				loss = outputs[0]
+				#loss = outputs[0]
+				loss, logits = outputs[:2]
+				
 				if self.n_gpu > 1:
 					loss = loss.mean()
 				loss.backward()
 				total_loss += loss.item()
-
-
+				###metric
+				self.history['loss'].append(loss.item())
+				acc=accuracy(np.argmax(logits.detach().cpu().numpy(), axis=1), batch[2].numpy())
+				self.history['accuracy'].append(acc)
+				self.history['step'].append(step)
+				##########
 				torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
 				self.optimizer.step()
 				self.scheduler.step()
@@ -323,8 +404,9 @@ class Model:
 
 		self.model.eval()
 		predictions = None
+		print('Predicting :')
 
-		for batch in predict_dataloader:
+		for step,batch in enumerate(predict_dataloader):
         
 					batch = tuple(t.to(self.device) for t in batch)
         
@@ -348,6 +430,8 @@ class Model:
 					if p_type=='probability':
 						if predictions is None:predictions=torch.softmax(logits, dim=1).numpy()
 						else:predictions=np.append(predictions,torch.softmax(logits, dim=1).numpy(), axis=0)
+					progress(count=step+1, total=len(predict_dataloader))
+
 		return predictions
 		
 	def fit_generation(self,text_loader):
@@ -449,8 +533,8 @@ class Model:
 			else:
 				print ("Successfully created the directory %s " % self.path)
 		self.model.to(torch.device('cpu'))
-		torch.save(self.model.module.state_dict(),self.path+file_name+'.pt')
-		model.to(self.device)
+		torch.save(self.model.module.state_dict(),self.path+file_name)
+		self.model.to(self.device)
 		
 	def load(self,file_name):
 			self.load_class()
@@ -466,12 +550,25 @@ def choose_from_top(probs, n=5):
     return int(token_id)
 		
 
+def Create_DataLoader(inputs=None,masks=None,labels=None,batch_size=16):
+	#for train
+	if inputs is not None and masks is not None and labels is not None:
+		td = TensorDataset(totensors(inputs), totensors(masks), totensors(labels))
+		rs = RandomSampler(td)
+		return DataLoader(td, sampler=rs, batch_size=batch_size)
+	#for test
+	if inputs is not None and masks is not None and labels is None:
+		td = TensorDataset(totensors(inputs), totensors(masks))
+		ss = SequentialSampler(td)
+		return DataLoader(td, sampler=ss, batch_size=batch_size)
+		
+#deprecate
 def Create_DataLoader_train(inputs,masks,labels,batch_size=16):
 	td = TensorDataset(totensors(inputs), totensors(masks), totensors(labels))
 	rs = RandomSampler(td)
 	return DataLoader(td, sampler=rs, batch_size=batch_size)
 		
-#a supprimer!!!!!!
+#deprecate
 def Create_DataLoader_predict(inputs,masks,batch_size=16):
 		td = TensorDataset(totensors(inputs), totensors(masks))
 		ss = SequentialSampler(td)
@@ -651,34 +748,15 @@ class EarlyStopping:
 		self.acc_validation_min = acc_validation
 
 '''
-bert-base-uncased,bert-large-uncased,bert-base-cased,bert-large-cased,bert-base-multilingual-uncased,bert-base-multilingual-cased,bert-base-chinese
-,bert-base-german-cased,bert-large-uncased-whole-word-masking,bert-large-cased-whole-word-masking,bert-large-uncased-whole-word-masking-finetuned-squad
-,bert-large-cased-whole-word-masking-finetuned-squad,bert-base-cased-finetuned-mrpc,bert-base-german-dbmdz-cased
-,bert-base-german-dbmdz-uncased,bert-base-japanese,bert-base-japanese-whole-word-masking,bert-base-japanese-char,bert-base-japanese-char-whole-word-masking
-,bert-base-finnish-cased-v1,bert-base-finnish-uncased-v1,bert-base-dutch-cased
 
+,Transformer-XL,transfo-xl-wt103
 
-openai-gpt,GPT-2,gpt2,gpt2-medium,gpt2-large,gpt2-xl,Transformer-XL,transfo-xl-wt103
-
-xlnet-base-cased,xlnet-large-cased,
 xlm-mlm-en-2048,xlm-mlm-ende-1024,xlm-mlm-enfr-1024,xlm-mlm-enro-1024,xlm-mlm-xnli15-1024,xlm-mlm-tlm-xnli15-1024,xlm-clm-enfr-1024,xlm-clm-ende-1024
 ,xlm-mlm-17-1280,xlm-mlm-100-1280
 
-roberta-base,roberta-large,roberta-large-mnli,distilroberta-base,roberta-base-openai-detector,roberta-large-openai-detector
-
-,distilbert-base-uncased,distilbert-base-uncased-distilled-squad,distilbert-base-cased,distilbert-base-cased-distilled-squad
-
 distilgpt2,distilbert-base-german-cased,distilbert-base-multilingual-cased
 
-ctrl
-
-camembert-base,
-
-albert-base-v1,albert-large-v1,albert-xlarge-v1,albert-xxlarge-v1,albert-base-v2,albert-large-v2,albert-xlarge-v2,albert-xxlarge-v2
-
 t5-small,t5-base,t5-large,t5-3B,t5-11B
-
-,xlm-roberta-base,xlm-roberta-large
 
 flaubert-small-cased,flaubert-base-uncased,flaubert-base-cased,flaubert-large-cased
 

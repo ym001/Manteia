@@ -6,6 +6,15 @@ Designing your neural network to natural language processing. Deep learning has 
 , construction model (Bert, Roberta, Distilbert, XLNet, Albert, GPT, GPT2), quality measurement training and finally visualization
 of your results on several dataset ( 20newsgroups, Agnews Amazon Review Full, Amazon Review Polarity, DBPedia, PubMed_20k_RCT, Short_Jokes, Sogou News, SST-2, SST-5, Tweeter Airline Sentiment, Yahoo! Answers, Yelp Review Full, Yelp Review Polarity).
 
+.. _Train your neural network: https://github.com/ym001/Manteia/blob/master/notebook/notebook_Manteia_classification_visualisation.ipynb
+.. _Explore your data: https://github.com/ym001/Manteia/blob/master/notebook/notebook_Manteia_classification1.ipynb
+
++---------------------------------+------------------------------+
+| `Train your neural network`_.   | `Explore your data`_.        | 
++=================================+==============================+
+| .. image:: images/train.png     | .. image:: images/boxplot.png| 
++---------------------------------+------------------------------+
+
 Classes
 =======
 

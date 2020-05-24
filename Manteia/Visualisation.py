@@ -117,11 +117,12 @@ class Visualisation:
 		plt.xticks(rotation=90) 
 		sns.boxplot(x='Labels', y='Length of document', data=data, palette='Set2',notch=True,showfliers=True, showmeans=True, meanline=True)
 		ax.set_ylim(0, ylim)
-		if self.show:
-			plt.show()
 		if self.save:
 			path=os.path.join(self.path,'boxplot.png')
 			plt.savefig(path)
+		if self.show:
+			plt.show()
+		
 
 	def plot_train(self,loss,accuracy,granularity=None):
 		if granularity is not None:
@@ -142,11 +143,13 @@ class Visualisation:
 		ax2.set_ylabel('Loss', color='b')
 
 		#plt.legend(['train'], loc='upper left')
-		if self.show:
-			plt.show()
 		if self.save:
 			path=os.path.join(self.path,'train.png')
-			plt.savefig(path)
+			plt.savefig(path, dpi=300)
+		print('test')
+		if self.show:
+			plt.show()
+		
 
 		
 		

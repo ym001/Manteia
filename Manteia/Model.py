@@ -19,6 +19,7 @@ from transformers import AdamW, get_linear_schedule_with_warmup
 from transformers import (
     WEIGHTS_NAME,
     BertTokenizer,
+    BartTokenizer,
     XLNetTokenizer,
     XLMTokenizer,
     RobertaTokenizer,
@@ -28,6 +29,7 @@ from transformers import (
     FlaubertTokenizer
 )
 from transformers import BertForSequenceClassification
+from transformers import BartForSequenceClassification
 from transformers import RobertaForSequenceClassification
 from transformers import XLMForSequenceClassification
 from transformers import XLNetForSequenceClassification
@@ -36,6 +38,8 @@ from transformers import AlbertForSequenceClassification
 from transformers import CamembertForSequenceClassification
 from transformers import FlaubertForSequenceClassification
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
+
+from transformers import BartForConditionalGeneration, BartConfig
 
 from Manteia.Utils import progress
 
@@ -48,7 +52,7 @@ import time
 import datetime
 import gc
 
-#model'distilbert','albert','xlnet','roberta','camenbert','scibert'
+#model'bert','distilbert','albert','bart','xlnet','roberta','camenbert','scibert'
 class Model:
 	r"""
 		This is the class to construct model.
@@ -89,10 +93,11 @@ class Model:
 			
 		Attributes:
 	"""
-	def __init__(self,model_name ='bert',model_type=None,num_labels=0,epochs=None,MAX_SEQ_LEN = 128,early_stopping=False,path='./model',verbose=True): 
+	def __init__(self,model_name ='bert',model_type=None,task='classification',num_labels=0,epochs=None,MAX_SEQ_LEN = 128,early_stopping=False,path='./model',verbose=True): 
 		
 		self.model_name      = model_name
 		self.model_type      = model_type
+		self.task            = task
 		self.early_stopping  = early_stopping
 		self.num_labels      = num_labels
 		self.MAX_SEQ_LEN     = MAX_SEQ_LEN
@@ -137,7 +142,17 @@ class Model:
 				else:
 					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
 					
-		if self.model_name=='xlnet':
+		if self.model_name=='bart':
+			model_dict=['bart-large','bart-large-mnli','bart-large-cnn','bart-large-xsum','mbart-large-en-ro']
+			if self.model_type is None:
+				self.model_type=model_dict[0]
+			else:
+				if self.model_type in model_dict:
+					print('type compatible')
+				else:
+					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
+					
+		if self.model_name=='albert':
 			model_dict=['albert-base-v1','albert-large-v1','albert-xlarge-v1','albert-xxlarge-v1','albert-base-v2','albert-large-v2','albert-xlarge-v2','albert-xxlarge-v2']
 			if self.model_type is None:
 				self.model_type=model_dict[0]
@@ -186,6 +201,15 @@ class Model:
 					print('type compatible')
 				else:
 					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
+		if self.model_name=='flaubert':
+			model_dict=['flaubert-base-uncased', 'flaubert-small-cased', 'flaubert-base-cased', 'flaubert-large-cased']
+			if self.model_type is None:
+				self.model_type=model_dict[0]
+			else:
+				if self.model_type in model_dict:
+					print('type compatible')
+				else:
+					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
 
 					
 	def load_tokenizer(self):
@@ -195,19 +219,21 @@ class Model:
 		if self.model_name=='bert':
 			self.tokenizer = BertTokenizer.from_pretrained      (self.model_type, do_lower_case=True)
 		if self.model_name=='distilbert':
-			self.tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', do_lower_case=True)
+			self.tokenizer = DistilBertTokenizer.from_pretrained(self.model_type, do_lower_case=True)
 		if self.model_name=='albert':
-			self.tokenizer = AlbertTokenizer.from_pretrained    ('albert-base-v1', do_lower_case=True)	
+			self.tokenizer = AlbertTokenizer.from_pretrained    (self.model_type, do_lower_case=True)
+		if self.model_name=='bart':
+			self.tokenizer = BartTokenizer.from_pretrained    (self.model_type, do_lower_case=True)
 		if self.model_name=='xlnet':
-			self.tokenizer = XLNetTokenizer.from_pretrained     ('xlnet-base-cased', do_lower_case=True)
+			self.tokenizer = XLNetTokenizer.from_pretrained     (self.model_type, do_lower_case=True)
 		if self.model_name=='roberta':
-			self.tokenizer = RobertaTokenizer.from_pretrained   ('roberta-base', do_lower_case=True)
+			self.tokenizer = RobertaTokenizer.from_pretrained   (self.model_type, do_lower_case=True)
 		if self.model_name=='camenbert':
-			self.tokenizer = CamembertTokenizer.from_pretrained ('camembert-base', do_lower_case=True)
+			self.tokenizer = CamembertTokenizer.from_pretrained (self.model_type, do_lower_case=True)
 		if self.model_name=='flaubert':
-			self.tokenizer = FlaubertTokenizer.from_pretrained  ('flaubert-base-uncased', do_lower_case=True)
+			self.tokenizer = FlaubertTokenizer.from_pretrained  (self.model_type, do_lower_case=True)
 		if self.model_name=='gpt2':
-			self.tokenizer = GPT2Tokenizer.from_pretrained      ('gpt2-medium')
+			self.tokenizer = GPT2Tokenizer.from_pretrained      (self.model_type)
 			
 	def load_class(self):
 		# Load the tokenizer.
@@ -223,19 +249,26 @@ class Model:
 			output_hidden_states = False, # Whether the model returns all hidden-states.
 		)
 		if self.model_name=='distilbert':
-			self.model     = DistilBertForSequenceClassification.from_pretrained("distilbert-base-uncased",num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = DistilBertForSequenceClassification.from_pretrained(self.model_type,num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='albert':
-			self.model     = AlbertForSequenceClassification.from_pretrained    ("albert-base-v1",num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = AlbertForSequenceClassification.from_pretrained    (self.model_type,num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
+		if self.model_name=='bart':
+			if self.task=='classification':
+				self.model = BartForSequenceClassification.from_pretrained      (self.model_type,num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
+			if self.task=='summarize':
+				self.model = BartForConditionalGeneration.from_pretrained       (self.model_type)
+
+
 		if self.model_name=='xlnet':
-			self.model     = XLNetForSequenceClassification.from_pretrained     ("xlnet-base-cased",num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = XLNetForSequenceClassification.from_pretrained     (self.model_type,num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='roberta':
-			self.model     = RobertaForSequenceClassification.from_pretrained   ("roberta-base",num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = RobertaForSequenceClassification.from_pretrained   (self.model_type,num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='camenbert':
-			self.model     = CamembertForSequenceClassification.from_pretrained ("camembert-base",num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = CamembertForSequenceClassification.from_pretrained (self.model_type,num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='flaubert':
-			self.model     = FlaubertForSequenceClassification.from_pretrained  ("flaubert-base-uncased",num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
+			self.model     = FlaubertForSequenceClassification.from_pretrained  (self.model_type,num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='gpt2-medium':
-			self.model     = GPT2LMHeadModel.from_pretrained('gpt2-medium')
+			self.model     = GPT2LMHeadModel.from_pretrained                    (self.model_type)
 
 	def devices(self):
 		# If there's a GPU available...
@@ -533,12 +566,12 @@ class Model:
 			else:
 				print ("Successfully created the directory %s " % self.path)
 		self.model.to(torch.device('cpu'))
-		torch.save(self.model.module.state_dict(),self.path+file_name)
+		torch.save(self.model.module.state_dict(),os.path.join(self.path,file_name))
 		self.model.to(self.device)
 		
 	def load(self,file_name):
 			self.load_class()
-			self.model.load_state_dict(torch.load(self.path+file_name))
+			self.model.load_state_dict(torch.load(os.path.join(self.path,file_name)))
 			self.model.to(self.device)
 
 def choose_from_top(probs, n=5):

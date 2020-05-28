@@ -5,5 +5,5 @@ documents = ['What should you do before criticizing Pac-Man? WAKA WAKA WAKA mile
 			
 labels = ['funny','not funny']
 			
-model = Model(model_name ='bert')
+model = Model(model_name ='bart')
 cl=Classification(model,documents,labels,process_classif=True)

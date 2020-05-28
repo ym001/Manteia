@@ -14,8 +14,11 @@ You can install it with pip :
 For use with GPU and cuda we recommend the use of [Anaconda](https://www.anaconda.com/open-source) :
 
      __conda create -n manteia_env python=3.7__
+
      __conda activate manteia_env__
+
      __conda install pytorch__
+
      __pip install manteia__
 
 Example of use Classification :

@@ -104,6 +104,7 @@ class Model:
 		self.epochs           = epochs
 		self.path            = path
 		self.verbose         = verbose
+		self.device          = None
 		self.history         = {}
 		self.history['loss'] = []
 		self.history['step'] = []
@@ -303,8 +304,8 @@ class Model:
 		if self.early_stopping:
 			self.es=EarlyStopping(path=self.path)
 			
-		if self.n_gpu > 1:
-			self.model = torch.nn.DataParallel(self.model)
+		#if self.n_gpu > 1:
+		#	self.model = torch.nn.DataParallel(self.model)
             
 		loss_values = []
 
@@ -334,10 +335,10 @@ class Model:
 
 				self.model.zero_grad()        
 
-				if self.model_name != 'distilbert':
-						outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
+				if self.model_name != 'distilbert' and self.model_name != 'bart':
+					outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
 				else:
-						outputs = self.model(b_input_ids, attention_mask=b_input_mask, labels=b_labels)
+					outputs = self.model(b_input_ids, attention_mask=b_input_mask, labels=b_labels)
 
 				
 				#loss = outputs[0]
@@ -384,7 +385,7 @@ class Model:
         
 					with torch.no_grad():        
 
-						if self.model_name != 'distilbert':
+						if self.model_name != 'distilbert' and self.model_name != 'bart':
 							outputs = self.model(b_input_ids, token_type_ids=None,attention_mask=b_input_mask)
 						else:
 							outputs = self.model(b_input_ids,attention_mask=b_input_mask)
@@ -414,6 +415,10 @@ class Model:
 					if self.verbose==True:
 						print("Early stopping")
 					break
+		#a la fin de l'entrainement on charge le meilleur model.
+		if self.early_stopping:
+			self.model.load_state_dict(torch.load(os.path.join(self.path,'state_dict_validation.pt')))
+
 		if self.verbose==True:
 			print("")
 			print("Training complete!")
@@ -421,17 +426,23 @@ class Model:
 	p_type='class' or 'probability' or 'logits'
 	"""
 	def predict(self,predict_dataloader,p_type='class'):
+		'''
 		if self.early_stopping:
 			#by torch
 			#pour charger uniquement la classe du modèle!
+			print('test')
+			self.load_type()
+			print('test')
 			self.load_class()
-			self.model.load_state_dict(torch.load(self.path+'state_dict_validation.pt'))
+			print('test')
+			self.model.load_state_dict(torch.load(os.path.join(self.path,'state_dict_validation.pt')))
+			print('test')
 
 			#by transformer
 			#self.model.from_pretrained(self.path)
 			if self.verbose==True:
 				print('loading model early...')
-				
+		'''
 		#self.model.cuda()
 		self.model.to(self.device)
 
@@ -566,12 +577,16 @@ class Model:
 			else:
 				print ("Successfully created the directory %s " % self.path)
 		self.model.to(torch.device('cpu'))
-		torch.save(self.model.module.state_dict(),os.path.join(self.path,file_name))
+		#torch.save(self.model.module.state_dict(),os.path.join(self.path,file_name))
+		torch.save(self.model.state_dict(),os.path.join(self.path,file_name))
 		self.model.to(self.device)
 		
 	def load(self,file_name):
+			self.load_type()
 			self.load_class()
 			self.model.load_state_dict(torch.load(os.path.join(self.path,file_name)))
+			if self.device is None:
+				self.devices()
 			self.model.to(self.device)
 
 def choose_from_top(probs, n=5):
@@ -734,8 +749,9 @@ class EarlyStopping:
 		self.acc_validation_min = 0
 		self.delta = delta
 		self.path=path
-		if os.path.isfile(self.path+'state_dict_validation.pt'):
-			os. remove(self.path+'state_dict_validation.pt') 
+		
+		if os.path.isfile(os.path.join(self.path,'state_dict_validation.pt')):
+			os. remove(os.path.join(self.path,'state_dict_validation.pt')) 
 
 	def __call__(self, acc_validation , model,device_model):
         
@@ -773,7 +789,8 @@ class EarlyStopping:
 		device = torch.device('cpu')
 		model.to(device)
 		print(type(model))
-		torch.save(model.module.state_dict(),self.path+'state_dict_validation.pt')
+		#torch.save(model.module.state_dict(),os.path.join(self.path,'state_dict_validation.pt'))
+		torch.save(model.state_dict(),os.path.join(self.path,'state_dict_validation.pt'))
 		
 		model.to(device_model)
 		#save by transformer

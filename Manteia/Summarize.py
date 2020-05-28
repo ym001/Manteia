@@ -43,19 +43,19 @@ class Summarize:
 			
 			
 	"""
-	def __init__(self,model=None,documents = [],verbose=True):
+	def __init__(self,model=None,documents = [],verbose=True,process_summarize=False):
 		
-		self.process_classif = process_classif
-		self.verbose         = verbose
-		self.model           = model
-		self.documents_train = documents_train
-		self.labels_train    = labels_train
-		self.documents_test  = documents_test
-		self.labels_test     = labels_test
+		self.process_summarize = process_summarize
+		self.verbose           = verbose
+		self.model             = model
+		self.documents         = documents
 
 		self.load_model()
 		inputs=self.process_text()
-		print(self.predict(inputs))
+		summary_ids = self.model.model.generate(inputs['input_ids'], num_beams=6, max_length=8, early_stopping=True)
+		print([self.model.tokenizer.decode(g, skip_special_tokens=True, clean_up_tokenization_spaces=False) for g in summary_ids])
+
+		#print(self.predict(inputs))
 					
 	def load_model(self):
 		"""
@@ -66,6 +66,7 @@ class Summarize:
 		"""
 		if self.model is None:
 			self.model = Model(model_name ='bart',model_type='bart-large-cnn',task='summarize')
+
 		self.model.load_type()
 		self.model.load_tokenizer()
 		self.model.load_class()
@@ -80,7 +81,7 @@ class Summarize:
 		
 			from Manteia.Summarize import Summarize
 		"""
-		inputs = self.model.tokenizer.batch_encode_plus(self.documents, max_length=1024, return_tensors='pt')
+		inputs = self.model.tokenizer.batch_encode_plus(self.documents, max_length=1024,pad_to_max_length=True, return_tensors='pt')
 		return inputs
 		
 	def predict(self,inputs):

@@ -15,6 +15,27 @@ of your results on several dataset ( 20newsgroups, Agnews Amazon Review Full, Am
 | .. image:: images/train.png     | .. image:: images/boxplot.png| 
 +---------------------------------+------------------------------+
 
+Installation
+------------
+
+You can install it with pip :
+
+     pip install Manteia
+
+.. _Anaconda: https://www.anaconda.com/open-source>
+
+For use with GPU and cuda we recommend the use of `Anaconda`_. :
+
+     conda create -n manteia_env python=3.7
+
+     conda activate manteia_env
+
+     conda install pytorch
+
+     pip install manteia
+
+
+
 Classes
 =======
 

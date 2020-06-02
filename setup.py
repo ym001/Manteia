@@ -12,7 +12,7 @@ setup(
     name='Manteia',
  
 #    version=Manteia.__version__,
-    version="0.0.29",
+    version="0.0.31",
  
     packages=find_packages(),
  

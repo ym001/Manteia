@@ -28,7 +28,7 @@
 	reminiscent.
 """
  
-__version__ = "0.0.29"
+__version__ = "0.0.31"
 
 
 from Manteia import Classification

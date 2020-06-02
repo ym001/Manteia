@@ -38,7 +38,7 @@ class Dataset:
 		* **path**        - Path to the data file.
 		
 	"""
-	def __init__(self,name='20newsgroups',train=True,test=False,dev=False,classe=False,desc=False,path='./dataset',verbose=True):
+	def __init__(self,name='20newsgroups',train=True,test=False,dev=False,classe=True,desc=False,path='./dataset',verbose=True):
 		r"""
 		"""
 		self.name=name
@@ -507,14 +507,13 @@ class Dataset:
 			download_and_extract(url, self.path)
 			
 		self.path_classes = os.path.join(self.path_dir,'classes.txt')
-		classes=['']
+		classes=[]
 		if os.path.isfile(self.path_classes) and self.classe:
 			fi = open(self.path_classes, "r")
 			rows = fi.readlines()
 			for row in rows:
-				classes.append(row.strip())
+					classes.append(row.strip())
 			self.list_labels=classes
-				
 		self.path_train = os.path.join(self.path_dir,'train.csv')
 		if os.path.isfile(self.path_train)and self.train:
 			fi = open(self.path_train, "r")
@@ -522,8 +521,9 @@ class Dataset:
 			for row in rows:
 				row.strip()
 				row=row.split(',')
+				
 				self.documents_train.append(row[1].strip('"')+' '+row[2].strip('"'))
-				self.labels_train.append(classes[int(row[0])])
+				self.labels_train.append(classes[int(row[0])-1])
 		self.path_test = os.path.join(self.path_dir,'test.csv')
 		if os.path.isfile(self.path_test)and self.test:
 			fi = open(self.path_test, "r")
@@ -930,7 +930,7 @@ class Dataset:
 			wget.download(url_test, out=path_dir)
 			wget.download(url_dev, out=path_dir)
 		if self.train:
-			path_file=os.path.join(path_dir,'train.txt')
+			path_file=os.path.join(self.path_dir,'train.txt')
 			fi = open(path_file, "r")
 			rows = fi.readlines()
 			for row in rows:

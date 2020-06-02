@@ -10,6 +10,7 @@
 import numpy as np
 import math
 from operator import itemgetter
+import random
 
 class RandomSampling():
 	"""
@@ -31,7 +32,7 @@ class UncertaintyEntropySampling():
 	The basic uncertainty sampling query strategy, querying the examples with the top entropy.
 	"""
 
-	def __init__(self,verbose=True):
+	def __init__(self,verbose=False):
 		self.verbose=verbose
 		if self.verbose:
 			print('UncertaintyEntropySampling')

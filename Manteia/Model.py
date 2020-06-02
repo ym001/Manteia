@@ -129,7 +129,8 @@ class Model:
 				self.model_type=model_dict[0]
 			else:
 				if self.model_type in model_dict:
-					print('type compatible')
+					if self.verbose:
+						print('type compatible : {}'.format(self.model_type))
 				else:
 					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
 
@@ -302,7 +303,7 @@ class Model:
 		#self.model.cuda()
 		
 		if self.early_stopping:
-			self.es=EarlyStopping(path=self.path)
+			self.es=EarlyStopping(path=self.path,verbose=self.verbose)
 			
 		#if self.n_gpu > 1:
 		#	self.model = torch.nn.DataParallel(self.model)
@@ -361,7 +362,8 @@ class Model:
 				avg_train_loss = total_loss / len(train_dataloader)            
     
 				loss_values.append(avg_train_loss)
-				progress(count=step+1, total=len(train_dataloader))
+				if self.verbose:
+					progress(count=step+1, total=len(train_dataloader))
 
 			if self.verbose==True:
 				print("")
@@ -399,7 +401,8 @@ class Model:
 						else:tab_logits=np.append(tab_logits,np.argmax(logits, axis=1), axis=0)
 						if tab_labels is None:tab_labels=label_ids
 						else:tab_labels=np.append(tab_labels,label_ids, axis=0)
-					progress(count=step+1, total=len(validation_dataloader))
+					if self.verbose:
+						progress(count=step+1, total=len(validation_dataloader))
 
 						
 			acc_validation=accuracy(tab_logits, tab_labels)
@@ -448,7 +451,8 @@ class Model:
 
 		self.model.eval()
 		predictions = None
-		print('Predicting :')
+		if self.verbose:
+			print('Predicting :')
 
 		for step,batch in enumerate(predict_dataloader):
         
@@ -474,7 +478,8 @@ class Model:
 					if p_type=='probability':
 						if predictions is None:predictions=torch.softmax(logits, dim=1).numpy()
 						else:predictions=np.append(predictions,torch.softmax(logits, dim=1).numpy(), axis=0)
-					progress(count=step+1, total=len(predict_dataloader))
+					if self.verbose:
+						progress(count=step+1, total=len(predict_dataloader))
 
 		return predictions
 		
@@ -788,7 +793,8 @@ class EarlyStopping:
 		#save by torch
 		device = torch.device('cpu')
 		model.to(device)
-		print(type(model))
+		if self.verbose:
+			print(type(model))
 		#torch.save(model.module.state_dict(),os.path.join(self.path,'state_dict_validation.pt'))
 		torch.save(model.state_dict(),os.path.join(self.path,'state_dict_validation.pt'))
 		

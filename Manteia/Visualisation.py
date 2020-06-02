@@ -150,6 +150,42 @@ class Visualisation:
 		if self.show:
 			plt.show()
 		
+	def plot_multigraph(self,metric_dictionnary,title=None,labelx=None,labely=None,legend=True):
+	
+		x_list=[]
+		y_list=[]
 
-		
-		
+		labely_list=list(metric_dictionnary.keys())
+		for graph in metric_dictionnary.keys():
+			x = []
+			y = []
+			for key,value in metric_dictionnary[graph].items():
+				x.append(float(key))
+				y.append(float(value))
+			x_list.append(x)
+			y_list.append(y)
+
+		tab_color=['red','black','blue','green','orange','purple']
+		plt.axis([0, 1, 0, 1])
+
+		plt.figure(1)
+		i=0
+		for cx,cy,color in zip(x_list,y_list,tab_color):
+			if labely_list[i]=='Base line':
+					courbe=plt.plot(cx, cy,'--',label='Base line',color=color,linewidth=2)
+			else:
+					courbe=plt.plot(cx, cy,label=labely_list[i],color=color,linewidth=2)
+			i=i+1
+		if title is not None:
+			plt.title(title)
+		if labelx is not None:
+			plt.xlabel(labelx)
+		if labely is not None:
+			plt.ylabel(labely)
+		if legend==True:
+			plt.legend(fontsize='large')
+		if self.save:
+			path=os.path.join(self.path,self.name)
+			plt.savefig(path, dpi=300)
+		if self.show:
+			plt.show()

@@ -1,5 +1,16 @@
 import sys,time
+import numpy as np
 
+def coss_validation_idx(nb_pass,nb_docs):
+  docs_idx = [idx for idx in range(nb_docs)]
+  train_idx, test_idx = [], []
+  for pli in range(nb_pass):
+    test_pli_idx = list(np.random.choice(docs_idx,int(len(docs_idx)/nb_pass) , replace=False))
+    train_pli_idx  = [idx for idx in docs_idx if idx not in test_pli_idx]
+    train_idx.append(train_pli_idx)
+    test_idx.append(test_pli_idx)
+  return train_idx, test_idx
+  
 def progress(count, total):
 	bar_len = 60
 	filled_len = int(round(bar_len * count / float(total)))

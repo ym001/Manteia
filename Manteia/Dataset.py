@@ -79,7 +79,7 @@ class Dataset:
 		if self.name=="trec":
 			self.load_trec()
 			
-		if self.name=="agnews":
+		if self.name=="Agnews":
 			self.load_agnews()
 			
 		if self.name=="DBPedia":

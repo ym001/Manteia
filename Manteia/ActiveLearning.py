@@ -51,6 +51,26 @@ class UncertaintyEntropySampling():
 			print(entropie_trie[:nb_question])
 		return idx_entropie
 
+class DAL():
+	"""
+	The basic discriminative strategy.
+	"""
+
+	def __init__(self,verbose=False):
+		self.verbose=verbose
+		if self.verbose:
+			print('DAL')
+
+	def query(self,predictions,unlabeled_idx,nb_question):
+		#dal est une liste de tuple idx non labélisé et probabilité de ne pas etre labellisé
+		dal=[(idx,p[1])for idx,p in zip(unlabeled_idx,predictions)]
+		dal=sorted(dal, key=itemgetter(1),reverse=True)
+		print(dal[:3])
+		idx_dal=[tup[0] for tup in dal[:nb_question]]
+		if self.verbose:
+			print(dal[:nb_question])
+		return idx_dal
+
 
 
 

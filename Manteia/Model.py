@@ -93,7 +93,7 @@ class Model:
 			
 		Attributes:
 	"""
-	def __init__(self,model_name ='bert',model_type=None,task='classification',num_labels=0,epochs=None,MAX_SEQ_LEN = 128,early_stopping=False,path='./model',verbose=True): 
+	def __init__(self,model_name ='bert',model_type=None,task='classification',num_labels=0,epochs=None,MAX_SEQ_LEN = 128,early_stopping=False,path='./model/',verbose=True): 
 		
 		self.model_name      = model_name
 		self.model_type      = model_type
@@ -297,7 +297,7 @@ class Model:
 		self.devices()
 
 		
-	def fit(self,train_dataloader,validation_dataloader):
+	def fit(self,train_dataloader=None,validation_dataloader=None):
 		
 		self.model.to(self.device)
 		#self.model.cuda()
@@ -315,7 +315,8 @@ class Model:
 
 				print("")
 				print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, self.epochs))
-				print('Training :')
+				#print('')
+				#print('Training :')
 
 			t0 = time.time()
 			total_loss = 0
@@ -365,21 +366,22 @@ class Model:
 				if self.verbose:
 					progress(count=step+1, total=len(train_dataloader))
 
-			if self.verbose==True:
-				print("")
+			if self.verbose:
 				print("  Average training loss: {0:.2f}".format(avg_train_loss))
-				print("  Training epoch took: {:}".format(format_time(time.time() - t0)))
-				print("Validation :")
+				print("")
 
-			t0 = time.time()
+				#print("  Training epoch took: {:}".format(format_time(time.time() - t0)))
+			if validation_dataloader is not None:
+				if self.verbose:
+					print("")
+					#print("Validation :")
 
-			self.model.eval()
-
-			tab_logits = None
-			tab_labels = None
-
+				t0 = time.time()
+				self.model.eval()
+				tab_logits = None
+				tab_labels = None
 			
-			for step,batch in enumerate(validation_dataloader):
+				for step,batch in enumerate(validation_dataloader):
         
 					batch = tuple(t.to(self.device) for t in batch)
         
@@ -405,30 +407,34 @@ class Model:
 						progress(count=step+1, total=len(validation_dataloader))
 
 						
-			acc_validation=accuracy(tab_logits, tab_labels)
-			if self.verbose==True:
-				print("")
-				print("  Accuracy: {0:.2f}".format(acc_validation))
-				print("  Validation took: {:}".format(format_time(time.time() - t0)))
+				acc_validation=accuracy(tab_logits, tab_labels)
+				if self.verbose==True:
+					print("")
+					print("  Validation : Accuracy : {0:.2f}".format(acc_validation))
+					#print("  Validation took: {:}".format(format_time(time.time() - t0)))
 
-			if self.early_stopping:
-				self.es(acc_validation, self.model,self.device)
+				if self.early_stopping:
+					self.es(acc_validation, self.model,self.device)
                 
-				if self.es.early_stop:
-					if self.verbose==True:
-						print("Early stopping")
-					break
+					if self.es.early_stop:
+						if self.verbose==True:
+							print("")
+							print("Early stopping")
+						break
 		#a la fin de l'entrainement on charge le meilleur model.
 		if self.early_stopping:
 			self.model.load_state_dict(torch.load(os.path.join(self.path,'state_dict_validation.pt')))
+			self.model.to(self.device)
+
 
 		if self.verbose==True:
 			print("")
 			print("Training complete!")
+			
 	"""
 	p_type='class' or 'probability' or 'logits'
 	"""
-	def predict(self,predict_dataloader,p_type='class'):
+	def predict(self,predict_dataloader,p_type='class',mode='eval'):
 		'''
 		if self.early_stopping:
 			#by torch
@@ -446,10 +452,11 @@ class Model:
 			if self.verbose==True:
 				print('loading model early...')
 		'''
-		#self.model.cuda()
 		self.model.to(self.device)
-
-		self.model.eval()
+		if mode=='eval':
+			self.model.eval()
+		if mode=='train':
+			self.model.train()
 		predictions = None
 		if self.verbose:
 			print('Predicting :')
@@ -793,11 +800,8 @@ class EarlyStopping:
 		#save by torch
 		device = torch.device('cpu')
 		model.to(device)
-		if self.verbose:
-			print(type(model))
 		#torch.save(model.module.state_dict(),os.path.join(self.path,'state_dict_validation.pt'))
 		torch.save(model.state_dict(),os.path.join(self.path,'state_dict_validation.pt'))
-		
 		model.to(device_model)
 		#save by transformer
 		#model.save_pretrained(self.path)

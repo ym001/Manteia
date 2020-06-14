@@ -33,6 +33,8 @@ Example of use Classification :
 	model = Model(model_name ='roberta')
 	cl=Classification(model,documents,labels,process_classif=True)
 
+[NoteBook](https://github.com/ym001/Manteia/blob/master/notebook/notebook_Manteia_presentation1.ipynb)
+
 
 Example of use Generation :
 
@@ -40,11 +42,13 @@ Example of use Generation :
 	from Manteia.Generation import Generation 
 	from Manteia.Dataset import Dataset
 	from Manteia.Model import *
+
 	
 	ds=Dataset('Short_Jokes')
 
-	model       = Model(model_name ='gpt2-medium')
+	model       = Model(model_name ='gpt2')
 	text_loader = Create_DataLoader_generation(ds.documents_train[:10000],batch_size=32)
+	model.load_type()
 	model.load_tokenizer()
 	model.load_class()
 	model.devices()
@@ -57,6 +61,7 @@ Example of use Generation :
 	output_text = decode_text(output,model.tokenizer)
 	print(output_text)
 
+[NoteBook](https://github.com/ym001/Manteia/blob/master/notebook/notebook_Manteia_presentation2.ipynb)
 
 [Documentation](https://manteia.readthedocs.io/en/latest/#)
 [Pypi](https://pypi.org/project/Manteia/)

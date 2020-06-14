@@ -1,6 +1,6 @@
 from Manteia.Dataset import Dataset
 
-ds=Dataset('DBPedia',test=True,desc=True,classe=True)
+ds=Dataset('DBPedia',path='test/test/',test=True,desc=True,classe=True)
 
 print('Train : ')
 print(ds.documents_train[:5])

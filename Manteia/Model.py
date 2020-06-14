@@ -185,7 +185,7 @@ class Model:
 					raise TypeError("{} Model type not in : {}".format(self.model_name,model_dict))
 
 		if self.model_name=='gpt2':
-			model_dict=['openai-gpt','GPT-2','gpt2','gpt2-medium','gpt2-large','gpt2-xl']
+			model_dict=['gpt2','gpt2-medium','gpt2-large','gpt2-xl','openai-gpt','GPT-2']
 			if self.model_type is None:
 				self.model_type=model_dict[0]
 			else:
@@ -269,7 +269,7 @@ class Model:
 			self.model     = CamembertForSequenceClassification.from_pretrained (self.model_type,num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
 		if self.model_name=='flaubert':
 			self.model     = FlaubertForSequenceClassification.from_pretrained  (self.model_type,num_labels = self.num_labels,output_attentions = False,output_hidden_states = False,)
-		if self.model_name=='gpt2-medium':
+		if self.model_name=='gpt2':
 			self.model     = GPT2LMHeadModel.from_pretrained                    (self.model_type)
 
 	def devices(self):
@@ -368,7 +368,7 @@ class Model:
 
 			if self.verbose:
 				print("  Average training loss: {0:.2f}".format(avg_train_loss))
-				print("")
+				#print("")
 
 				#print("  Training epoch took: {:}".format(format_time(time.time() - t0)))
 			if validation_dataloader is not None:
@@ -409,7 +409,7 @@ class Model:
 						
 				acc_validation=accuracy(tab_logits, tab_labels)
 				if self.verbose==True:
-					print("")
+					#print("")
 					print("  Validation : Accuracy : {0:.2f}".format(acc_validation))
 					#print("  Validation took: {:}".format(format_time(time.time() - t0)))
 
@@ -418,7 +418,7 @@ class Model:
                 
 					if self.es.early_stop:
 						if self.verbose==True:
-							print("")
+							#print("")
 							print("Early stopping")
 						break
 		#a la fin de l'entrainement on charge le meilleur model.
@@ -428,7 +428,7 @@ class Model:
 
 
 		if self.verbose==True:
-			print("")
+			#print("")
 			print("Training complete!")
 			
 	"""

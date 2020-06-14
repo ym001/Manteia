@@ -64,8 +64,6 @@ class Dataset:
 		if self.name=="SST-5":
 			self.load_SST_5()
 			
-		if self.name=="SST-B":
-			self.load_SST_B()
 
 		if self.name=="drugscom":
 			self.load_drugscom()
@@ -169,7 +167,7 @@ class Dataset:
 		#self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 
 			file_list=['yelp_review_polarity00.zip','yelp_review_polarity01.zip','yelp_review_polarity02.zip']
 			load_multiple_file(file_list,self.path,self.path_dir)
@@ -219,7 +217,7 @@ class Dataset:
 		#self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 
 			file_list=['yelp_review_full00.zip','yelp_review_full01.zip','yelp_review_full02.zip']
 			load_multiple_file(file_list,self.path,self.path_dir)
@@ -281,7 +279,7 @@ class Dataset:
 		#self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 
 			file_list=['yahoo_answers00.zip','yahoo_answers01.zip','yahoo_answers02.zip','yahoo_answers03.zip',
 						'yahoo_answers04.zip']
@@ -319,7 +317,7 @@ class Dataset:
 		#self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 
 			file_list=['sogou_news00.zip','sogou_news01.zip','sogou_news02.zip','sogou_news03.zip',
 						'sogou_news04.zip','sogou_news05.zip']
@@ -376,7 +374,7 @@ class Dataset:
 		#self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 
 			file_list=['amazon_review_polarity00.zip','amazon_review_polarity01.zip','amazon_review_polarity02.zip','amazon_review_polarity03.zip',
 						'amazon_review_polarity04.zip','amazon_review_polarity05.zip','amazon_review_polarity06.zip','amazon_review_polarity07.zip',
@@ -429,7 +427,7 @@ class Dataset:
 		#!!!!!!!!!!!!!!!!!!!!
 
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 
 			file_list=['amazon_review_full00.zip','amazon_review_full01.zip','amazon_review_full02.zip','amazon_review_full03.zip',
 						'amazon_review_full04.zip','amazon_review_full05.zip','amazon_review_full06.zip','amazon_review_full07.zip',
@@ -532,7 +530,7 @@ class Dataset:
 				row.strip()
 				row=row.split(',')
 				self.documents_test.append(row[1].strip('"')+' '+row[2].strip('"'))
-				self.labels_test.append(classes[int(row[0])])
+				self.labels_test.append(classes[int(row[0])-1])
 		self.path_description = os.path.join(self.path_dir,'readme.txt')
 		if os.path.isfile(self.path_description)and self.desc:
 			self.description=''
@@ -566,7 +564,7 @@ class Dataset:
 		self.del_dir('agnews')
 		self.path_dir = os.path.join(self.path,'agnews')
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 
 		self.path_train = os.path.join(self.path_dir,'train.csv')
 		classes=['World','Sports','Business','Sci/Tech']
@@ -613,7 +611,7 @@ class Dataset:
 		"""
 		self.path_dir = os.path.join(self.path,'trec')
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 
 		self.path_train = os.path.join(self.path_dir,'train_5500.label')
 		self.path_test  = os.path.join(self.path_dir,'TREC_10.label')
@@ -665,7 +663,7 @@ class Dataset:
 		"""
 		self.path_dir = os.path.join(self.path,'drugscom')
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 
 		self.path_train = os.path.join(self.path_dir,'drugsComTrain_raw.tsv')
 		self.path_test  = os.path.join(self.path_dir,'drugsComTest_raw.tsv')
@@ -720,7 +718,7 @@ class Dataset:
 		#self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 			print('dossier')
 		file_sentiment = os.path.join(self.path_dir,'stanfordSentimentTreebank')
 		file_sentiment = os.path.join(file_sentiment,'sentiment_labels.txt')
@@ -813,7 +811,7 @@ class Dataset:
 		#self.del_dir(self.path_dir)
 		#!!!!!!!!!!!!!!!!!!!!
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 			print('dossier')
 		file_sentiment = os.path.join(self.path_dir,'stanfordSentimentTreebank')
 		file_sentiment = os.path.join(file_sentiment,'sentiment_labels.txt')
@@ -822,7 +820,7 @@ class Dataset:
 			url='http://nlp.stanford.edu/~socherr/stanfordSentimentTreebank.zip'
 
 			if self.verbose:
-				print("Downloading and extracting SST-2...")
+				print("Downloading and extracting SST-5...")
 			download_and_extract(url,self.path_dir)
 			if self.verbose:
 				print("\tCompleted!")
@@ -919,7 +917,7 @@ class Dataset:
 		
 		self.path_dir=os.path.join(self.path,'PubMed_20k_RCT')
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 		
 			url_train = 'https://raw.githubusercontent.com/Franck-Dernoncourt/pubmed-rct/master/PubMed_20k_RCT/train.txt'
 			url_dev   = 'https://raw.githubusercontent.com/Franck-Dernoncourt/pubmed-rct/master/PubMed_20k_RCT/dev.txt'
@@ -977,13 +975,13 @@ class Dataset:
 		
 		self.path_dir=os.path.join(self.path,'Short_Jokes')
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 			url_train = 'https://github.com/ym001/Dune/raw/master/datasets/short-jokes.zip'
 			if self.verbose:
 				print("Downloading and extracting Short_Jokes...")
-			download_and_extract(url_train, path_dir)
+			download_and_extract(url_train, self.path_dir)
 		if self.train:
-			path_file=os.path.join(path_dir,'shortjokes.csv')
+			path_file=os.path.join(self.path_dir,'shortjokes.csv')
 			fi = open(path_file, "r")
 			rows = fi.readlines()
 			for row in rows:
@@ -1017,7 +1015,7 @@ class Dataset:
 		
 		self.path_dir=os.path.join(self.path,'Tweeter_Airline_Sentiment')
 		if not os.path.isdir(self.path_dir):
-			os.mkdir(self.path_dir)
+			os.makedirs(self.path_dir)
 			url_train = 'https://github.com/ym001/Dune/raw/master/datasets/Airline-Sentiment.zip'
 			if self.verbose:
 				print("Downloading and extracting Tweeter_Airline_Sentiment...")

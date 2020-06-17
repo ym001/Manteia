@@ -10,6 +10,11 @@
 import numpy as np
 import random
 from nltk.corpus import wordnet
+import collections
+import math
+
+#import nltk
+#nltk.download('wordnet')
 
 class Augmentation:
 	
@@ -190,7 +195,7 @@ class TfIdfWordRep(EfficientRandomGen):
     for idx in token_list_idx:
       self.token_list += [self.tf_idf_keys[idx]]
     self.token_ptr = len(self.token_list) - 1
-    print("sampled token list: {:s}".format(" ".join(self.token_list)))
+    #print("sampled token list: {:s}".format(" ".join(self.token_list)))
 
 def eda(documents,labels):
 	documents_augmented=[]

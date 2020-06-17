@@ -70,6 +70,11 @@ class Dataset:
 			
 		if self.name=="pubmed_rct20k":
 			self.load_pubmed_rct20k()
+
+		if self.name=="eRisk_anx":
+			self.load_eRisk_anx()
+		if self.name=="eRisk_dep":
+			self.load_eRisk_dep()
 			
 		if self.name=="yelp":
 			self.load_yelp()
@@ -643,7 +648,7 @@ class Dataset:
 				row=row.split(':')
 				self.documents_test.append(row[1])
 				self.labels_test.append(row[0])
-				
+
 	def load_drugscom(self):
 		r"""
 		Defines Drugs.com Dataset.
@@ -692,6 +697,64 @@ class Dataset:
 			for row in reader:
 				self.documents_test.append(row['review'])
 				self.labels_test.append(row['rating'])
+
+	def load_eRisk_anx(self):
+		
+		self.path_dir = os.path.join(self.path,'eRisk_anx')
+		if not os.path.isdir(self.path_dir):
+			os.makedirs(self.path_dir)
+		
+		if not os.path.isdir(os.path.join(self.path_dir,'pos')):
+			if self.verbose:
+				print('Downloading eRisk_anx...')
+			url='https://github.com/ym001/Dune/raw/master/datasets/eRisk_anx.zip'
+			download_and_extract(url,self.path_dir)
+			if self.verbose:
+				print("\tCompleted!")
+				
+		if os.path.isdir(os.path.join(self.path_dir,'neg'))and self.train:
+			self.documents_train=[]
+			self.labels_train=[]
+			dossier=os.path.join(self.path_dir,'neg')
+			FichList = [ f for f in os.listdir(dossier)]
+			for fich in FichList:
+				with open(os.path.join(dossier,fich),'r') as f:
+					text = f.read()
+				self.documents_train.append(text)
+				self.labels_train.append('-')
+			dossier=os.path.join(self.path_dir,'pos')
+			FichList = [ f for f in os.listdir(dossier)]
+			for fich in FichList:
+				with open(os.path.join(dossier,fich),'r') as f:
+					text = f.read()
+				self.documents_train.append(text)
+				self.labels_train.append('+')
+
+	def load_eRisk_dep(self):
+		
+		self.path_dir = os.path.join(self.path,'eRisk_dep')
+		if not os.path.isdir(self.path_dir):
+			os.makedirs(self.path_dir)
+			file_list=['eRisk_dep00.zip','eRisk_dep01.zip','eRisk_dep02.zip']
+			load_multiple_file(file_list,self.path_dir,self.path_dir)
+				
+		if os.path.isdir(os.path.join(self.path_dir,'neg'))and self.train:
+			self.documents_train=[]
+			self.labels_train=[]
+			dossier=os.path.join(self.path_dir,'neg')
+			FichList = [ f for f in os.listdir(dossier)]
+			for fich in FichList:
+				with open(os.path.join(dossier,fich),'r') as f:
+					text = f.read()
+				self.documents_train.append(text)
+				self.labels_train.append('-')
+			dossier=os.path.join(self.path_dir,'pos')
+			FichList = [ f for f in os.listdir(dossier)]
+			for fich in FichList:
+				with open(os.path.join(dossier,fich),'r') as f:
+					text = f.read()
+				self.documents_train.append(text)
+				self.labels_train.append('+')
 
 	def load_SST_2(self):
 		"""

@@ -77,6 +77,30 @@ def uda(documents,labels):
 	return documents_augmented,labels_augmented
 
 #https://github.com/google-research/uda/blob/master/text/augmentation/word_level_augment.py
+def pyramid(documents,labels):
+	r"""
+		This function compute DAIA.
+		
+		Args:
+			documents
+			labels
+
+		return
+			documents_augmented
+			labels_augmented
+
+		Example::
+			
+	"""
+	documents_augmented=[]
+	labels_augmented=[]
+	
+	for text,label in zip(documents,labels):
+		text_list,label_list=split_text(text,label)
+		documents_augmented  = documents_augmented+text_list
+		labels_augmented = labels_augmented+label_list
+	return documents_augmented,labels_augmented
+	
 def get_data_stats(texts):
   """Compute the IDF score for each word. Then compute the TF-IDF score."""
   word_doc_freq = collections.defaultdict(int)
@@ -263,26 +287,4 @@ def split_text(text,label):
 	return text_list,label_list
 
 	
-def pyramid(documents,labels):
-	r"""
-		This function compute DAIA.
-		
-		Args:
-			documents
-			labels
 
-		return
-			documents_augmented
-			labels_augmented
-
-		Example::
-			
-	"""
-	documents_augmented=[]
-	labels_augmented=[]
-	
-	for text,label in zip(documents,labels):
-		text_list,label_list=split_text(text,label)
-		documents_augmented  = documents_augmented+text_list
-		labels_augmented = labels_augmented+label_list
-	return documents_augmented,labels_augmented

@@ -262,16 +262,22 @@ def split_text(text,label):
 
 	return text_list,label_list
 
-r"""
-		This is the function to do DAIA.
+	
+def pyramid(documents,labels):
+	r"""
+		This function compute DAIA.
 		
 		Args:
-		
+			documents
+			labels
+
+		return
+			documents_augmented
+			labels_augmented
+
 		Example::
 			
 	"""
-	
-def pyramid(documents,labels):
 	documents_augmented=[]
 	labels_augmented=[]
 	

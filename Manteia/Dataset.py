@@ -65,6 +65,9 @@ class Dataset:
 			self.load_SST_5()
 			
 
+		if self.name=="COVID":
+			self.load_COVID()
+			
 		if self.name=="drugscom":
 			self.load_drugscom()
 			
@@ -755,6 +758,34 @@ class Dataset:
 					text = f.read()
 				self.documents_train.append(text)
 				self.labels_train.append('+')
+
+	def load_COVID(self):
+		
+		self.path_dir = os.path.join(self.path,'COVID')
+		if not os.path.isdir(self.path_dir):
+			os.makedirs(self.path_dir)
+		self.path_train = os.path.join(self.path_dir,'covid.zip')
+		
+		if not os.path.isfile(self.path_train):
+			if self.verbose:
+				print('Downloading COVID...')
+			url='https://github.com/ym001/Dune/raw/master/datasets/covid.zip'
+			download_and_extract(url,self.path_dir)
+			if self.verbose:
+				print("\tCompleted!")
+				
+		if os.path.isfile(os.path.join(self.path_dir,'all_sources_metadata_2020-03-13.csv'))and self.train:
+			self.documents_train=[]
+			self.labels_train=[]
+			file_train=os.path.join(self.path_dir,'all_sources_metadata_2020-03-13.csv')
+
+			fh = open(file_train)
+			reader = csv.DictReader(fh, delimiter = ',')
+			for ligne in reader:
+				if ligne['abstract']!='':
+					self.documents_train.append(ligne['title']+' '+ligne['abstract'])
+					self.labels_train.append(ligne['source_x'])
+			fh.close()
 
 	def load_SST_2(self):
 		"""

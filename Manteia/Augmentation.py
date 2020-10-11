@@ -77,14 +77,14 @@ def uda(documents,labels):
 	return documents_augmented,labels_augmented
 
 #https://github.com/google-research/uda/blob/master/text/augmentation/word_level_augment.py
-def pyramid(documents,labels):
+def pyramid(documents,labels,level):
 	r"""
 		This function compute DAIA.
 		
 		Args:
 			documents
 			labels
-
+			level
 		return
 			documents_augmented
 			labels_augmented
@@ -94,9 +94,10 @@ def pyramid(documents,labels):
 	"""
 	documents_augmented=[]
 	labels_augmented=[]
-	
+	if level < 2:level=2
+	if level > 5:level=5
 	for text,label in zip(documents,labels):
-		text_list,label_list=split_text(text,label)
+		text_list,label_list=split_text(text,label,level)
 		documents_augmented  = documents_augmented+text_list
 		labels_augmented = labels_augmented+label_list
 	return documents_augmented,labels_augmented
@@ -271,18 +272,31 @@ def eda_text(text,label):
 				label_list.append(label)
 	return text_list,label_list
 
-def split_text(text,label):
+def split_text(text,label,level=3):
 	text_list,label_list=[],[]
 	
 	decoup_1a = int(0.05*len(text))
 	decoup_1b = int(0.95*len(text))
 	decoup_2 = int(len(text)/2)
 	decoup_3 = int(len(text)/3)
+	decoup_4 = int(len(text)/4)
+	decoup_5 = int(len(text)/5)
 
-	
-	#for split in 3 levels
-	text_list  = text_list+[text[decoup_1a:decoup_1b],text[:decoup_2],text[decoup_2:],text[:decoup_3],text[decoup_3:2*decoup_3],text[2*decoup_3:]]
-	label_list = label_list+[label,label,label,label,label,label]
+	if level >=1 :
+		text_list  = text_list+[text[decoup_1a:decoup_1b]]
+		label_list = label_list+[label]
+	if level >=2 :
+		text_list  = text_list+[text[:decoup_2],text[decoup_2:]]
+		label_list = label_list+[label,label]
+	if level >=3 :
+		text_list  = text_list+[text[:decoup_3],text[decoup_3:2*decoup_3],text[2*decoup_3:]]
+		label_list = label_list+[label,label,label]
+	if level >=4 :
+		text_list  = text_list+[text[:decoup_4],text[decoup_4:2*decoup_4],text[2*decoup_4:3*decoup_4],text[3*decoup_4:]]
+		label_list = label_list+[label,label,label,label]
+	if level >=5 :
+		text_list  = text_list+[text[:decoup_5],text[decoup_5:2*decoup_5],text[2*decoup_5:3*decoup_5],text[3*decoup_5:4*decoup_5],text[4*decoup_5:]]
+		label_list = label_list+[label,label,label,label,label]
 
 	return text_list,label_list
 

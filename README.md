@@ -68,3 +68,5 @@ Example of use Generation :
 [Source](https://github.com/ym001/Manteia)
 
 This code is licensed under MIT.
+
+https://www.amazon.fr/ABcédaire-Amoureux-lIntelligence-Artificielle-Mercadier/dp/B0C872FTS3
